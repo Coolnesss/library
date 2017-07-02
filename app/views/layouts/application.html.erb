@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Library</title>
+  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
+  <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+  <%= csrf_meta_tags %>
+</head>
+<body>
+  <nav class="navbar navbar-default">
+    <%= link_to 'Home ', root_path, class:"navbar-brand" %>
+    <%= link_to "<i class='fa fa-book'></i> Books".html_safe, books_path, class: "navbar-btn" %>
+    <% if current_user %>
+      <%= link_to "<i class='fa fa-sign-out fa-fw'></i> Sign out".html_safe, logout_path, class:"navbar-btn navbar-right" %>
+    <% else %>
+      <%= link_to "<i class='fa fa-sign-in fa-fw'></i> Sign in".html_safe, login_path, class:"navbar-btn navbar-right btn-default" %>
+    <% end %>
+  </nav>
+   <%= flash_messages %>
+
+<%= yield %>
+
+</body>
+</html>

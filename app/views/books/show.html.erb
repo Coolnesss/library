@@ -1,0 +1,30 @@
+<div class="col col-md-8 col-md-offset-2">
+<div class="panel panel-success">
+    <div class="panel-heading">
+      <h1 class="sindhi">
+        <strong><%= @book.name %></strong>
+      </h1>
+      <div class="row">
+        <h4 class="text-center">
+          In English: <span class="label label-primary"><%= @book.name_eng %></span>
+          Author: <%= link_to @book.author, nil, class: "btn btn-default btn-xs" %>
+          Published: <%= link_to @book.year, nil, class: "btn btn-default btn-xs"  %>
+          Publisher: <%= link_to @book.publisher, nil, class: "btn btn-default btn-xs" %>
+        </h4>
+      </div>
+    </div>
+
+    <div class="panel-body">
+      <h3 class="text-center">English description:</h3>
+        <div class="well">
+          <%= @book.description_eng %>
+        </div>
+        <h3 class="text-center">Sindhi description:</h3>
+        <div class="well sindhi">
+          <%= @book.description_sindhi %>
+        </div>
+    </div>
+</div>
+
+<%= link_to 'Edit', edit_book_path(@book), class: "btn btn-warning" %>
+<%= link_to 'Back', books_path, class: "btn btn-default" %>

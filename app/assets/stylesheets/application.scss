@@ -1,0 +1,33 @@
+@import "bootstrap-sprockets";
+@import "bootstrap";
+@import "font-awesome";
+
+body {
+  font-family: 'Ubuntu';
+  padding-left: 2%;
+  padding-right: 2%;
+}
+
+@font-face {
+  font-family: 'Sindhi';
+  src: font-url('MBLATEEFI.TTF') format('truetype');
+}
+
+.sindhi {
+  font-family: "Sindhi";
+  font-weight: 600;
+}
+
+
+h1 {
+  @extend .text-center;
+}
+
+.btn {
+  font-weight: 700;
+}
+
+.navbar-btn {
+  @extend .btn;
+  font-weight: 700;
+}
