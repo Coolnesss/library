@@ -35,6 +35,7 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 gem 'bcrypt'
 gem "font-awesome-rails"
 gem 'bootstrap-sass', '~> 3.3.5'
+gem "paperclip"
 
 group :production do
   gem 'pg'

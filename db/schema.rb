@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150801143202) do
+ActiveRecord::Schema.define(version: 20170702202936) do
 
   create_table "book_categories", force: :cascade do |t|
     t.integer  "book_id"
@@ -27,9 +27,13 @@ ActiveRecord::Schema.define(version: 20150801143202) do
     t.text     "description_sindhi"
     t.text     "description_eng"
     t.integer  "year"
-    t.datetime "created_at",         null: false
-    t.datetime "updated_at",         null: false
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
     t.string   "publisher"
+    t.string   "attachment_file_name"
+    t.string   "attachment_content_type"
+    t.integer  "attachment_file_size"
+    t.datetime "attachment_updated_at"
   end
 
   create_table "categories", force: :cascade do |t|

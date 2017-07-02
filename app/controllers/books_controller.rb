@@ -73,6 +73,6 @@ class BooksController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def book_params
-      params.require(:book).permit(:name, :name_eng, :author, :description_sindhi, :description_eng, :year, :publisher)
+      params.require(:book).permit(:name, :name_eng, :author, :description_sindhi, :description_eng, :year, :publisher, :attachment)
     end
 end

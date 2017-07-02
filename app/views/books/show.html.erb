@@ -10,6 +10,9 @@
           Author: <%= link_to @book.author, nil, class: "btn btn-default btn-xs" %>
           Published: <%= link_to @book.year, nil, class: "btn btn-default btn-xs"  %>
           Publisher: <%= link_to @book.publisher, nil, class: "btn btn-default btn-xs" %>
+          <% if @book.attachment.exists? %>
+            <%= link_to "Download", @book.attachment.url %>
+          <% end %>
         </h4>
       </div>
     </div>
