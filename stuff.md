@@ -3,6 +3,8 @@
 * Sort by any column
 * Add language tag
 * Upload PDF
+* Pagination
+* Validations
 
 # OCR
 
