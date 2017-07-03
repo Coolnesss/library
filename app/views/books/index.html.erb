@@ -1,45 +1,35 @@
 <h1>Listing Books</h1>
-<div class="col col-md-10 col-md-offset-1">
+<div class="container">
+  <div class="columns">
+    <div class="column col-8 centered">
+      <div class="input-group">
+        <%= form_tag(books_path, :method => "get", id: "search-form", class:"input-group") do %>
+          <%= text_field_tag :search, params[:search], placeholder: "Find a book", class:"form-input", type:"text" %>
+          <%= submit_tag "Search", class:"btn btn-primary input-group-btn" %>
+          <%= link_to 'Reset', books_path, class:"btn btn-link" %>
+        <% end %>
+      </div>
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Name eng</th>
+            <th>Author</th>
+            <th>Published</th>
+          </tr>
+        </thead>
 
-  <div class="input-group">
-      <%= form_tag(books_path, :method => "get", id: "search-form") do %>
-        <%= text_field_tag :search, params[:search], placeholder: "Find book", class:"form-control" %>
-        <span class="input-group-btn">
-          <%= submit_tag "Search", class:"btn btn-default" %>
-          <%= link_to 'Reset', books_path, class:"btn btn-default" %>
-        </span>
-      <% end %>
-    </div>
-
-  <table class="table table-striped">
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>Name eng</th>
-        <th>Author</th>
-        <th>Description (Sindhi)</th>
-        <th>Description (English)</th>
-        <th>Published</th>
-        <th>Publisher</th>
-      </tr>
-    </thead>
-
-    <tbody>
-      <% @books.each do |book| %>
-        <tr>
-          <td><%= link_to book.name, book %></td>
-          <td><%= book.name_eng %></td>
-          <td><%= link_to book.author, books_path(:search => book.author), class: "btn btn-xs btn-default" %></td>
-          <td><%= book.description_sindhi %></td>
-          <td><%= book.description_eng %></td>
-          <td><span class="label label-default"><%= book.year %></span></td>
-          <td><%= book.publisher %> </td>
-          <td><%= link_to 'Edit', edit_book_path(book), class: "btn btn-xs btn-warning" %></td>
-          <td><%= link_to 'Destroy', book, method: :delete, data: { confirm: 'Are you sure?' }, class: "btn btn-xs btn-danger" %></td>
-        </tr>
-      <% end %>
-    </tbody>
-  </table>
-  <%= link_to 'New Book', new_book_path, class: "btn btn-success" %>
+        <tbody>
+          <% @books.each do |book| %>
+            <tr>
+              <td><%= link_to book.name, book %></td>
+              <td><%= book.name_eng %></td>
+              <td><%= link_to book.author, books_path(:search => book.author), class: "btn btn-link" %></td>
+              <td><span class="label label-primary"><%= book.year %></span></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+      <%= link_to 'New Book', new_book_path, class: "btn btn-success" %>
+  </div>
 </div>
-<br>

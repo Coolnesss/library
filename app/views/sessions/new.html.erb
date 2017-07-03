@@ -1,9 +1,20 @@
 <h1>Login</h1>
 
-<%= form_tag '/login' do %>
-<div class="col col-md-6 col-md-offset-2">
-  <h3>Name: <%= text_field_tag :name %></h3>
-  <h3>Pass: <%= password_field_tag :password %></h3>
-  <%= submit_tag "Submit", class:"btn btn-success" %>
+<div class="container">
+  <div class="columns">
+    <div class="column col-4 centered">
+  <!-- form input control -->
+      <div class="form-group">
+        <%= form_tag '/login', class: "form-group" do %>
+          <label class="form-label" for="name">Name</label>
+          <input class="form-input" type="text" id="name" name="name" placeholder="Name" />
+          
+          <label class="form-label" for="password">Name</label>
+          <input class="form-input" type="password" id="password" name="password" placeholder="Password" />
+          <br>
+          <%= submit_tag "Submit", class:"btn btn-primary" %>
+        <% end %>
+        </div>
+    </div>
+  </div>
 </div>
-<% end %>
