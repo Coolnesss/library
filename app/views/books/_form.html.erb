@@ -1,55 +1,51 @@
-<%= form_for @book, html: { multipart: true } do |f| %>
-  <% if @book.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@book.errors.count, "error") %> prohibited this book from being saved:</h2>
 
-      <ul>
-      <% @book.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
+<div class="container">
+  <div class="columns">
+    <div class="column col-6 centered">
+      <%= form_for @book, html: { multipart: true } do |f| %>
+        <% if @book.errors.any? %>
+          <div id="error_explanation">
+            <h2><%= pluralize(@book.errors.count, "error") %> prohibited this book from being saved:</h2>
+
+            <ul>
+            <% @book.errors.full_messages.each do |message| %>
+              <li><%= message %></li>
+            <% end %>
+            </ul>
+          </div>
+        <% end %>
+
+        <div class="form-group">
+            <%= f.label :name, "Name", class:"form-label" %>
+            <%= f.text_field :name, class:"form-input", dir: "rtl", placeholder: "Name" %>
+          
+            <%= f.label :name_eng, "Name (English)", class:"form-label" %>
+            <%= f.text_field :name_eng, class:"form-input", placeholder: "Name (English)" %>
+          
+            <%= f.label :author, "Author", class:"form-label" %>
+            <%= f.text_field :author, class:"form-input", placeholder: "Author" %>
+          
+            <%= f.label :publisher, "Publisher", class:"form-label" %>
+            <%= f.text_field :publisher, class:"form-input", placeholder: "Publisher" %>
+          
+            <%= f.label :description_sindhi, "Description (Sindhi)", class:"form-label" %>
+            <%= f.text_area :description_sindhi, class:"form-input", placeholder: "Sindhi description", dir: "rtl" %>
+
+            <%= f.label :description_eng, "Description (English)", class:"form-label" %>
+            <%= f.text_area :description_eng, class:"form-input", placeholder: "English description" %>
+
+            <%= f.label :year, "Year", class:"form-label" %>
+            <%= f.number_field :year, class:"form-input", placeholder: "Year" %>
+
+            <%= f.label :attachment, "Attachment", class:"form-label" %>
+            <%= f.file_field :attachment, class:"form-input" %>
+
+            <div class="actions">
+              <br>
+              <%= f.submit "Create book", class: "btn btn-primary" %>
+            </div>
+        </div>
       <% end %>
-      </ul>
     </div>
-  <% end %>
-
-  <div class="field">
-    <%= f.label :name %><br>
-    <%= f.text_field :name %>
   </div>
-  <div class="field">
-    <%= f.label :name_eng %><br>
-    <%= f.text_field :name_eng %>
-  </div>
-  <div class="field">
-    <%= f.label :author %><br>
-    <%= f.text_field :author %>
-  </div>
-  <div class="field">
-    <%= f.label :publisher %><br>
-    <%= f.text_field :publisher %>
-  </div>
-
-  <div class="field">
-    <%= f.label :description_sindhi %><br>
-    <%= f.text_area :description_sindhi %>
-  </div>
-
-  <div class="field">
-    <%= f.label :description_eng %><br>
-    <%= f.text_area :description_eng %>
-  </div>
-
-  <div class="field">
-    <%= f.label :year %><br>
-    <%= f.number_field :year %>
-  </div>
-
-  <div class="field">
-    <%= f.label :attachment %><br>
-    <%= f.file_field :attachment %>
-  </div>
-
-  <div class="actions">
-    <br>
-    <%= f.submit %>
-  </div>
-<% end %>
+</div>
