@@ -36,6 +36,7 @@ gem 'bcrypt'
 gem "font-awesome-rails"
 gem 'bootstrap-sass', '~> 3.3.5'
 gem "paperclip"
+gem 'aws-sdk', '~> 2.3'
 
 group :production do
   gem 'pg'
