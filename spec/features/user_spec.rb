@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe "the signin process", :type => :feature do
+describe "The signin process", :type => :feature do
   before :each do
     FactoryGirl.create :user
   end

@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe "the books listing", :type => :feature do
+describe "The books listing", :type => :feature do
   before :each do
     FactoryGirl.create :user
     FactoryGirl.create :book
