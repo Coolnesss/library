@@ -1,33 +1,42 @@
-<div class="col col-md-8 col-md-offset-2">
-<div class="panel panel-success">
-    <div class="panel-heading">
-      <h1 class="sindhi">
-        <strong><%= @book.name %></strong>
-      </h1>
-      <div class="row">
-        <h4 class="text-center">
-          In English: <span class="label label-primary"><%= @book.name_eng %></span>
-          Author: <%= link_to @book.author, nil, class: "btn btn-default btn-xs" %>
-          Published: <%= link_to @book.year, nil, class: "btn btn-default btn-xs"  %>
-          Publisher: <%= link_to @book.publisher, nil, class: "btn btn-default btn-xs" %>
-          <% if @book.attachment.exists? %>
-            <%= link_to "Download", @book.attachment.url %>
-          <% end %>
-        </h4>
+<div class="container">
+  <div class="columns">
+    <div class="column col-8 centered">
+      <div class="card">
+        <div class="card-header">
+          <h4 class="card-title" style="display:inline;">
+             <%= @book.name_eng %>
+            <div class="sindhi" style="display:inline; float:right;">   <%= @book.name %> </div>
+          </h4>
+          <h6 class="card-subtitle">by <%= @book.author %> in <label class="label"><%= @book.year %></label>
+            <br>Published by <%= @book.publisher %>
+          </h6>
+          <div class="tile tile-centered">
+            <div class="tile-icon">
+                <i class="icon icon-download centered"></i>
+              </div>
+            <div class="tile-content">
+              <div class="tile-title"><%= link_to @book.attachment_file_name, @book.attachment.url %></div>
+              <div class="tile-subtitle"> <%= number_to_human_size(@book.attachment_file_size) %> · <%= @book.attachment_updated_at.to_date %></div>
+            </div>
+          </div>
+        </div>
+        <div class="columns">
+          <div class="column">
+            <div class="card-body">
+              <%= @book.description_eng %>
+            </div>
+          </div>
+          <div class="divider-vert"></div>
+          <div class="column">
+            <div class="card-body sindhi">
+              <%= @book.description_sindhi %>
+            </div>
+          </div>
+          </div>
       </div>
+    <br>
+    <%= link_to 'Edit', edit_book_path(@book), class: "btn btn-warning" %>
+    <%= link_to 'Back', books_path, class: "btn btn-default" %>
     </div>
-
-    <div class="panel-body">
-      <h3 class="text-center">English description:</h3>
-        <div class="well">
-          <%= @book.description_eng %>
-        </div>
-        <h3 class="text-center">Sindhi description:</h3>
-        <div class="well sindhi">
-          <%= @book.description_sindhi %>
-        </div>
-    </div>
+  </div>
 </div>
-
-<%= link_to 'Edit', edit_book_path(@book), class: "btn btn-warning" %>
-<%= link_to 'Back', books_path, class: "btn btn-default" %>
