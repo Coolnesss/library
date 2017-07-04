@@ -13,6 +13,7 @@ gem 'uglifier', '>= 1.3.0'
 gem 'coffee-rails', '~> 4.1.0'
 # See https://github.com/sstephenson/execjs#readme for more supported runtimes
 # gem 'therubyracer', platforms: :ruby
+# Language list for books, see https://github.com/scsmith/language_list
 gem 'language_list'
 
 # Use jquery as the JavaScript library
