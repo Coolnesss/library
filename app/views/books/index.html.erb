@@ -12,10 +12,10 @@
       <table class="table table-hover">
         <thead>
           <tr>
-            <th>Name</th>
-            <th>Name eng</th>
-            <th>Author</th>
-            <th>Published</th>
+            <th><%= sortable "name" %></th>
+            <th><%= sortable "name_eng", "Name (English)" %></th>
+            <th><%= sortable "author" %></th>
+            <th><%= sortable "year", "Published" %></th>
           </tr>
         </thead>
 

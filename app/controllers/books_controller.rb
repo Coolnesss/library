@@ -1,11 +1,12 @@
 class BooksController < ApplicationController
   before_action :set_book, only: [:show, :edit, :update, :destroy]
   before_filter :authorize
+  helper_method :sort_column, :sort_direction
 
   # GET /books
   # GET /books.json
   def index
-    @books = Book.all.order(:author)
+    @books = Book.order("LOWER("+sort_column + ") " + sort_direction)
     if params[:search]
       @books = Book.search(params[:search]).order(:author)
     end
@@ -69,6 +70,14 @@ class BooksController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_book
       @book = Book.find(params[:id])
+    end
+
+    def sort_column
+      Book.column_names.include?(params[:sort]) ? params[:sort] : "name"
+    end
+
+    def sort_direction
+      %w[asc desc].include?(params[:direction]) ? params[:direction] : "asc"
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

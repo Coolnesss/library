@@ -1,7 +1,5 @@
 # Stuff to do
 
-* Sort by any column
-* Add language tag
 * Pagination
 * Validations
 
