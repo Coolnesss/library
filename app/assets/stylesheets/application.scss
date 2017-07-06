@@ -40,7 +40,3 @@ header a {
 .card-subtitle {
   font-size: 15px !important;
 }
-
-.field_with_errors {
-  @extend is-error !optional;
-}

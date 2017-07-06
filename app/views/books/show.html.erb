@@ -11,6 +11,11 @@
             <br>Published by <%= @book.publisher %>
             <br><span class="label label-success"><%= @book.language %></span>
           </h6>
+          Tags: 
+          <% @book.categories.each do |category| %>
+            <label class="chip"><%= category.name %></label>
+          <% end %>
+          <br><br>
           <% if @book.attachment.exists? %>
           <div class="tile tile-centered">
             <div class="tile-icon">
@@ -23,6 +28,7 @@
           </div>
           <% end %>
         </div>
+
         <div class="columns">
           <div class="column">
             <div class="card-body">

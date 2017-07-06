@@ -1,7 +1,8 @@
 class BooksController < ApplicationController
-  before_action :set_book, only: [:show, :edit, :update, :destroy]
+  before_action :set_book, only: [:show, :edit, :update, :destroy, :categories]
   before_filter :authorize
   helper_method :sort_column, :sort_direction
+  after_action :handle_tags, only: [:update, :create]
 
   # GET /books
   # GET /books.json
@@ -10,6 +11,10 @@ class BooksController < ApplicationController
     if params[:search]
       @books = Book.search(params[:search]).order(:author)
     end
+  end
+
+  def categories
+    render json: @book.categories, status: 200
   end
 
   # GET /books/1
@@ -82,6 +87,22 @@ class BooksController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def book_params
-      params.require(:book).permit(:name, :name_eng, :author, :language, :description_sindhi, :description_eng, :year, :publisher, :attachment)
+      params.require(:book).permit(:name, :name_eng, :author, :language, :description_sindhi, :description_eng, :year, :publisher, :attachment, categories_attributes: [:id, :name, :_destroy])
+    end
+
+    def handle_tags
+      tags = params[:tags]
+
+      # Add new ones
+      tags.each do |tag|
+        tag_name = tag.capitalize
+        category = Category.find_or_create_by name: tag_name
+        BookCategory.find_or_create_by category: category, book: @book   
+      end
+
+      # Remove those that user chose not to keep
+      @book.categories.reject{|c| tags.include? c.name.capitalize }.each do |category|
+        BookCategory.find_by(category: category, book: @book).destroy
+      end     
     end
 end

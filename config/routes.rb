@@ -3,6 +3,8 @@ Rails.application.routes.draw do
 
   resources :books
 
+  get 'books/:id/categories' => 'books#categories'
+
   root 'books#index'
 
   get '/login' => 'sessions#new'

@@ -30,7 +30,20 @@
 
             <%= f.label :attachment, "Attachment", class:"form-label" %>
             <%= f.file_field :attachment, class:"form-input" %>
+            
+            <br>
+            
+            Tags: <div class="tags" id="tags"> </div>
+          
+            <br>
 
+            <label class="form-label" for="addNewTag">Add a new tag</label>
+            <div>
+            <input class="form-input" id="addNewTag">
+
+            <button class="btn btn-link">Add</button>
+            </div>
+            
             <div class="actions">
               <br>
               <%= f.submit "Submit", class: "btn btn-primary" %>
