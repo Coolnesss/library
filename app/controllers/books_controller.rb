@@ -91,7 +91,7 @@ class BooksController < ApplicationController
     end
 
     def handle_tags
-      tags = params[:tags]
+      tags = params[:tags] || []
 
       # Add new ones
       tags.each do |tag|
