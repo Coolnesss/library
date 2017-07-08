@@ -22,14 +22,15 @@
     
 tags_list = renderable (tags) ->
     tags = tags.sort((a, b) -> b.name < a.name)
-    
-    label '.chip.active', name: "label-tag", for: "tag-all", ->
+    totalCount = tags.reduce(((a, b) -> a + b.bookCount), 0)
+
+    label '.btn.active.btn-sm.badge', name: "label-tag", for: "tag-all", 'data-badge': totalCount, ->
         text 'All'
     input '#tag-all', name: "tags", type: "radio", hidden: true, checked: true, onchange: "tagSelected(this)"
         
     for tag in tags
         input '#tag-'+tag.name, name: "tags", type: "radio", hidden: true, onchange: "tagSelected(this)"
-        label '.chip', name: "label-tag", for: "tag-"+tag.name, ->
+        label '.btn.btn-sm.badge', name: "label-tag", for: "tag-"+tag.name, 'data-badge': tag.bookCount, style: "margin-left: 1em;", ->
             text tag.name
     
 books_list = renderable (books) ->
@@ -42,8 +43,6 @@ books_list = renderable (books) ->
                     div '.card-subtitle', ->
                         text book.categories.join(" ")
                     
-                    
-
 ready = ->
     return if $("#categoryPage").length < 1
 
