@@ -45,6 +45,8 @@ books_list = renderable (books) ->
                     
 
 ready = ->
+    return if $("#categoryPage").length < 1
+
     books_url = location.origin + "/books.json"
     tags_url = location.origin + "/categories.json"
     $.getJSON books_url, (books) ->
