@@ -9,15 +9,21 @@ capitalize = (string) ->
     element.parent().remove()
 
 createTag = (name) ->
-    return '<label class="chip">' + name + 
+    '<label class="chip">' + name + 
             '<button  onclick="removeChoice($(this))" class="btn btn-clear"></button>
              <input type="hidden" id="tags[]" name="tags[]" value="' + name + '" />
              </label>'
 
 ready = ->
     # Target specific views
-    if $("#addNewTag").length < 1
-        return
+    return if $("#addNewTag").length < 1
+    
+    $.getJSON location.origin + "/categories.json", (tags) ->
+        input = document.getElementById "addNewTag"
+        new Awesomplete input, {
+            minChars: 1,
+            list: tags.map((tag) -> tag.name)
+        }
 
     current_book_id = location.pathname.split("/")[2]
     url = location.origin + "/books/" + current_book_id + "/categories.json"

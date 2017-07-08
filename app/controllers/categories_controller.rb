@@ -72,4 +72,35 @@ class CategoriesController < ApplicationController
     def category_params
       params.require(:category).permit(:name)
     end
+
+    def filter_css
+      '.filter {
+  .filter-nav {
+    margin: 1rem 0;
+  }
+
+  .filter-body {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .filter-tag {
+    &#tag-all:checked ~ .filter-nav .chip[for="tag-all"],
+    &#tag-science:checked ~ .filter-nav .chip[for="tag-science"],
+    &#tag-roleplaying:checked ~ .filter-nav .chip[for="tag-roleplaying"],
+    &#tag-shooter:checked ~ .filter-nav .chip[for="tag-shooter"],
+    &#tag-sports:checked ~ .filter-nav .chip[for="tag-sports"] {
+      background: @primary-color;
+      color: @light-color;
+    }
+
+    &#tag-science:checked ~ .filter-body .column:not([data-tag~="tag-science"]),
+    &#tag-roleplaying:checked ~ .filter-body .column:not([data-tag~="tag-roleplaying"]),
+    &#tag-shooter:checked ~ .filter-body .column:not([data-tag~="tag-shooter"]),
+    &#tag-sports:checked ~ .filter-body .column:not([data-tag~="tag-sports"]) {
+      display: none;
+    }
+  }
+}'
+    end
 end
