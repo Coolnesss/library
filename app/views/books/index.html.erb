@@ -25,7 +25,7 @@
               <td><%= link_to book.name, book %></td>
               <td><%= book.name_eng %></td>
               <td><%= link_to book.author, books_path(:search => book.author), class: "btn btn-link" %></td>
-              <td><span class="label label-primary"><%= book.year %></span></td>
+              <td><span class="label label-primary"><%= book.year or "Unknown" %></span></td>
             </tr>
           <% end %>
         </tbody>
