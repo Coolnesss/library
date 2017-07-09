@@ -12,20 +12,20 @@
       <table class="table table-hover">
         <thead>
           <tr>
-            <th><%= sortable "name" %></th>
-            <th><%= sortable "name_eng", "Name (English)" %></th>
-            <th><%= sortable "author" %></th>
+            <th><%= sortable "name_eng", "Title" %></th>
+            <th><%= sortable "author", "Author / Editor" %></th>
             <th><%= sortable "year", "Published" %></th>
+            <th direction="rtl" class="sindhi-noto"><%= sortable "نالو" %></th>
           </tr>
         </thead>
 
         <tbody>
           <% @books.each do |book| %>
             <tr>
-              <td><%= link_to book.name, book %></td>
-              <td><%= book.name_eng %></td>
+              <td><%= link_to book.name_eng, book %></td>
               <td><%= link_to book.author, books_path(:search => book.author), class: "btn btn-link" %></td>
               <td><span class="label label-primary"><%= book.year or "Unknown" %></span></td>
+              <td direction="rtl" class="sindhi"><%= link_to book.name, book, direction: "rtl" %></td>              
             </tr>
           <% end %>
         </tbody>
