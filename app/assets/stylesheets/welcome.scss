@@ -1,0 +1,19 @@
+// Place all the styles related to the welcome controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+body {
+    background-image: image_url("book.jpg");
+    background-repeat:no-repeat;
+    //background-position: center center cover;
+    background-size: 100%;
+}
+
+h1 {
+    font-size: 8em;
+}
+
+blockquote {
+    font-size: 2em;
+    color: white;
+}
+

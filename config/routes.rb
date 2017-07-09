@@ -5,7 +5,7 @@ Rails.application.routes.draw do
 
   get 'books/:id/categories' => 'books#categories'
 
-  root 'books#index'
+  root 'welcome#index'
 
   get '/login' => 'sessions#new'
   post '/login' => 'sessions#create'

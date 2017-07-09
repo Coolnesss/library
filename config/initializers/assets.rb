@@ -10,4 +10,4 @@ Rails.application.config.assets.version = '1.0'
 # application.js, application.css, and all non-JS/CSS in app/assets folder are already added.
 # Rails.application.config.assets.precompile += %w( search.js )
 Rails.application.config.assets.precompile << /\.(?:svg|eot|woff|ttf)\z/
-Rails.application.config.assets.precompile += %w( spectre.min.css spectre-icons.min.css spectre-exp.min.css awesomplete.css awesomplete.min.js )
+Rails.application.config.assets.precompile += %w( welcome.css spectre.min.css spectre-icons.min.css spectre-exp.min.css awesomplete.css awesomplete.min.js )

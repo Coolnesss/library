@@ -1,7 +1,11 @@
 # Stuff to do
 
 * Pagination
-* Validations
+* Change password
+* rtl
+* Home page
+* Instructions
+* Deploy instructions
 
 # OCR
 
