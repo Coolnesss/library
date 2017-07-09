@@ -4,14 +4,14 @@
     <div class="column col-6 centered">
       <%= form_for @book, html: { multipart: true } do |f| %>
         <div class="form-group">
-            <%= f.label :name, "Name", class:"form-label" %>
-            <%= f.text_field :name, class:"form-input", dir: "rtl", placeholder: "Name" %>
+            <%= f.label :name, "نالو", class:"form-label sindhi bold" %>
+            <%= f.text_field :name, class:"form-input sindhi-noto", dir: "rtl", placeholder: "Name" %>
 
-            <%= f.label :name_eng, "Name (English)", class:"form-label" %>
-            <%= f.text_field :name_eng, class:"form-input", placeholder: "Name (English)" %>
+            <%= f.label :name_eng, "Title", class:"form-label" %>
+            <%= f.text_field :name_eng, class:"form-input", placeholder: "Title" %>
 
-            <%= f.label :author, "Author", class:"form-label" %>
-            <%= f.text_field :author, class:"form-input", placeholder: "Author" %>
+            <%= f.label :author, "Author / Editor", class:"form-label" %>
+            <%= f.text_field :author, class:"form-input", placeholder: "Author / Editor" %>
 
             <%= f.label :language, "Language", class:"form-label" %>
             <%= f.select :language, LanguageHelper.languages, {include_blank: "Select a language"}, class:"form-select" %>
@@ -19,10 +19,10 @@
             <%= f.label :publisher, "Publisher", class:"form-label" %>
             <%= f.text_field :publisher, class:"form-input", placeholder: "Publisher" %>
 
-            <%= f.label :description_sindhi, "Description (Sindhi)", class:"form-label" %>
-            <%= f.text_area :description_sindhi, class:"form-input", placeholder: "Sindhi description", dir: "rtl" %>
+            <%= f.label :description_sindhi, "تعارف", class:"form-label sindhi bold" %>
+            <%= f.text_area :description_sindhi, class:"form-input sindhi-noto", placeholder: "Sindhi description", dir: "rtl" %>
 
-            <%= f.label :description_eng, "Description (English)", class:"form-label" %>
+            <%= f.label :description_eng, "Intro", class:"form-label" %>
             <%= f.text_area :description_eng, class:"form-input", placeholder: "English description" %>
 
             <%= f.label :year, "Year", class:"form-label" %>

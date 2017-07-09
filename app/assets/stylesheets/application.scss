@@ -1,6 +1,7 @@
 //@import "bootstrap-sprockets";
 //@import "bootstrap";
 @import "font-awesome";
+@import url(//fonts.googleapis.com/earlyaccess/notonaskharabic.css);
 
 body {
   font-family: 'Ubuntu';
@@ -16,10 +17,13 @@ body {
 
 .sindhi {
   font-family: "Sindhi";
-  font-weight: 600;
   direction: rtl;
 }
 
+.sindhi-noto {
+    font-family: 'Noto Naskh Arabic';
+    direction: rtl;
+}
 
 h1 {
   text-align: center;
@@ -39,4 +43,8 @@ header a {
 
 .card-subtitle {
   font-size: 15px !important;
+}
+
+.bold {
+  font-weight: 600
 }
