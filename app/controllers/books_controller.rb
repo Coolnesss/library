@@ -7,7 +7,7 @@ class BooksController < ApplicationController
   # GET /books
   # GET /books.json
   def index
-    @books = Book.order("LOWER("+sort_column + ") " + sort_direction)
+    @books = Book.lower_order(sort_column, sort_direction)
     if params[:search]
       @books = Book.search(params[:search]).order(:author)
     end

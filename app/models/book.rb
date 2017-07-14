@@ -20,4 +20,11 @@ class Book < ActiveRecord::Base
   def self.search(search)
     where("author LIKE ?", "%#{search}%")
   end
+
+  def self.lower_order(sort_column, sort_direction)
+    if Book.column_for_attribute(sort_column).type == :integer
+      return Book.order(sort_column + " " + sort_direction)
+    end
+    Book.order("LOWER(" + sort_column + ") " + sort_direction)
+  end
 end

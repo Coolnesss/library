@@ -15,7 +15,7 @@
             <th><%= sortable "name_eng", "Title" %></th>
             <th><%= sortable "author", "Author / Editor" %></th>
             <th><%= sortable "year", "Published" %></th>
-            <th direction="rtl" class="sindhi-noto"><%= sortable "نالو" %></th>
+            <th direction="rtl" class="sindhi-noto"><%= sortable "name", "نالو" %></th>
           </tr>
         </thead>
 
@@ -24,7 +24,7 @@
             <tr>
               <td><%= link_to book.name_eng, book %></td>
               <td><%= link_to book.author, books_path(:search => book.author), class: "btn btn-link" %></td>
-              <td><span class="label label-primary"><%= book.year or "Unknown" %></span></td>
+              <td><%= book.year or "Unknown" %></td>
               <td class="sindhi-noto"><%= link_to book.name, book %></td>              
             </tr>
           <% end %>
