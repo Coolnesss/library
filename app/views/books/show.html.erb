@@ -9,7 +9,7 @@
           </h4>
           <h6 class="card-subtitle">by <%= @book.author %> in <label class="label"><%= @book.year %></label>
             <br>Published by <%= @book.publisher %>
-            <br><span class="label label-success"><%= @book.language %></span>
+            <br><%= @book.language %>
           </h6>
           Tags: 
           <% @book.categories.each do |category| %>
