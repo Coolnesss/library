@@ -1,12 +1,21 @@
-<h1> Change password </h1>
+<div class="container">
+  <div class="columns">
+    <div class="column col-6 centered">
+      <h1> Change password </h1>
+      
+      <%= form_for @user, class: "form-group" do |f| %>
 
-<%= form_for @user, class: "form-group" do |f| %>
+          <label class="form-label" for="password">New Password</label>
+          <input class="form-input" type="password" id="user_password" name="user[password]" placeholder="New password" />
+          <br>
+          
+          <label class="form-label" for="password">Password Confirmation</label>
+          <input class="form-input" type="password" id="user_password_confirmation" name="user[password_confirmation]" placeholder="New password again" />
+          <br>
+          
+          <%= f.submit "Submit", class:"btn btn-primary" %>
 
-    <label class="form-label" for="password">Password</label>
-    <input class="form-input" type="password" id="user_password" name="user[password]" placeholder="Password" />
-    <br>
-    <label class="form-label" for="password">Password Confirmation</label>
-    <input class="form-input" type="password" id="user_password_confirmation" name="user[password_confirmation]" placeholder="Password again" />
-
-    <%= f.submit_tag "Submit", class:"btn btn-primary" %>
-<% end %>
+      <% end %>
+    </div>
+  </div>
+</div>
