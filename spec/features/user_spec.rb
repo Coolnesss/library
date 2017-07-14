@@ -10,6 +10,6 @@ describe "The signin process", :type => :feature do
     fill_in 'name', with: "John"
     fill_in 'password', with: 'Doe'
     click_button 'Submit'
-    expect(page).to have_content 'Listing Books'
+    expect(page).to have_content 'Library'
   end
 end

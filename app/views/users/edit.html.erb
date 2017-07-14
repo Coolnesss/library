@@ -1,0 +1,12 @@
+<h1> Change password </h1>
+
+<%= form_for @user, class: "form-group" do |f| %>
+
+    <label class="form-label" for="password">Password</label>
+    <input class="form-input" type="password" id="user_password" name="user[password]" placeholder="Password" />
+    <br>
+    <label class="form-label" for="password">Password Confirmation</label>
+    <input class="form-input" type="password" id="user_password_confirmation" name="user[password_confirmation]" placeholder="Password again" />
+
+    <%= f.submit_tag "Submit", class:"btn btn-primary" %>
+<% end %>
