@@ -49,6 +49,7 @@ end
 group :development do
   gem 'web-console', '~> 2.0'
   gem 'pry-rails'
+  gem 'rails_real_favicon'
 end
 
 group :development, :test do
