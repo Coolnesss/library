@@ -1,7 +1,7 @@
 <h1>Listing Books</h1>
-<div class="container">
+<div class="container grid-960">
   <div class="columns">
-    <div class="column col-8 centered">
+    <div class="column centered">
       <div class="input-group">
         <%= form_tag(books_path, :method => "get", id: "search-form", class:"input-group") do %>
           <%= text_field_tag :search, params[:search], placeholder: "Find a book", class:"form-input", type:"text" %>

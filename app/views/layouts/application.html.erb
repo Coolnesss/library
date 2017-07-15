@@ -11,26 +11,30 @@
   <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
   <link href="https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no" />
   <%= csrf_meta_tags %>
 </head>
 
 <body>
-  <header class="navbar">
-    <section class="navbar-section">
-      <%= link_to 'Home ', root_path, class:"navbar-brand mr-10" %>
-      <%= link_to "<i class='fa fa-book'></i> Books".html_safe, books_path, class: "btn btn-link" %>
-      <%= link_to "<i class='fa fa-tag'></i> Categories".html_safe, categories_path, class: "btn btn-link" %>
+  <section class="section section-header bg-gray">
+    <section class="grid-header container">
+      <nav class="navbar">
+        <section class="navbar-section">
+          <%= link_to 'Home ', root_path, class:"navbar-brand mr-10" %>
+          <%= link_to "<i class='fa fa-book'></i> Books".html_safe, books_path, class: "btn btn-link" %>
+          <%= link_to "<i class='fa fa-tag'></i> Categories".html_safe, categories_path, class: "btn btn-link" %>
+        </section>
+        <section class="navbar-section">
+          <% if current_user %>
+            <%= link_to "<i class='fa fa-key fa-fw'></i> Change password".html_safe, change_password_path, class: "btn btn-link hide-sm" %>
+            <%= link_to "<i class='fa fa-sign-out fa-fw'></i> Sign out".html_safe, logout_path, class: "btn btn-link" %>
+          <% else %>
+            <%= link_to "<i class='fa fa-sign-in fa-fw'></i> Sign in".html_safe, login_path, class: "btn btn-link" %>
+          <% end %>
+        </section>
+      </nav>
     </section>
-    <section class="navbar-section">
-      <% if current_user %>
-        <%= link_to "<i class='fa fa-key fa-fw'></i> Change password".html_safe, change_password_path, class: "btn btn-link" %>
-        <%= link_to "<i class='fa fa-sign-out fa-fw'></i> Sign out".html_safe, logout_path, class: "btn btn-link" %>
-      <% else %>
-        <%= link_to "<i class='fa fa-sign-in fa-fw'></i> Sign in".html_safe, login_path, class: "btn btn-link" %>
-      <% end %>
-    </section>
-  </header>
-  <br>
+  </section>
    <%= flash_messages %>
 
 <%= yield %>
