@@ -29,6 +29,7 @@ tags_list = renderable (tags) ->
     input '#tag-all', name: "tags", type: "radio", hidden: true, checked: true, onchange: "tagSelected(this)"
         
     for tag in tags
+        continue if tag.bookCount == 0
         input '#tag-'+tag.name, name: "tags", type: "radio", hidden: true, onchange: "tagSelected(this)"
         label '.btn.btn-sm.badge', name: "label-tag", for: "tag-"+tag.name, 'data-badge': tag.bookCount, style: "margin-left: 1em;", ->
             text tag.name
