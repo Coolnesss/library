@@ -6,6 +6,9 @@
     h1 {
         font-size: 4em;
     }
+    blockquote {
+        font-size: 1em;
+    }
 }
 
 .welcome:after {
@@ -43,11 +46,9 @@ body {
     h1 {
         font-size: 7em;
     }
-}
-
-blockquote {
-    font-size: 2em;
-    color: white !important;
+    blockquote {
+        font-size: 2em;
+    }
 }
 
 p {
