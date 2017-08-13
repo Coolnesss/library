@@ -7,9 +7,16 @@ class BooksController < ApplicationController
   # GET /books
   # GET /books.json
   def index
-    @books = Book.lower_order(sort_column, sort_direction).paginate(page: params[:page])
-    if params[:search]
-      @books = Book.search(params[:search]).order(:author).paginate(page: params[:page])
+    respond_to do |format| 
+      format.html { 
+        @books = Book.lower_order(sort_column, sort_direction).paginate(page: params[:page])
+        if params[:search]
+          @books = Book.search(params[:search]).order(:author).paginate(page: params[:page]) 
+        end
+      }
+      format.csv {
+       send_data Book.as_csv, filename: "books-#{Date.today}.csv" 
+      }
     end
   end
 

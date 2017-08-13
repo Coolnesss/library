@@ -1,3 +1,5 @@
+require 'csv'
+
 class Book < ActiveRecord::Base
 
   has_many :book_categories
@@ -30,5 +32,17 @@ class Book < ActiveRecord::Base
       return Book.order(sort_column + " " + sort_direction)
     end
     Book.order("LOWER(" + sort_column + ") " + sort_direction)
+  end
+
+  def self.as_csv
+    attributes = %w{name name_eng isbn language year }
+
+    CSV.generate(headers: true) do |csv|
+      csv << attributes
+
+      all.each do |book|
+        csv << attributes.map{ |attr| book.send(attr) }
+      end
+    end
   end
 end
