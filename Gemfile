@@ -39,6 +39,7 @@ gem "font-awesome-rails"
 gem "paperclip"
 gem 'aws-sdk', '~> 2.3'
 gem 'teacup-rails'
+gem 'will_paginate'
 
 
 group :production do

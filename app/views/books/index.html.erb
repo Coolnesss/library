@@ -31,6 +31,8 @@
         </tbody>
       </table>
       <br>
+      <%= will_paginate @books %>
+      <br>
       <%= link_to 'New Book', new_book_path, class: "btn btn-success" %>
   </div>
 </div>

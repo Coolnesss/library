@@ -7,6 +7,11 @@ body {
   font-family: 'Ubuntu';
 }
 
+table {
+  border-spacing: 0;
+  border-collapse: collapse;
+}
+
 @font-face {
   font-family: 'Sindhi';
   src: font-url('MBLATEEFI.TTF') format('truetype');
@@ -154,4 +159,9 @@ header a {
     width: 100%;
     z-index: 300;
   }
+}
+
+.pagination a, em, span {
+  padding-left: 2px;
+  padding-right: 2px;
 }

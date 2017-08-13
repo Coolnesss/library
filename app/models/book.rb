@@ -17,8 +17,10 @@ class Book < ActiveRecord::Base
 
   accepts_nested_attributes_for :categories, :allow_destroy => true
 
+  self.per_page = 20
+
   def self.search(search)
-    where("author LIKE ?", "%#{search}%")
+    where("author LIKE ? OR name_eng LIKE ? OR name LIKE ?", "%#{search}%", "%#{search}%", "%#{search}%")
   end
 
   def self.lower_order(sort_column, sort_direction)

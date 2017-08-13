@@ -7,9 +7,9 @@ class BooksController < ApplicationController
   # GET /books
   # GET /books.json
   def index
-    @books = Book.lower_order(sort_column, sort_direction)
+    @books = Book.lower_order(sort_column, sort_direction).paginate(page: params[:page])
     if params[:search]
-      @books = Book.search(params[:search]).order(:author)
+      @books = Book.search(params[:search]).order(:author).paginate(page: params[:page])
     end
   end
 
