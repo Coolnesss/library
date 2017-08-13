@@ -15,7 +15,7 @@ class Book < ActiveRecord::Base
     inclusion: { in: (0..2020), message: "Should be between 0 and 2020" },
     numericality: { only_integer: true }
   
-  validates :isbn, isbn_format: true
+  validates :isbn, isbn_format: true, allow_blank: false
 
   accepts_nested_attributes_for :categories, :allow_destroy => true
 
