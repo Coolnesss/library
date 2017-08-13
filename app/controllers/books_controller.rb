@@ -10,8 +10,11 @@ class BooksController < ApplicationController
   def index
     respond_to do |format| 
       format.html {
-        @books = Book.all.order(sort_column, sort_direction).paginate(page: params[:page]) if sort_column == "created_at" 
-        @books = Book.lower_order(sort_column, sort_direction).paginate(page: params[:page])
+        if sort_column == "created_at"  
+          @books = Book.all.order(created_at: :desc).paginate(page: params[:page]) 
+        else 
+          @books = Book.lower_order(sort_column, sort_direction).paginate(page: params[:page])
+        end
         if params[:search]
           @books = Book.search(params[:search]).order(:author).paginate(page: params[:page]) 
         end
