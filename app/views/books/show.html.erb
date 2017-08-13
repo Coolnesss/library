@@ -20,6 +20,7 @@
           <% @book.categories.each do |category| %>
             <label class="chip"><%= category.name %></label>
           <% end %>
+          <br>Uploaded at <%= @book.created_at %>
           <br><br>
           <% if @book.attachment.exists? %>
           <div class="tile tile-centered">
