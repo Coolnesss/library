@@ -5,11 +5,16 @@
         <div class="card-header">
           <h4 class="card-title" style="display:inline;">
              <%= @book.name_eng %>
-            <div class="sindhi" style="display:inline; float:right;">   <%= @book.name %> </div>
+            <div class="sindhi" style="display:inline; float:right;">
+              <%= @book.name %>
+            </div>
           </h4>
           <h6 class="card-subtitle">by <%= @book.author %> in <label class="label"><%= @book.year %></label>
             <br>Published by <%= @book.publisher %>
             <br><%= @book.language %>
+            <% if @book.isbn %>
+              <br><small class="label label-primary">ISBN</small> <span class="number"><%= @book.isbn %></span>
+            <% end %>
           </h6>
           Tags: 
           <% @book.categories.each do |category| %>

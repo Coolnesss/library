@@ -40,6 +40,7 @@ gem "paperclip"
 gem 'aws-sdk', '~> 2.3'
 gem 'teacup-rails'
 gem 'will_paginate'
+gem 'isbn_validation'
 
 
 group :production do

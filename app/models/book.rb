@@ -14,10 +14,12 @@ class Book < ActiveRecord::Base
   validates :year, presence: true,
     inclusion: { in: (0..2020), message: "Should be between 0 and 2020" },
     numericality: { only_integer: true }
+  
+  validates :isbn, isbn_format: true
 
   accepts_nested_attributes_for :categories, :allow_destroy => true
 
-  self.per_page = 20
+  self.per_page = 10
 
   def self.search(search)
     where("author LIKE ? OR name_eng LIKE ? OR name LIKE ?", "%#{search}%", "%#{search}%", "%#{search}%")
