@@ -3,6 +3,7 @@ class BooksController < ApplicationController
   before_filter :authorize
   helper_method :sort_column, :sort_direction
   after_action :handle_tags, only: [:update, :create]
+  before_filter :authorize_admin, only: [:destroy]
 
   # GET /books
   # GET /books.json

@@ -1,5 +1,7 @@
 class UsersController < ApplicationController
 
+  before_filter :authorize_self
+
   def edit
     @user = current_user
   end
