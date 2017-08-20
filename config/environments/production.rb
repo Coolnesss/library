@@ -87,4 +87,6 @@ Rails.application.configure do
       s3_host_name: ENV.fetch('S3_ENDPOINT')
     }
   }
+
+  config.force_ssl = true
 end
