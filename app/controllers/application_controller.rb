@@ -10,7 +10,7 @@ class ApplicationController < ActionController::Base
   end
 
   def authorize
-    redirect_to login_path, notice: 'you should be signed in' if current_user.nil?
+    redirect_to login_path, notice: 'You should be signed in' if not current_user
   end
 
   def authorize_admin

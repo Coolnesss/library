@@ -1,6 +1,5 @@
 Rails.application.routes.draw do
   resources :categories
-
   resources :books
 
   get 'books/:id/categories' => 'books#categories'
@@ -10,7 +9,8 @@ Rails.application.routes.draw do
   get '/login' => 'sessions#new'
   post '/login' => 'sessions#create'
   get '/logout' => 'sessions#destroy', as: "logout"
-  get '/change_password' => 'users#edit', as: 'change_password' 
+  get '/change_password' => 'users#edit', as: 'change_password'
+  get '/register' => 'users#register', as: 'register'
   
   resources :users
 

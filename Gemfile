@@ -41,6 +41,7 @@ gem 'aws-sdk', '~> 2.3'
 gem 'teacup-rails'
 gem 'will_paginate'
 gem 'isbn_validation'
+gem 'email_validator'
 
 
 group :production do

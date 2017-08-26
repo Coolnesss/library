@@ -20,9 +20,23 @@ class UsersController < ApplicationController
     end
   end
 
+  def register
+    @user = User.new
+  end
+
+  def create
+    @user = User.new user_params
+
+    if @user.save
+      redirect_to login_path, notice: 'User created succesfully. Wait for an admin to activate your account.'
+    else
+      render :register
+    end
+  end
+
     # Never trust parameters from the scary internet, only allow the white list through.
   def user_params
-    params.require(:user).permit(:password, :password_confirmation)
+    params.require(:user).permit(:name, :email, :password, :password_confirmation)
   end
 
 end

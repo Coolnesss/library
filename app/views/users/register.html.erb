@@ -1,0 +1,30 @@
+<div class="container grid-480">
+  <div class="columns">
+    <div class="column centered">
+      <h1> Create an account </h1>
+      
+      <%= form_for @user, class: "form-group" do |f| %>
+        
+        <div class="form-group">
+          <%= f.label :name, "Name", class:"form-label" %>
+          <%= f.text_field :name, class: "form-input", placeholder: "Name" %>
+          <br>
+          
+          <%= f.label :email, "Email", class:"form-label" %>
+          <%= f.text_field :email, class: "form-input", placeholder: "Email" %>
+          <br>
+
+          <%= f.label :password, "Password", class:"form-label" %>
+          <%= f.password_field :password, class:"form-input", placeholder: "Password" %>
+          <br>
+
+          <%= f.label :password_confirmation, "Password Confirmation", class:"form-label" %>
+          <%= f.password_field :password_confirmation, class: "form-input", placeholder: "Password again" %>
+          <br>
+          <%= f.submit "Submit", class:"btn btn-primary" %>
+        </div>
+
+      <% end %>
+    </div>
+  </div>
+</div>
