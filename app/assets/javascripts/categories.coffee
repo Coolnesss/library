@@ -2,7 +2,7 @@
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://coffeescript.org/
         
-{renderable, div, text, label, input} = teacup
+{renderable, div, text, label, input, a} = teacup
 
 @tagSelected = (e) ->
     label = $("label[for='"+$(e).attr('id')+"']");
@@ -40,7 +40,7 @@ books_list = renderable (books) ->
             div '.card', ->
                 div '.card-header', ->
                     div '.card-title', ->
-                        text book.name_eng
+                        a book.name_eng, href: '/books/' + book.id
                     div '.card-subtitle', ->
                         text book.categories.join(" ")
                     
