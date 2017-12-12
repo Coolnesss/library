@@ -1,0 +1,32 @@
+
+<div class="container grid-960">
+  <div class="columns">
+    <div class="column centered">
+    <h1> Unconfirmed users </h1>
+    <p class="text-center"> Accept or reject these accounts. When you accept them, they will be able to login. </p>
+
+      <table class="table table-striped table-hover">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Registered</th>
+            <th>Actions</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @users.each do |user| %>
+          <tr>
+            <td><%= user.name %></td>
+            <td><%= user.email %></td>
+            <td><%= user.created_at.to_formatted_s(:long) %></td>
+            <td><%= button_to "Approve", confirm_path, params: { user_id: user.id, confirm: true }, class:"btn btn-sm" %></td>
+            <td><%= button_to "Reject", confirm_path, params: { user_id: user.id, confirm: false }, class:"btn btn-danger btn-sm" %></td>
+          </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

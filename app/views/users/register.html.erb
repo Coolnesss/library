@@ -2,7 +2,7 @@
   <div class="columns">
     <div class="column centered">
       <h1> Create an account </h1>
-      
+
       <%= form_for @user, class: "form-group" do |f| %>
         
         <div class="form-group">
@@ -21,6 +21,9 @@
           <%= f.label :password_confirmation, "Password Confirmation", class:"form-label" %>
           <%= f.password_field :password_confirmation, class: "form-input", placeholder: "Password again" %>
           <br>
+
+          <p>Your account will be activated by an admin after they've reviewed your information. </p>
+
           <%= f.submit "Submit", class:"btn btn-primary" %>
         </div>
 

@@ -11,6 +11,8 @@ Rails.application.routes.draw do
   get '/logout' => 'sessions#destroy', as: "logout"
   get '/change_password' => 'users#edit', as: 'change_password'
   get '/register' => 'users#register', as: 'register'
+  get '/inactive' => 'users#inactive', as: 'inactive'
+  post '/confirm_user' => 'users#confirm', as: 'confirm'
   
   resources :users
 

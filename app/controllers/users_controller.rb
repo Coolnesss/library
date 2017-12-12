@@ -1,6 +1,19 @@
 class UsersController < ApplicationController
 
-  before_filter :authorize_self
+  before_filter :authorize_self, except: [:inactive]
+  before_filter :authorize_admin, only: [:inactive, :confirm]
+
+  def inactive
+    @users = User.where(active: nil).order(created_at: :desc)
+  end
+
+  def confirm
+    user_params = params.permit(:confirm, :user_id)
+    user = User.find(user_params[:user_id])
+    user.active = true? user_params[:confirm]
+    
+    redirect_to inactive_path, notice: build_notice(user.save, user)
+  end
 
   def edit
     @user = current_user
@@ -34,9 +47,24 @@ class UsersController < ApplicationController
     end
   end
 
+  private
+
     # Never trust parameters from the scary internet, only allow the white list through.
   def user_params
     params.require(:user).permit(:name, :email, :password, :password_confirmation)
   end
 
+  def build_notice(result, user)
+    if result and user.active
+      "User was activated successfully."
+    elsif !result
+      "Something went wrong while saving the user."
+    elsif result and !user.active
+      "User was rejected successfully." 
+    end
+  end
+
+  def true?(obj)
+    obj.to_s == "true"
+  end
 end
