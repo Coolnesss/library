@@ -3,6 +3,8 @@ FactoryGirl.define do
     name "John"
     password  "Doe"
     password_confirmation "Doe"
+    email "c@c.fi"
+    active true
   end
 
   factory :book do

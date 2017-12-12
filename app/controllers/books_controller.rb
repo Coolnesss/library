@@ -19,9 +19,8 @@ class BooksController < ApplicationController
           @books = Book.search(params[:search]).order(:author).paginate(page: params[:page]) 
         end
       }
-      format.csv {
-        send_data Book.as_csv, filename: "books-#{Date.today}.csv" 
-      }
+      format.json { @books = Book.all }
+      format.csv { send_data Book.as_csv, filename: "books-#{Date.today}.csv" }
     end
   end
 
