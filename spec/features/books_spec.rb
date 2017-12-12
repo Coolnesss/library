@@ -2,8 +2,8 @@ require 'rails_helper'
 
 describe "Books", :type => :feature do
   before :each do
-    FactoryGirl.create :user
-    FactoryGirl.create :book
+    FactoryBot.create :user
+    FactoryBot.create :book
   end
 
   it "can view books list" do

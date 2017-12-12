@@ -2,7 +2,7 @@ require 'rails_helper'
 
 describe "User", :type => :feature do
   before :each do
-    FactoryGirl.create :user
+    FactoryBot.create :user
   end
 
   it "can sign in" do
