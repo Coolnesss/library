@@ -35,7 +35,7 @@ class Book < ActiveRecord::Base
   end
 
   def self.as_csv
-    attributes = %w{name name_eng isbn language year }
+    attributes = %w{name name_eng isbn language year description_sindhi description_eng publisher  }
 
     CSV.generate(headers: true) do |csv|
       csv << attributes
