@@ -28,6 +28,7 @@
           <% if current_user %>
             <% if current_user.admin? %>
               <%= link_to "<i class='fa fa-user-times fa-fw'></i> Unconfirmed users".html_safe, inactive_path, class: "btn btn-link hide-sm" %>
+              <%= link_to "<i class='fa fa-user fa-fw'></i> Users".html_safe, users_path, class: "btn btn-link hide-sm" %>
             <% end %>
             <%= link_to "<i class='fa fa-key fa-fw'></i> Change password".html_safe, change_password_path, class: "btn btn-link hide-sm" %>
             <%= link_to "<i class='fa fa-sign-out fa-fw'></i> Sign out".html_safe, logout_path, class: "btn btn-link" %>

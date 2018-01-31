@@ -1,0 +1,28 @@
+<div class="container grid-960">
+  <h1>Administer users</h1>
+  <div class="columns">
+    <div class="column centered">
+    
+    <table class="table table-hover">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <% @users.each do |user| %>
+            <tr>
+              <td><%= user.name %></td>
+              <td><%= user.email %></td>
+              <td><%= link_to "Change password", edit_user_path(user) %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    
+    </div>
+  </div>
+</div>

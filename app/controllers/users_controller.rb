@@ -1,10 +1,14 @@
 class UsersController < ApplicationController
 
   before_filter :authorize_self, except: [:inactive]
-  before_filter :authorize_admin, only: [:inactive, :confirm]
+  before_filter :authorize_admin, only: [:inactive, :confirm, :index]
 
   def inactive
     @users = User.where(active: nil).order(created_at: :desc)
+  end
+
+  def index
+    @users = User.all
   end
 
   def confirm
@@ -17,10 +21,12 @@ class UsersController < ApplicationController
 
   def edit
     @user = current_user
+    @user = User.find(params[:id]) if params[:id]  
   end
 
   def update
     @user = current_user
+    @user = User.find(params[:id]) if params[:id]
 
     respond_to do |format|
       if @user.update(user_params)

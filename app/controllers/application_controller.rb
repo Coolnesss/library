@@ -18,6 +18,6 @@ class ApplicationController < ActionController::Base
   end
 
   def authorize_self
-    redirect_to login_path, notice: "This isn't yours to modify!" if params[:id] and User.find(params[:id]) != current_user
+    redirect_to login_path, notice: "This isn't yours to modify!" if (params[:id] and User.find(params[:id]) != current_user) and not current_user.admin?
   end
 end
