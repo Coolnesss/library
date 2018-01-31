@@ -40,7 +40,7 @@ books_list = renderable (books) ->
             div '.card', ->
                 div '.card-header', ->
                     div '.card-title', ->
-                        a book.name_eng, href: '/books/' + book.id
+                        a book.name, href: '/books/' + book.id
                     div '.card-subtitle', ->
                         text book.categories.join(" ")
                     
