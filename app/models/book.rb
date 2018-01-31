@@ -24,7 +24,7 @@ class Book < ActiveRecord::Base
   self.per_page = 10
 
   def self.search(search)
-    where("author LIKE ? OR name_eng LIKE ? OR name LIKE ?", "%#{search}%", "%#{search}%", "%#{search}%")
+    where("lower(author) LIKE ? OR lower(name_eng) LIKE ? OR lower(name) LIKE ? OR lower(publisher) LIKE ?", "%#{search}%", "%#{search}%", "%#{search}%", "%#{search}%")
   end
 
   def self.lower_order(sort_column, sort_direction)
