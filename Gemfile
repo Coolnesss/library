@@ -37,7 +37,8 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 gem 'bcrypt'
 gem "font-awesome-rails"
 gem "paperclip"
-gem 'aws-sdk', '~> 2.3'
+#gem 'aws-sdk', '~> 2.3'
+gem 'aws-sdk-s3'
 gem 'teacup-rails'
 gem 'will_paginate'
 gem 'isbn_validation'
