@@ -1,3 +1,4 @@
+=begin
 FactoryBot.define do
   factory :user do
     name "John"
@@ -18,3 +19,4 @@ FactoryBot.define do
     isbn "9780520960916"
   end
 end
+=end
