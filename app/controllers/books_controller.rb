@@ -11,13 +11,18 @@ class BooksController < ApplicationController
     respond_to do |format| 
       format.html {
         if sort_column == "created_at"  
-          @books = Book.all.order(created_at: :desc).paginate(page: params[:page]) 
+          @books = Book.all.order(created_at: :desc)
         else 
-          @books = Book.lower_order(sort_column, sort_direction).paginate(page: params[:page])
+          @books = Book.lower_order(sort_column, sort_direction)
         end
         if params[:search]
-          @books = Book.search(params[:search]).order(:author).paginate(page: params[:page]) 
+          @books = Book.search(params[:search]).order(:author)
         end
+        if params[:filter]
+          @books = @books.joins(:book_categories).where('book_categories.category_id' => params[:filter])
+        end
+
+        @books = @books.paginate(page: params[:page])
       }
       format.json { @books = Book.all }
       format.csv { send_data Book.as_csv, filename: "books-#{Date.today}.csv" }
