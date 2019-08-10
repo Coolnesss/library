@@ -1,7 +1,7 @@
 class UsersController < ApplicationController
 
   before_filter :authorize_self, except: [:inactive]
-  before_filter :authorize_admin, only: [:inactive, :confirm, :index]
+  before_filter :authorize_admin, only: [:inactive, :confirm, :index, :destroy]
 
   def inactive
     @users = User.where(active: nil).order(created_at: :desc)
@@ -50,6 +50,15 @@ class UsersController < ApplicationController
       redirect_to login_path, notice: 'User created succesfully. Wait for an admin to activate your account.'
     else
       render :register
+    end
+  end
+
+  def destroy
+    @user = User.find(params[:id]) if params[:id]
+    @user.destroy
+    respond_to do |format|
+      format.html { redirect_to users_url, notice: 'User was successfully destroyed.' }
+      format.json { head :no_content }
     end
   end
 
