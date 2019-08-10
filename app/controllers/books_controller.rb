@@ -15,10 +15,12 @@ class BooksController < ApplicationController
         else 
           @books = Book.lower_order(sort_column, sort_direction)
         end
-        if params[:search]
+
+        if params[:search].present?
           @books = Book.search(params[:search]).order(:author)
         end
-        if params[:filter]
+
+        if params[:filter].present?
           @books = @books.joins(:book_categories).where('book_categories.category_id' => params[:filter])
         end
 
