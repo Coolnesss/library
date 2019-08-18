@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190811141812) do
+ActiveRecord::Schema.define(version: 20190811185041) do
 
   create_table "book_categories", force: :cascade do |t|
     t.integer  "book_id"
@@ -36,6 +36,7 @@ ActiveRecord::Schema.define(version: 20190811141812) do
     t.datetime "attachment_updated_at"
     t.string   "language"
     t.string   "isbn"
+    t.string   "author_sindhi"
   end
 
   create_table "categories", force: :cascade do |t|
