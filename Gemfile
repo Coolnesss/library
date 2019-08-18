@@ -42,7 +42,7 @@ gem "paperclip"
 #gem 'aws-sdk', '~> 2.3'
 gem 'aws-sdk-s3'
 gem 'teacup-rails'
-gem 'will_paginate'
+gem 'will_paginate', '3.1.7'
 gem 'isbn_validation'
 gem 'email_validator'
 #gem 'puma'
