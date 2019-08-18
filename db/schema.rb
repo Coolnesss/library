@@ -1,4 +1,3 @@
-# encoding: UTF-8
 # This file is auto-generated from the current state of the database. Instead
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
@@ -11,50 +10,49 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190811185041) do
+ActiveRecord::Schema.define(version: 2019_08_11_185041) do
 
   create_table "book_categories", force: :cascade do |t|
-    t.integer  "book_id"
-    t.integer  "category_id"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.integer "book_id"
+    t.integer "category_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "books", force: :cascade do |t|
-    t.string   "name"
-    t.string   "name_eng"
-    t.string   "author"
-    t.text     "description_sindhi"
-    t.text     "description_eng"
-    t.integer  "year"
-    t.datetime "created_at",              null: false
-    t.datetime "updated_at",              null: false
-    t.string   "publisher"
-    t.string   "attachment_file_name"
-    t.string   "attachment_content_type"
-    t.integer  "attachment_file_size"
+    t.string "name"
+    t.string "name_eng"
+    t.string "author"
+    t.text "description_sindhi"
+    t.text "description_eng"
+    t.integer "year"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "publisher"
+    t.string "attachment_file_name"
+    t.string "attachment_content_type"
+    t.integer "attachment_file_size"
     t.datetime "attachment_updated_at"
-    t.string   "language"
-    t.string   "isbn"
-    t.string   "author_sindhi"
+    t.string "language"
+    t.string "isbn"
+    t.string "author_sindhi"
   end
 
   create_table "categories", force: :cascade do |t|
-    t.string   "name"
+    t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
   create_table "users", force: :cascade do |t|
-    t.string   "name"
-    t.string   "password_digest"
-    t.datetime "created_at",      null: false
-    t.datetime "updated_at",      null: false
-    t.boolean  "admin"
-    t.boolean  "active"
-    t.string   "email"
+    t.string "name"
+    t.string "password_digest"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.boolean "admin"
+    t.boolean "active"
+    t.string "email"
+    t.index ["email"], name: "index_users_on_email", unique: true
   end
-
-  add_index "users", ["email"], name: "index_users_on_email", unique: true
 
 end

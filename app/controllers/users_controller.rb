@@ -1,7 +1,7 @@
 class UsersController < ApplicationController
 
-  before_filter :authorize_self, except: [:inactive]
-  before_filter :authorize_admin, only: [:inactive, :confirm, :index, :destroy]
+  before_action :authorize_self, except: [:inactive]
+  before_action :authorize_admin, only: [:inactive, :confirm, :index, :destroy]
 
   def inactive
     @users = User.where(active: nil).order(created_at: :desc)

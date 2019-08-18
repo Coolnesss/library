@@ -1,8 +1,8 @@
 source 'https://rubygems.org'
-ruby '2.4.0'
+ruby '2.6.3'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 4.2.11'
+gem 'rails', '~> 5.2'
 # Use sqlite3 as the database for Active Record
 #gem 'sqlite3'
 # Use SCSS for stylesheets
@@ -15,6 +15,8 @@ gem 'coffee-rails'
 # gem 'therubyracer', platforms: :ruby
 # Language list for books, see https://github.com/scsmith/language_list
 gem 'language_list'
+gem 'bootsnap', require: false
+gem 'listen'
 
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
