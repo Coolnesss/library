@@ -25,7 +25,7 @@ class Book < ApplicationRecord
 
   def self.search(term)
     term = term.downcase
-    where("lower(author) LIKE ? OR lower(name_eng) LIKE ? OR lower(name) LIKE ? OR lower(publisher) LIKE ?", "%#{term}%", "%#{term}%", "%#{term}%", "%#{term}%")
+    where("lower(author) LIKE ? OR lower(author_sindhi) LIKE ? OR lower(name_eng) LIKE ? OR lower(name) LIKE ? OR lower(publisher) LIKE ?", "%#{term}%", "%#{term}%", "%#{term}%", "%#{term}%", "%#{term}%")
   end
 
   def self.lower_order(sort_column, sort_direction)

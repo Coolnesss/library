@@ -7,6 +7,12 @@ body {
   font-family: 'Ubuntu';
 }
 
+a:visited {
+  color:#5755d9;
+}
+
+
+
 table {
   border-spacing: 0;
   border-collapse: collapse;
@@ -67,8 +73,8 @@ h1 {
 .grid-header .btn-link {
   color: #667189;
   padding-left: .6rem;
-  padding-right: .6rem;
 }
+
 .grid-header .btn-link:focus,
 .grid-header .btn-link:hover,
 .grid-header .btn-link:active {
@@ -92,8 +98,8 @@ h1 {
 }
 
 .btn-warning:hover {
-  background-color: #ffb700;
-  color: white;
+  background-color: #ffb700 !important;
+  color: white !important;
 }
 
 .btn-danger:hover {
