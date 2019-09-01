@@ -21,8 +21,10 @@
       <nav class="navbar">
         <section class="navbar-section">
           <%= link_to 'Home ', root_path, class:"navbar-brand mr-10" %>
-          <%= link_to "<i class='fa fa-book'></i> Books".html_safe, books_path, class: "btn btn-link" %>
-          <%= link_to "<i class='fa fa-tag'></i> Categories".html_safe, categories_path, class: "btn btn-link" %>
+          <% if current_user %>
+            <%= link_to "<i class='fa fa-book'></i> Books".html_safe, books_path, class: "btn btn-link" %>
+            <%= link_to "<i class='fa fa-tag'></i> Categories".html_safe, categories_path, class: "btn btn-link" %>
+          <% end %>
         </section>
         <section class="navbar-section">
           <% if current_user %>
