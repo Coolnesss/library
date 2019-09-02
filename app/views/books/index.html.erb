@@ -62,27 +62,26 @@
     <% @books.each do |book| %>
       <div class="card">
           <div class="card-header">
-        <h4 class="card-title" style="display:inline;">
-             
-            <div class="sindhi" style="display:inline; float:right;">
-              <%= book.name %>
-            </div>
-            <%= book.name_eng %> 
-          </h4>
+            <h4 class="card-title" style="" >
+              <p><%= book.name_eng %> </p>
+              <p class="sindhi" style="float:right;"><%= book.name%></p>
+            </h4>
           
-          <div class="card-subtitle">
-          by <%= book.author %>, published in <%= book.year %>
-          <br />
-          <% if book.language.present? %>
-              Language: <%= book.language %>
-            <% end %>
+            <div class="card-subtitle">
+            <p>by <%= book.author %>, published in <%= book.year %>
+            <br />
+            <% if book.language.present? %>
+                Language: <%= book.language %></p>
+              <% end %>
+            </div>
           </div>
-        </div>
+
         <div class="card-body">
           <% book.categories.each do |category| %>
             <label class="chip"><%= category.name %></label>
           <% end %>
         </div>
+
         <div class="card-footer">
           <% if book.attachment.exists? %>
             <%= link_to "<i class='icon icon-download centered'></i> Download".html_safe, book.attachment.url, class: "btn btn-link" %>
