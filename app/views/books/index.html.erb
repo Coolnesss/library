@@ -63,16 +63,18 @@
       <div class="card">
           <div class="card-header">
         <h4 class="card-title" style="display:inline;">
-             <%= book.name_eng %>
+             
             <div class="sindhi" style="display:inline; float:right;">
               <%= book.name %>
             </div>
+            <%= book.name_eng %> 
           </h4>
+          
           <div class="card-subtitle">
-          by <%= book.author %>, written in <%= book.year %>
+          by <%= book.author %>, published in <%= book.year %>
           <br />
           <% if book.language.present? %>
-              In <%= book.language %>
+              Language: <%= book.language %>
             <% end %>
           </div>
         </div>
