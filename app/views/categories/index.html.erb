@@ -20,7 +20,7 @@
               <td><%= category.name %></td>
               <td><%= category.books.count %></td>
               <td><%= link_to "Edit", edit_category_path(category), class: "btn btn-sm btn-warning" %></td>
-              <td><%= link_to "Delete", category, method: :delete, class: "btn btn-sm btn-danger" %></td>
+              <td><%= link_to "Delete", category, method: :delete, class: "btn btn-sm btn-danger", :data => {:confirm => 'Are you sure?'} %></td>
             </tr>
           <% end %>
         </tbody>
