@@ -1,11 +1,13 @@
 class CategoriesController < ApplicationController
   before_action :set_category, only: [:show, :edit, :update, :destroy]
-  before_action :authorize
+  before_action :authorize_admin
 
   # GET /categories
   # GET /categories.json
   def index
-    @categories = Category.all
+    @categories = Category.left_joins(:books)
+      .group(:id)
+      .order('COUNT(books.id) DESC')
   end
 
   # GET /categories/1
@@ -43,7 +45,7 @@ class CategoriesController < ApplicationController
   def update
     respond_to do |format|
       if @category.update(category_params)
-        format.html { redirect_to @category, notice: 'Category was successfully updated.' }
+        format.html { redirect_to categories_path, notice: 'Category was successfully updated.' }
         format.json { render :show, status: :ok, location: @category }
       else
         format.html { render :edit }
@@ -71,36 +73,5 @@ class CategoriesController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def category_params
       params.require(:category).permit(:name)
-    end
-
-    def filter_css
-      '.filter {
-  .filter-nav {
-    margin: 1rem 0;
-  }
-
-  .filter-body {
-    display: flex;
-    flex-wrap: wrap;
-  }
-
-  .filter-tag {
-    &#tag-all:checked ~ .filter-nav .chip[for="tag-all"],
-    &#tag-science:checked ~ .filter-nav .chip[for="tag-science"],
-    &#tag-roleplaying:checked ~ .filter-nav .chip[for="tag-roleplaying"],
-    &#tag-shooter:checked ~ .filter-nav .chip[for="tag-shooter"],
-    &#tag-sports:checked ~ .filter-nav .chip[for="tag-sports"] {
-      background: @primary-color;
-      color: @light-color;
-    }
-
-    &#tag-science:checked ~ .filter-body .column:not([data-tag~="tag-science"]),
-    &#tag-roleplaying:checked ~ .filter-body .column:not([data-tag~="tag-roleplaying"]),
-    &#tag-shooter:checked ~ .filter-body .column:not([data-tag~="tag-shooter"]),
-    &#tag-sports:checked ~ .filter-body .column:not([data-tag~="tag-sports"]) {
-      display: none;
-    }
-  }
-}'
     end
 end

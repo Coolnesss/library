@@ -1,15 +1,31 @@
 <%= stylesheet_link_tag "categories" %>
 
-<h1 id="categoryPage">Listing Categories</h1>
-<div class="container grid-lg text-center">
+<h1>Categories</h1>
+<div class="container grid-md">
   <div class="columns">
-    <div  class="column centered">
-      <div id="tags">
+    <div class="column centered">
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Amount of books</th>
+            <th>Actions</th>
+            <th></th>
+          </tr>
+        </thead>
 
-      </div>
-      <div id="books" class="columns">
-        
-      </div>
+        <tbody>
+          <% @categories.each do |category| %>
+            <tr>
+              <td><%= category.name %></td>
+              <td><%= category.books.count %></td>
+              <td><%= link_to "Edit", edit_category_path(category), class: "btn btn-sm btn-warning" %></td>
+              <td><%= link_to "Delete", category, method: :delete, class: "btn btn-sm btn-danger" %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+      <br>
     </div>
   </div>
 </div>
