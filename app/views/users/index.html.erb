@@ -18,8 +18,8 @@
             <tr>
               <td><%= user.name %></td>
               <td><%= user.email %></td>
-              <td><%= button_to "Change password", edit_user_path(user), class: "btn btn-sm" %></td>
-              <td><%= button_to "Destroy", user, method: :delete, class: "btn btn-danger btn-sm", data: {confirm: "Are you sure?"} %></td>
+              <td><%= link_to "Change password", edit_user_path(user), class: "btn btn-sm btn-warning" %></td>
+              <td><%= link_to "Destroy", user, method: :delete, class: "btn btn-danger btn-sm", data: {confirm: "Are you sure?"} %></td>
             </tr>
           <% end %>
         </tbody>
