@@ -4,7 +4,7 @@
 <div class="container grid-xl hide-md">
   <div class="columns">
     <div class="column centered">
-    
+      <p><b> Total books: <%= Book.count %></b></p>
       <div class="input-group">
         <%= form_tag(books_path, :method => "get", id: "search-form", class:"input-group") do %>
           <%= select_tag :filter, options_from_collection_for_select(Category.order(:name), :id, :name, params[:filter]), {onchange: "$('#search-form').submit();", prompt: "All" , class: "form-select", style: "min-width:40%"} %>
@@ -48,7 +48,8 @@
 <div class="container grid-sm show-md">
   <div class="columns">
     <div class="column centered">
-    <br />
+    <p><b> Total books: <%= Book.count %></b></p>
+    
       <div>
         <%= form_tag(books_path, :method => "get", id: "search-form-mobile", class:"form-group") do %>
           <%= select_tag :filter, options_from_collection_for_select(Category.order(:name), :id, :name, params[:filter]), {onchange: "$('#search-form-mobile').submit();", prompt: "All" , class: "form-select"} %>
