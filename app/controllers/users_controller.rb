@@ -45,6 +45,7 @@ class UsersController < ApplicationController
 
   def create
     @user = User.new user_params
+    @user.email = @user.email.strip
 
     if @user.save
       redirect_to login_path, notice: 'User created succesfully. Wait for an admin to activate your account.'
