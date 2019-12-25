@@ -54,7 +54,7 @@ group :production do
 end
 
 group :development do
-  gem 'web-console', '~> 2.0'
+  gem 'web-console', '~> 3.7'
   gem 'pry-rails'
   gem 'rails_real_favicon'
 end

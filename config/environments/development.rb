@@ -34,6 +34,8 @@ Rails.application.configure do
   config.action_mailer.raise_delivery_errors = false
 
   config.action_mailer.perform_caching = false
+  config.action_mailer.show_previews = true
+  config.action_mailer.preview_path = "#{Rails.root}/test/mailers/previews/"
 
   # Print deprecation notices to the Rails logger.
   config.active_support.deprecation = :log
@@ -58,4 +60,18 @@ Rails.application.configure do
   # Use an evented file watcher to asynchronously detect changes in source code,
   # routes, locales, etc. This feature depends on the listen gem.
   config.file_watcher = ActiveSupport::EventedFileUpdateChecker
+
+  config.action_mailer.delivery_method = :test
+  host = 'gmail.com' #replace with your own url
+  config.action_mailer.default_url_options = { host: host }
+
+  # SMTP settings for gmail
+  config.action_mailer.smtp_settings = {
+    :address              => "smtp.gmail.com",
+    :port                 => 587,
+    :user_name            => ENV.fetch('GMAIL_APP_USER'),
+    :password             => ENV.fetch('GMAIL_APP_PASS'),
+    :authentication       => "plain",
+    :enable_starttls_auto => true
+  }
 end

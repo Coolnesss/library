@@ -16,6 +16,10 @@ class UsersController < ApplicationController
     user = User.find(user_params[:user_id])
     user.active = true? user_params[:confirm]
     
+    if user.active
+      UserMailer.with(user: user).user_approved_email.deliver_later
+    end
+    
     redirect_to inactive_path, notice: build_notice(user.save, user)
   end
 
