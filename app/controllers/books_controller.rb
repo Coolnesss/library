@@ -24,6 +24,10 @@ class BooksController < ApplicationController
           @books = @books.joins(:book_categories).where('book_categories.category_id' => params[:filter])
         end
 
+        if params[:filter_lang].present?
+          @books = @books.where(:language => params[:filter_lang])
+        end
+
         @books = @books.paginate(page: params[:page])
       }
       format.json { @books = Book.all }

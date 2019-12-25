@@ -6,9 +6,10 @@
     <div class="column centered">
       <p><b> Total books: <%= Book.count %></b></p>
       <div class="input-group">
-        <%= form_tag(books_path, :method => "get", id: "search-form", class:"input-group") do %>
-          <%= select_tag :filter, options_from_collection_for_select(Category.order(:name), :id, :name, params[:filter]), {onchange: "$('#search-form').submit();", prompt: "All" , class: "form-select", style: "min-width:40%"} %>
-          <%= text_field_tag :search, params[:search], placeholder: "Find a book", class: "form-input", type: "text" %>
+        <%= form_tag(books_path, :method => "get", id: "search-form", class:"input-group", style: "min-width: 60%") do %>
+          <%= select_tag :filter, options_from_collection_for_select(Category.order(:name), :id, :name, params[:filter]), {onchange: "$('#search-form').submit();", prompt: "All categories" , class: "form-select", style: "flex: 1"} %>
+          <%= select_tag :filter_lang, options_for_select(LanguageHelper.languages, params[:filter_lang]), {onchange: "$('#search-form').submit();", prompt: "All languages" , class: "form-select", style: "flex: 1"} %>
+          <%= text_field_tag :search, params[:search], placeholder: "Find a book", class: "form-input", type: "text", style: "flex: 1" %>
           <%= submit_tag "Search", class: "btn btn-primary input-group-btn" %>
           <%= link_to 'Reset', books_path, class: "btn btn-link" %>
         <% end %>
@@ -52,7 +53,8 @@
     
       <div>
         <%= form_tag(books_path, :method => "get", id: "search-form-mobile", class:"form-group") do %>
-          <%= select_tag :filter, options_from_collection_for_select(Category.order(:name), :id, :name, params[:filter]), {onchange: "$('#search-form-mobile').submit();", prompt: "All" , class: "form-select"} %>
+          <%= select_tag :filter, options_from_collection_for_select(Category.order(:name), :id, :name, params[:filter]), {onchange: "$('#search-form-mobile').submit();", prompt: "All categories" , class: "form-select"} %>
+          <%= select_tag :filter_lang, options_for_select(LanguageHelper.languages, params[:filter_lang]), {onchange: "$('#search-form-mobile').submit();", prompt: "All languages" , class: "form-select"} %>
           
           <%= text_field_tag :search, params[:search], placeholder: "Find a book", class: "form-input", type: "text" %>
           <%= submit_tag "Search", class: "btn btn-primary input-group-btn" %>
