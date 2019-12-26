@@ -57,9 +57,13 @@ class BooksController < ApplicationController
   # POST /books.json
   def create
     @book = Book.new(book_params)
-
+    
     respond_to do |format|
       if @book.save
+
+        # Create cover in background task if book was successfully created
+        CreateCoversJob.perform_later @book
+
         format.html { redirect_to @book, notice: 'Book was successfully created.' }
         format.json { render :show, status: :created, location: @book }
       else
@@ -72,8 +76,17 @@ class BooksController < ApplicationController
   # PATCH/PUT /books/1
   # PATCH/PUT /books/1.json
   def update
+    # If file changed, re-run cover art extractor
+    old_file_name = @book.attachment_file_name
+
     respond_to do |format|
+      
       if @book.update(book_params)
+        
+        if old_file_name != @book.attachment_file_name
+          CreateCoversJob.perform_later @book
+        end
+        
         format.html { redirect_to @book, notice: 'Book was successfully updated.' }
         format.json { render :show, status: :ok, location: @book }
       else

@@ -64,43 +64,53 @@
 
     <% @books.each do |book| %>
       <div class="card">
-          <div class="card-header">
-            <h4 class="card-title" style="" >
-              <p><%= book.name_eng %> </p>
-              <p class="sindhi" style="float:right;"><%= book.name%></p>
-            </h4>
-          
-            <div class="card-subtitle">
-            <p>by <%= book.author %>, published in <%= book.year %>
-            <br />
-            <% if book.language.present? %>
-                Language: <%= book.language %></p>
-              <% end %>
+        <div class="columns">
+
+          <div class="column">
+            <div class="card-image">
+              <img src=<%= book.cover.url %> class="img-responsive" height="30%">
             </div>
           </div>
 
-        <div class="card-body">
-          <% book.categories.each do |category| %>
-            <label class="chip"><%= category.name %></label>
-          <% end %>
-        </div>
+          <div class="column">
+            <div class="card-header">
+              <h4 class="card-title" style="" >
+                <p><%= book.name_eng %> </p>
+                <p class="sindhi" style="float:right;"><%= book.name%></p>
+              </h4>
+            
+              <div class="card-subtitle">
+                <p>by <%= book.author %>, published in <%= book.year %>
+                <br />
+                <% if book.language.present? %>
+                    Language: <%= book.language %></p>
+                <% end %>
+              </div>
+            </div>
 
-        <div class="card-footer">
-          <% if book.attachment.exists? %>
-            <%= link_to "<i class='icon icon-download centered'></i> Download".html_safe, book.attachment.url, class: "btn btn-link" %>
-          <% end %>
-          <div style="float: right;">
-            <%= link_to 'Show', book, class: "btn" %>
-            <%= link_to 'Edit', edit_book_path(book), class: "btn btn-warning" %>
+            <div class="card-body">
+              <% book.categories.each do |category| %>
+                <label class="chip"><%= category.name %></label>
+              <% end %>
+            </div>
+
+            <div class="card-footer">
+              <% if book.attachment.exists? %>
+                <%= link_to "<i class='icon icon-download centered'></i> Download".html_safe, book.attachment.url, class: "btn btn-link" %>
+              <% end %>
+            <div style="float: right;">
+              <%= link_to 'Show', book, class: "btn" %>
+              <%= link_to 'Edit', edit_book_path(book), class: "btn btn-warning" %>
+            </div>
           </div>
-          
+          </div>
         </div>
-      </div>
-      <br />
-    <% end %>
+        <br />
+    
       <br>
-      <%= will_paginate @books, class: "pagination" %>
       
     </div>
-  </div>
+    <% end %>
+    <%= will_paginate @books, class: "pagination" %>
+  </div>  
 </div>

@@ -46,7 +46,8 @@ gem 'will_paginate', '3.1.7'
 gem 'isbn_validation'
 gem 'email_validator'
 #gem 'puma'
-
+gem 'grim'
+gem 'thin' 
 
 group :production do
   gem 'pg', '~> 0.18'

@@ -8,6 +8,8 @@ class Book < ApplicationRecord
   has_attached_file :attachment, default_url: "/files/"
   validates_attachment :attachment, 
     :content_type => { :content_type => %w(application/pdf application/msword application/vnd.openxmlformats-officedocument.wordprocessingml.document), message: "Should be a document" }
+  
+  has_attached_file :cover, styles: {}, default_url: "/missing.png"
 
   validates :name, presence: true
   validates :name_eng, presence: true

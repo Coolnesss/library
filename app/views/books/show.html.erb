@@ -1,62 +1,67 @@
 <div class="container grid-lg">
   <div class="columns">
-    <div class="column centered">
+    <div class="column">
       <div class="card">
+        <div class="card-image">
+          <img src=<%= @book.cover.url %> class="img-responsive">
+        </div>
+      </div>
+    </div>
+    <div class="column">
+      <div class="card">
+
         <div class="card-header">
-          <h4 class="card-title" style="display:inline;">
+          <h4 class="card-title">
              <%= @book.name_eng %>
-            <div class="sindhi" style="display:inline; float:right;">
-              <%= @book.name %>
-            </div>
           </h4>
           <h6 class="card-subtitle">by <%= @book.author %> in <label class="label"><%= @book.year %></label>
-            <br>Published by <%= @book.publisher %>
-            <br>
+            <p style="margin: 0">Published by <%= @book.publisher %></p>
             <% if @book.language.present? %>
-                Language: <%= @book.language %></p>
+                <p style="margin: 0">Language: <%= @book.language %></p>
             <% end %>
             <% if @book.isbn.present? %>
               <br><small class="label label-primary">ISBN</small> <span class="number"><%= @book.isbn %></span>
             <% end %>
           </h6>
+
+          
+          
+          <% if @book.attachment.exists? %>
+            <div class="tile tile-centered">
+              <div class="tile-icon">
+                  <i class="icon icon-download centered"></i>
+                </div>
+              <div class="tile-content">
+                <div class="tile-title"><%= link_to "Download", @book.attachment.url %></div>
+                <div class="tile-subtitle"> <%= number_to_human_size(@book.attachment_file_size) %> · <%= @book.attachment_updated_at.to_date %></div>
+              </div>
+            </div>
+          <% end %>
+          <br />
           <% @book.categories.each do |category| %>
             <label class="chip"><%= category.name %></label>
           <% end %>
-          <br>Uploaded at <%= @book.created_at %>
-          <br><br>
-          <% if @book.attachment.exists? %>
-          <div class="tile tile-centered">
-            <div class="tile-icon">
-                <i class="icon icon-download centered"></i>
-              </div>
-            <div class="tile-content">
-              <div class="tile-title"><%= link_to @book.attachment_file_name, @book.attachment.url %></div>
-              <div class="tile-subtitle"> <%= number_to_human_size(@book.attachment_file_size) %> · <%= @book.attachment_updated_at.to_date %></div>
-            </div>
-          </div>
-          <% end %>
         </div>
-
-        <div class="columns">
-          <div class="column">
-            <div class="card-body">
-              <%= @book.description_eng %>
-            </div>
-          </div>
-          <div class="divider-vert"></div>
-          <div class="column">
-            <div class="card-body sindhi">
-              <%= @book.description_sindhi %>
-            </div>
-          </div>
-          </div>
       </div>
-    <br>
-    <%= link_to 'Edit', edit_book_path(@book), class: "btn btn-warning" %>
-    <% if current_user.admin? %> 
-      <%= link_to 'Delete', @book, method: :delete, class: "btn btn-danger", :data => {:confirm => 'Are you sure?'} %>
-    <% end %>
-    <%= link_to 'Back', books_path, class: "btn btn-default" %>
+    <br/>
+      <div class="card">
+
+        <div class="card-header">
+          <h4 class="card-title sindhi">
+             <%= @book.name %>
+          </h4>
+        </div>
+        <div class="card-body sindhi">
+          <%= @book.description_sindhi %>
+        </div>
+        <div class="card-body">
+          <%= link_to 'Edit', edit_book_path(@book), class: "btn btn-warning" %>
+            <% if current_user.admin? %> 
+              <%= link_to 'Delete', @book, method: :delete, class: "btn btn-danger", :data => {:confirm => 'Are you sure?'} %>
+            <% end %>
+            <%= link_to 'Back', books_path, class: "btn btn-default" %>
+        </div>
+      </div>
     </div>
   </div>
 </div>
