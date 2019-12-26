@@ -45,7 +45,7 @@ gem 'teacup-rails'
 gem 'will_paginate', '3.1.7'
 gem 'isbn_validation'
 gem 'email_validator'
-#gem 'puma'
+gem 'puma'
 gem 'grim'
 gem 'thin' 
 
