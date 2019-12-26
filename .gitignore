@@ -16,5 +16,5 @@
 !/log/.keep
 /tmp
 
-/public
+/public/system
 .DS_Store
