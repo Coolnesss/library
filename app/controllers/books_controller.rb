@@ -28,6 +28,14 @@ class BooksController < ApplicationController
           @books = @books.where(:language => params[:filter_lang])
         end
 
+        if params[:filter_author].present?
+          @books = @books.where(:author => params[:filter_author])
+        end
+
+        if params[:filter_sindhi_author].present?
+          @books = @books.where(:author_sindhi => params[:filter_sindhi_author])
+        end
+
         @books = @books.paginate(page: params[:page])
       }
       format.json { @books = Book.all }

@@ -30,9 +30,9 @@
           <% @books.each do |book| %>
             <tr>
               <td><%= link_to book.name_eng, book %></td>
-              <td><%= link_to book.author, books_path(:search => book.author) %></td>
+              <td><%= link_to book.author, books_path(:filter_author => book.author) %></td>
               <td class="hide-sm"><%= book.year or "Unknown" %></td>
-              <td direction="rtl" class="sindhi"><%= link_to book.author_sindhi, book %></td>              
+              <td direction="rtl" class="sindhi"><%= link_to book.author_sindhi, books_path(:filter_sindhi_author => book.author_sindhi) %></td>              
               <td direction="rtl" class="sindhi"><%= link_to book.name, book %></td>              
             </tr>
           <% end %>
@@ -56,59 +56,39 @@
         <%= form_tag(books_path, :method => "get", id: "search-form-mobile", class:"form-group") do %>
           <%= select_tag :filter, options_from_collection_for_select(Category.order(:name), :id, :name, params[:filter]), {onchange: "$('#search-form-mobile').submit();", prompt: "All categories" , class: "form-select"} %>
           <%= select_tag :filter_lang, options_for_select(LanguageHelper.languages, params[:filter_lang]), {onchange: "$('#search-form-mobile').submit();", prompt: "All languages" , class: "form-select"} %>
-          
           <%= text_field_tag :search, params[:search], placeholder: "Find a book", class: "form-input", type: "text" %>
-          <%= submit_tag "Search", class: "btn btn-primary input-group-btn" %>
+          <br/>
+          <%= submit_tag "Search", class: "btn btn-primary input-group-btn", style:" margin: 0 auto;" %>
         <% end %>
       </div>
     <br />
 
     <% @books.each do |book| %>
       <div class="card">
-        <div class="columns">
+          <a href=<%= book_path(book) %> class="card-image">
+            <img src=<%= book.cover.url %> class="img-responsive" height="30%">
+          </a>
 
-          <div class="column">
-            <a href=<%= book_path(book) %> class="card-image">
-              <img src=<%= book.cover.url %> class="img-responsive" height="30%">
-            </a>
-          </div>
+          <div class="card-header">
+            <h4 class="card-title" style="text-align: center;">
+              <%= book.name_eng %>
+            </h4>
 
-          <div class="column">
-            <div class="card-header">
-              <h4 class="card-title" style="" >
-                <p><%= book.name_eng %> </p>
-                <p class="sindhi" style="float:right;"><%= book.name%></p>
-              </h4>
-            
-              <div class="card-subtitle">
-                <p>by <%= book.author %>, published in <%= book.year %>
-                <br />
-                <% if book.language.present? %>
-                    Language: <%= book.language %></p>
-                <% end %>
-              </div>
-            </div>
-
-            <div class="card-body">
+            <div class="card-body" style="display: flex; justify-content: center;">
               <% book.categories.each do |category| %>
-                <label class="chip"><%= category.name %></label>
+              <div style="flex: 1; flex-grow:0;">
+                <label class="chip" style="display: inline-block;"><%= category.name %></label>
+                </div>
               <% end %>
             </div>
 
-            <div class="card-footer">
+            <div class="card-footer" style="justify-content: center; display: flex;">
               <% if book.attachment.exists? %>
                 <%= link_to "<i class='icon icon-download centered'></i> Download".html_safe, book.attachment.url, class: "btn btn-link" %>
               <% end %>
-            <div style="float: right;">
-              <%= link_to 'Show', book, class: "btn" %>
-              <%= link_to 'Edit', edit_book_path(book), class: "btn btn-warning" %>
             </div>
           </div>
-          </div>
-        </div>
-        <br />
-    
-      <br>
+      <br />
       
     </div>
     <% end %>
