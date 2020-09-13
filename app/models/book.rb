@@ -43,7 +43,7 @@ class Book < ApplicationRecord
   end
 
   def self.as_csv
-    attributes = %w{name name_eng isbn language year description_sindhi description_eng publisher  }
+    attributes = %w{name name_eng author author_sindhi isbn language year description_sindhi description_eng publisher}
 
     CSV.generate(headers: true) do |csv|
       csv << attributes
