@@ -48,6 +48,7 @@ gem 'email_validator'
 gem 'puma'
 gem 'grim'
 gem 'thin' 
+gem 'redcarpet'
 
 group :production do
   gem 'pg', '~> 0.18'

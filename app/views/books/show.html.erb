@@ -24,7 +24,7 @@
             <% end %>
           </h6>
 
-          <p><%=@book.description_eng %></p>
+          <%= @markdown.render(@book.description_eng).html_safe %>
 
           <% if @book.attachment.exists? %>
             <div class="tile tile-centered">
@@ -85,7 +85,7 @@
           <% end %>
         </h6>
 
-        <p><%=@book.description_eng %></p>
+        <%= @markdown.render(@book.description_eng).html_safe %>
 
         <% if @book.attachment.exists? %>
           <div class="tile tile-centered">
