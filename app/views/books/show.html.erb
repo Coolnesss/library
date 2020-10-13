@@ -32,7 +32,7 @@
                   <i class="icon icon-download centered"></i>
                 </div>
               <div class="tile-content">
-                <div class="tile-title"><%= link_to "Download", @book.attachment.url %></div>
+                <div class="tile-title"><%= link_to "Download", @book.attachment.url, class: "umami--click--download-button" %></div>
                 <div class="tile-subtitle"> <%= number_to_human_size(@book.attachment_file_size) %> · <%= @book.attachment_updated_at.to_date %></div>
               </div>
             </div>
@@ -93,7 +93,7 @@
                 <i class="icon icon-download centered"></i>
               </div>
             <div class="tile-content">
-              <div class="tile-title"><%= link_to "Download", @book.attachment.url %></div>
+              <div class="tile-title"><%= link_to "Download", @book.attachment.url, class: "umami--click--download-button" %></div>
               <div class="tile-subtitle"> <%= number_to_human_size(@book.attachment_file_size) %> · <%= @book.attachment_updated_at.to_date %></div>
             </div>
           </div>
