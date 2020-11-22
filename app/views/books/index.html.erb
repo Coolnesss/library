@@ -31,7 +31,7 @@
             <tr>
               <td><%= link_to book.name_eng, book %></td>
               <td><%= link_to book.author, books_path(:filter_author => book.author) %></td>
-              <td class="hide-sm"><%= book.year or "Unknown" %></td>
+              <td class="hide-sm"><%= book.year_str or "Unknown" %></td>
               <td direction="rtl" class="sindhi"><%= link_to book.author_sindhi, books_path(:filter_sindhi_author => book.author_sindhi) %></td>              
               <td direction="rtl" class="sindhi"><%= link_to book.name, book %></td>              
             </tr>

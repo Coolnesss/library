@@ -42,6 +42,11 @@ class Book < ApplicationRecord
     Book.order("LOWER(" + sort_column + ") " + sort_direction)
   end
 
+  def year_str
+    return 'Unknown' if year == 0
+    year
+  end
+
   def self.as_csv
     attributes = %w{name name_eng author author_sindhi isbn language year description_sindhi description_eng publisher}
 

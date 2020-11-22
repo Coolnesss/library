@@ -18,6 +18,8 @@ class UsersController < ApplicationController
     
     if user.active
       UserMailer.with(user: user).user_approved_email.deliver_later
+    else
+      user.destroy
     end
     
     redirect_to inactive_path, notice: build_notice(user.save, user)

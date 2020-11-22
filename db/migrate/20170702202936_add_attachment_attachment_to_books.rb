@@ -1,4 +1,4 @@
-class AddAttachmentAttachmentToBooks < ActiveRecord::Migration
+class AddAttachmentAttachmentToBooks < ActiveRecord::Migration[4.2]
   def self.up
     change_table :books do |t|
       t.attachment :attachment
