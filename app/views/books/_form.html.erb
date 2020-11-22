@@ -19,6 +19,9 @@
             <%= f.label :author, "Author / Editor", class:"form-label" %>
             <%= f.text_field :author, class:"form-input", placeholder: "Author / Editor" %>
 
+            <%= f.label :translator, "Translator", class:"form-label" %>
+            <%= f.text_field :translator, class:"form-input", placeholder: "Translator" %>
+
             <%= f.label :language, "Language", class:"form-label" %>
             <%= f.select :language, LanguageHelper.languages, {include_blank: "Select a language"}, class:"form-select" %>
 

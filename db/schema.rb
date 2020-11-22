@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_12_25_165834) do
+ActiveRecord::Schema.define(version: 2020_11_22_170844) do
 
   create_table "book_categories", force: :cascade do |t|
     t.integer "book_id"
@@ -40,6 +40,7 @@ ActiveRecord::Schema.define(version: 2019_12_25_165834) do
     t.string "cover_content_type"
     t.bigint "cover_file_size"
     t.datetime "cover_updated_at"
+    t.string "translator"
   end
 
   create_table "categories", force: :cascade do |t|
