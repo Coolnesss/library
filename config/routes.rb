@@ -1,6 +1,9 @@
 Rails.application.routes.draw do
   resources :categories
+  
+  get 'books/new2' => 'books#new2'
   resources :books
+
 
   get 'books/:id/categories' => 'books#categories'
 

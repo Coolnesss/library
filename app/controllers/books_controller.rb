@@ -56,6 +56,11 @@ class BooksController < ApplicationController
   # GET /books/new
   def new
     @book = Book.new
+    session[:book] = @book
+  end
+
+  def new2
+    binding.pry
   end
 
   # GET /books/1/edit
@@ -66,7 +71,7 @@ class BooksController < ApplicationController
   # POST /books.json
   def create
     @book = Book.new(book_params)
-    
+  
     respond_to do |format|
       if @book.save
 
@@ -76,6 +81,16 @@ class BooksController < ApplicationController
         format.html { redirect_to @book, notice: 'Book was successfully created.' }
         format.json { render :show, status: :created, location: @book }
       else
+        pdf_year, pdf_language, pdf_publisher, pdf_title, pdf_author = @book.extract_fields_from_metadata
+        @book.name_eng = @book.name_eng.presence || pdf_title
+        @book.author = @book.author.presence || pdf_author
+        @book.year = @book.year.presence || pdf_year
+        @book.publisher = @book.publisher.presence || pdf_publisher
+        if LanguageHelper.languages.include? pdf_language.capitalize
+          @book.language = @book.language.presence || pdf_language
+        end
+        
+        flash.now[:success] = "Note: some fields were filled automatically from the book you provided. Recheck them and submit again."
         format.html { render :new }
         format.json { render json: @book.errors, status: :unprocessable_entity }
       end

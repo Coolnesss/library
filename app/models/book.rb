@@ -30,6 +30,18 @@ class Book < ApplicationRecord
 
   self.per_page = 10
 
+  def extract_fields_from_metadata
+    temp_pdf = Origami::PDF.read Paperclip.io_adapters.for(attachment)
+
+    pdf_year = temp_pdf.metadata['DateOfPublication']
+    pdf_language = temp_pdf.metadata['Language']
+    pdf_publisher = temp_pdf.metadata['PublishedBy']
+    pdf_title = temp_pdf.metadata['title']
+    pdf_author = temp_pdf.metadata['creator']
+
+    return pdf_year, pdf_language, pdf_publisher, pdf_title, pdf_author
+  end
+
   def self.search(term)
     term = term.downcase
     where("lower(author) LIKE ? OR lower(author_sindhi) LIKE ? OR lower(name_eng) LIKE ? OR lower(name) LIKE ? OR lower(publisher) LIKE ? OR lower(translator) LIKE ?", "%#{term}%", "%#{term}%", "%#{term}%", "%#{term}%", "%#{term}%", "%#{term}%")

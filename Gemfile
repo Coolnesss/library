@@ -49,6 +49,7 @@ gem 'puma'
 gem 'grim'
 gem 'thin' 
 gem 'redcarpet'
+gem 'origami'
 
 group :production do
   gem 'pg', '~> 0.18'
