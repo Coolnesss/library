@@ -59,10 +59,6 @@ class BooksController < ApplicationController
     session[:book] = @book
   end
 
-  def new2
-    binding.pry
-  end
-
   # GET /books/1/edit
   def edit
   end
@@ -71,7 +67,12 @@ class BooksController < ApplicationController
   # POST /books.json
   def create
     @book = Book.new(book_params)
-  
+
+    if session[:attachment_path]
+      @book.attachment = File.open(session[:attachment_path], 'r')
+      session.delete(:attachment_path)
+    end
+
     respond_to do |format|
       if @book.save
 
@@ -89,7 +90,13 @@ class BooksController < ApplicationController
         if LanguageHelper.languages.include? pdf_language.capitalize
           @book.language = @book.language.presence || pdf_language
         end
+
+        temp_file = Tempfile.new(["pdf", ".pdf"], binmode: true)
+        temp_file.write Paperclip.io_adapters.for(@book.attachment).read
+        temp_file.close
         
+        session[:attachment_path] = temp_file.path
+
         flash.now[:success] = "Note: some fields were filled automatically from the book you provided. Recheck them and submit again."
         format.html { render :new }
         format.json { render json: @book.errors, status: :unprocessable_entity }
