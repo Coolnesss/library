@@ -4,6 +4,14 @@
     <div class="column centered">
       <%= form_for @book, html: { multipart: true } do |f| %>
         <div class="form-group">
+            <% if action_name == 'new' %>
+              <p class='text-center'> Some empty fields will be autofilled after you upload a PDF, and click submit. <br> Then, fill in the rest of the fields and submit again to publish the book. </p>
+            <% end %>
+            <%= f.label :attachment, "PDF", class:"form-label" %>
+            <%= f.file_field :attachment, class:"form-input" %>
+            
+            <div class="divider"></div>
+
             <%= f.label :name, "نالو", class:"form-label sindhi bold" %>
             <%= f.text_field :name, class:"form-input sindhi", dir: "rtl", placeholder: "نالو" %>
 
@@ -37,8 +45,6 @@
             <%= f.label :year, "Year", class:"form-label" %>
             <%= f.number_field :year, class:"form-input", placeholder: "Year" %>
 
-            <%= f.label :attachment, "Attachment", class:"form-label" %>
-            <%= f.file_field :attachment, class:"form-input" %>
             
             <br>
 
@@ -48,12 +54,12 @@
             <br>
             <label class="form-label" for="addNewTag">Add a new tag (press enter to add)</label>
             <input class="form-input" id="addNewTag">
-            
-            
+
             <div class="actions">
               <br>
               <%= f.submit "Submit", class: "btn btn-primary" %>
             </div>
+            <br>
         </div>
       <% end %>
     </div>

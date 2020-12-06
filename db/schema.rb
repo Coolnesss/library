@@ -31,7 +31,7 @@ ActiveRecord::Schema.define(version: 2020_11_22_170844) do
     t.string "publisher"
     t.string "attachment_file_name"
     t.string "attachment_content_type"
-    t.bigint "attachment_file_size"
+    t.integer "attachment_file_size"
     t.datetime "attachment_updated_at"
     t.string "language"
     t.string "isbn"
