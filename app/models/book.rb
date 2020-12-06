@@ -41,7 +41,7 @@ class Book < ApplicationRecord
     pdf_title = temp_pdf.metadata['title']
     pdf_author = temp_pdf.metadata['creator']
 
-    if LanguageHelper.languages.include? pdf_language.capitalize
+    if pdf_language and (LanguageHelper.languages.include? pdf_language.capitalize)
       self.language = self.language.presence || pdf_language
     end
 
