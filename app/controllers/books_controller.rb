@@ -1,10 +1,11 @@
 class BooksController < ApplicationController
-  before_action :set_book, only: [:show, :edit, :update, :destroy, :categories]
+  before_action :set_book, only: [:show, :edit, :update, :destroy, :categories], :unless => :format_json?
   before_action :authorize
   helper_method :sort_column, :sort_direction
   after_action :handle_tags, only: [:update, :create]
   before_action :authorize_admin, only: [:destroy]
 
+  
   # GET /books
   # GET /books.json
   def index
@@ -67,9 +68,11 @@ class BooksController < ApplicationController
   # POST /books.json
   def create
     @book = Book.new(book_params)
-
-    if session[:attachment_path]
-      @book.attachment = File.open(session[:attachment_path], 'r')
+    filename = session[:attachment_path]
+    if filename
+      if File.file? filename
+        @book.attachment = File.open(session[:attachment_path], 'r')
+      end
       session.delete(:attachment_path)
     end
 
@@ -83,13 +86,6 @@ class BooksController < ApplicationController
         format.json { render :show, status: :created, location: @book }
       else
         pdf_year, pdf_language, pdf_publisher, pdf_title, pdf_author = @book.extract_fields_from_metadata
-        @book.name_eng = @book.name_eng.presence || pdf_title
-        @book.author = @book.author.presence || pdf_author
-        @book.year = @book.year.presence || pdf_year
-        @book.publisher = @book.publisher.presence || pdf_publisher
-        if LanguageHelper.languages.include? pdf_language.capitalize
-          @book.language = @book.language.presence || pdf_language
-        end
 
         temp_file = Tempfile.new(["pdf", ".pdf"], binmode: true)
         temp_file.write Paperclip.io_adapters.for(@book.attachment).read
@@ -154,6 +150,10 @@ class BooksController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def book_params
       params.require(:book).permit(:name, :isbn, :name_eng, :author, :translator, :author_sindhi, :language, :description_sindhi, :description_eng, :year, :publisher, :attachment, categories_attributes: [:id, :name, :_destroy])
+    end
+
+    def format_json?
+      request.format.json?
     end
 
     def handle_tags
