@@ -57,7 +57,6 @@ class BooksController < ApplicationController
   # GET /books/new
   def new
     @book = Book.new
-    session[:book] = @book
   end
 
   # GET /books/1/edit
@@ -85,7 +84,7 @@ class BooksController < ApplicationController
         format.html { redirect_to @book, notice: 'Book was successfully created.' }
         format.json { render :show, status: :created, location: @book }
       else
-        pdf_year, pdf_language, pdf_publisher, pdf_title, pdf_author = @book.extract_fields_from_metadata
+        @book.extract_fields_from_metadata
 
         temp_file = Tempfile.new(["pdf", ".pdf"], binmode: true)
         temp_file.write Paperclip.io_adapters.for(@book.attachment).read

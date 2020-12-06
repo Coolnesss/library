@@ -56,8 +56,6 @@ class Book < ApplicationRecord
     end
 
     self.year = self.year.presence || pdf_year
-
-    return pdf_year, pdf_language, pdf_publisher, pdf_title, pdf_author
   end
 
   def self.search(term)
