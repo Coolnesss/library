@@ -19,30 +19,62 @@
 <body>
   <section class="section section-header">
     <section class="grid-header container">
-      <nav class="navbar">
-        <section class="navbar-section">
-          <%= link_to 'Home ', root_path, class:"navbar-brand mr-10" %>
-          <% if current_user %>
-            <%= link_to "<i class='fa fa-book'></i> Books".html_safe, books_path, class: "btn btn-link" %>
-            <% if current_user.admin? %>
-              <%= link_to "<i class='fa fa-tag'></i> Categories".html_safe, categories_path, class: "btn btn-link" %>
-            <% end %>
-          <% end %>
-        </section>
-        <section class="navbar-section">
-          <% if current_user %>
-            <% if current_user.admin? %>
-              <%= link_to "<i class='fa fa-user-times fa-fw'></i> Unconfirmed users".html_safe, inactive_path, class: "btn btn-link hide-lg" %>
-              <%= link_to "<i class='fa fa-user fa-fw'></i> Users".html_safe, users_path, class: "btn btn-link hide-lg" %>
-            <% end %>
-            <%= link_to "<i class='fa fa-key fa-fw'></i> Change password".html_safe, change_password_path, class: "btn btn-link hide-lg" %>
-            <%= link_to "<i class='fa fa-sign-out fa-fw'></i>".html_safe, logout_path, class: "btn btn-link" %>
-          <% else %>
-            <%= link_to "<i class='fa fa-user-plus fa-fw'></i> Register".html_safe, register_path, class: "btn btn-link" %>
-            <%= link_to "<i class='fa fa-sign-in fa-fw'></i> Sign in".html_safe, login_path, class: "btn btn-link" %>
-          <% end %>
-        </section>
-      </nav>
+      <div class="off-canvas">
+        <!-- off-screen toggle button -->
+        <btn id="nav-toggle" class="off-canvas-toggle btn btn-link btn-action" href="#">
+          <i class="icon icon-menu"></i>
+        </btn>
+
+        <div id="sidebar-id" class="off-canvas-sidebar">
+          <section class="navbar-section">
+            <ul>
+                <li><%= link_to fa_icon('home', text: 'Home'), root_path, class:"navbar-brand" %></li>
+                
+                <% if current_user %>
+                  <li><%= link_to fa_icon('book-open', text: 'Books'), books_path, class: "btn btn-link" %></li>
+                  <li><%= link_to fa_icon('info-circle', text: 'About'), about_path, class: "btn btn-link" %></li>
+                  
+                  <% if current_user.admin? %>
+                    <div class='divider'> </div>
+                    <li><%= link_to fa_icon('tags', text: 'Categories'), categories_path, class: "btn btn-link" %></li>
+                    <li><%= link_to fa_icon('brain', text: 'Thoughts'), thoughts_path, class: "btn btn-link" %></li>
+                    <li><%= link_to fa_icon('user-shield', text: 'Unconfirmed users'), inactive_path, class: "btn btn-link" %></li>
+                    <li><%= link_to fa_icon('users', text: 'Users'), users_path, class: "btn btn-link" %></li>
+                  <% end %>
+                  
+                <% end %>
+            <ul>
+          </section>
+        </div>
+
+        <btn id="nav-toggle-remove" class="off-canvas-overlay" href="#"></btn>
+
+        <div class="off-canvas-content">
+          <!-- off-screen content -->
+          <nav class="navbar">
+            <section class="navbar-section hide-lg">
+              
+              <% if current_user %>
+                  <%= link_to fa_icon('book-open', text: 'Books'), books_path, class: "btn btn-link" %>
+                  <% if current_user.admin? %>
+                    <%= link_to fa_icon('tags', text: 'Categories'), categories_path, class: "btn btn-link" %>
+                    <%= link_to fa_icon('brain', text: 'Thoughts'), thoughts_path, class: "btn btn-link" %>
+                  <% end %>
+                <% end %>
+            </section>
+            <section class="navbar-section">
+              <%= link_to fa_icon('info-circle', text: 'About'), about_path, class: "btn btn-link" %>
+              <% if current_user %>
+                <%= link_to fa_icon('sign-out-alt'), logout_path, class: "btn btn-link" %>
+              <% else %>
+                <%= link_to fa_icon('user-plus', text: 'Register'), register_path, class: "btn btn-link" %>
+                <%= link_to fa_icon('sign-in-alt', text: 'Sign in'), login_path, class: "btn btn-link" %>
+              <% end %>
+            </section>
+          </nav>
+        </div>
+  </div>
+      
     </section>
   </section>
   <br>

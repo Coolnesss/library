@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :thoughts
   resources :categories
   resources :books
 
@@ -13,7 +14,7 @@ Rails.application.routes.draw do
   get '/register' => 'users#register', as: 'register'
   get '/inactive' => 'users#inactive', as: 'inactive'
   post '/confirm_user' => 'users#confirm', as: 'confirm'
-  
+  get '/about' => 'welcome#about', as: 'about'
   resources :users
 
   # The priority is based upon order of creation: first created -> highest priority.

@@ -12,9 +12,9 @@ class BooksController < ApplicationController
     respond_to do |format| 
       format.html {
         if sort_column == "created_at"  
-          @books = Book.all.order(created_at: :desc)
+          @books = Book.preload(:categories).order(created_at: :desc)
         else 
-          @books = Book.lower_order(sort_column, sort_direction)
+          @books = Book.preload(:categories).lower_order(sort_column, sort_direction)
         end
 
         if params[:search].present?

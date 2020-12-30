@@ -1,6 +1,6 @@
 //@import "bootstrap-sprockets";
 //@import "bootstrap";
-@import "font-awesome";
+@import 'font_awesome5_webfont';
 @import url(//fonts.googleapis.com/earlyaccess/notonaskharabic.css);
 @import "spectre.min";
 
@@ -101,3 +101,15 @@ h1 {
 }
 
 .field_with_errors { @extend .has-error; }
+
+.navbar-right {
+  text-align: right;
+}
+
+ul {
+  list-style-type: none;
+}
+
+i {
+  padding-right: 3px;
+}

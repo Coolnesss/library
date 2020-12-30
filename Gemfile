@@ -50,6 +50,7 @@ gem 'grim'
 gem 'thin' 
 gem 'redcarpet'
 gem 'origami'
+gem 'font_awesome5_rails'
 
 group :production do
   gem 'pg', '~> 0.18'
@@ -60,6 +61,7 @@ group :development do
   gem 'web-console', '~> 3.7'
   gem 'pry-rails'
   gem 'rails_real_favicon'
+  gem 'meta_request'
 end
 
 group :development, :test do

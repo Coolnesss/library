@@ -1,0 +1,58 @@
+// Place all the styles related to the welcome controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+@media only screen and (min-width : 320px) and (max-width : 1200px) {
+    h1 {
+        font-size: 3em;
+    }
+    blockquote {
+        font-size: 1em;
+    }
+}
+
+h1, section a, blockquote {
+    position:relative;
+    z-index: 2;
+    color:white !important;
+}
+
+body {
+    background: image_url("book.jpg");
+    background-repeat: no-repeat; 
+    background-position: center;
+    background-attachment: fixed;       
+    webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    height: 100%;
+    width: 100%;
+}
+
+@media screen and (min-width : 1200px) {
+    h1 {
+        font-size: 4em;
+    }
+    blockquote {
+        font-size: 2em;
+    }
+}
+
+p {
+    line-height: 1em;
+    text-shadow: 2px 2px black;
+}
+
+.hilight {
+    color: #e85600;
+    font-weight: 700;
+}
+
+cite {
+    color: gray;
+}
+
+.section-header {
+    background: transparent;
+}

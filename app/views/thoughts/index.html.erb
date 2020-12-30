@@ -1,0 +1,34 @@
+<h1>Thoughts of the day</h1>
+<div class="container grid-md">
+  <div class="columns">
+    <div class="column centered">
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th>Content</th>
+            <th>Right to left</th>
+            <th>Actions</th>
+            <th></th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <% @thoughts.each do |thought| %>
+            <tr>
+              <td><p direction=<%= thought.direction_html %>, class=<%= thought.html_class %> ><%= thought.content %></p></td>
+              <td><%= thought.rtl %></td>
+              <td><%= link_to "Edit", edit_thought_path(thought), class: "btn btn-sm btn-warning" %></td>
+              <td><%= link_to "Delete", thought, method: :delete, class: "btn btn-sm btn-danger", :data => {:confirm => 'Are you sure?'} %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+      <br>
+
+      <%= link_to 'New Thought', new_thought_path, class: 'btn btn-success' %>
+
+    </div>
+  </div>
+</div>
+
+<br>

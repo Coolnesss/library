@@ -1,5 +1,10 @@
 =begin
 FactoryBot.define do
+  factory :thought do
+    content { "MyText" }
+    rtl { false }
+  end
+
   factory :user do
     name "John"
     password  "Doe"

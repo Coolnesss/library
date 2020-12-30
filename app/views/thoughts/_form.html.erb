@@ -1,0 +1,29 @@
+<div class="container grid-lg">
+  <div class="columns">
+    <div class="column centered">
+      <%= form_with(model: thought, local: true) do |form| %>
+        <div class="form-group">
+
+          <div class="field">
+            <%= form.label :content, class:"form-label" %>
+            <%= form.text_area :content, class:"form-input", dir: "auto"  %>
+          </div>
+
+          <div class="field">
+            
+              <label class="form-checkbox">
+                <%= form.check_box :rtl, class: "form-checkbox"%>
+                <i class="form-icon"></i> Right to left
+              </label>
+            
+          </div>
+
+          <div class="actions">
+            <br>
+            <%= form.submit "Submit", class: "btn btn-primary"  %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
