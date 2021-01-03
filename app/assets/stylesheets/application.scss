@@ -1,7 +1,7 @@
 //@import "bootstrap-sprockets";
 //@import "bootstrap";
 @import 'font_awesome5_webfont';
-@import url(//fonts.googleapis.com/earlyaccess/notonaskharabic.css);
+@import url(//fonts.googleapis.com/earlyaccess/notonastaliqurdu.css);
 @import "spectre.min";
 
 body {
@@ -28,6 +28,11 @@ table {
   font-family: "Sindhi";
   direction: rtl;
   text-align: right;
+}
+
+.not-sindhi-arabic {
+  font-family: 'Noto Nastaliq Urdu', serif;
+  direction: rtl;
 }
 
 h1 {

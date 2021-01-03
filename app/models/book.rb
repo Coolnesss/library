@@ -75,6 +75,15 @@ class Book < ApplicationRecord
     year
   end
 
+  def font_html_class
+
+    if language and (language == "Sindhi" or language == 'Other')
+      return "sindhi"
+    end
+    
+    return "not-sindhi-arabic"
+  end
+
   def self.as_csv
     attributes = %w{name name_eng author author_sindhi isbn language year description_sindhi description_eng publisher}
 
