@@ -33,6 +33,7 @@
                 <% if current_user %>
                   <li><%= link_to fa_icon('book-open', text: 'Books'), books_path, class: "btn btn-link" %></li>
                   <li><%= link_to fa_icon('info-circle', text: 'About'), about_path, class: "btn btn-link" %></li>
+                  <li><%= link_to fa_icon('lock', text: 'Change Password'), change_password_path, class: "btn btn-link" %></li>
                   
                   <% if current_user.admin? %>
                     <div class='divider'> </div>

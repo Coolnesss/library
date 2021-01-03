@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_12_25_174309) do
+ActiveRecord::Schema.define(version: 2021_01_02_124840) do
 
   create_table "book_categories", force: :cascade do |t|
     t.integer "book_id"
@@ -31,7 +31,7 @@ ActiveRecord::Schema.define(version: 2020_12_25_174309) do
     t.string "publisher"
     t.string "attachment_file_name"
     t.string "attachment_content_type"
-    t.integer "attachment_file_size"
+    t.bigint "attachment_file_size"
     t.datetime "attachment_updated_at"
     t.string "language"
     t.string "isbn"
@@ -41,6 +41,7 @@ ActiveRecord::Schema.define(version: 2020_12_25_174309) do
     t.bigint "cover_file_size"
     t.datetime "cover_updated_at"
     t.string "translator"
+    t.string "translator_sindhi"
   end
 
   create_table "categories", force: :cascade do |t|

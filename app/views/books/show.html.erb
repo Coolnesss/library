@@ -48,23 +48,30 @@
       </div>
     <br/>
       <div class="card">
-
         <div class="card-header">
           <h4 class="card-title sindhi">
              <%= @book.name %>
           </h4>
+        
+          <h6 class="card-subtitle sindhi">ليکڪ / مرتب <%= @book.author_sindhi %>
+              <% if @book.translator_sindhi.present? %>
+                  <p style="margin: 0">مترجم <%= @book.translator_sindhi %></p>
+              <% end %>
+          </h6>
         </div>
         <div class="card-body sindhi">
           <%= @book.description_sindhi %>
         </div>
-        <div class="card-body">
-          <%= link_to 'Edit', edit_book_path(@book), class: "btn btn-warning" %>
+      </div>
+      <br>
+        <div class="card">
+          <div class="card-header">
+            <%= link_to 'Edit', edit_book_path(@book), class: "btn btn-warning" %>
             <% if current_user.admin? %> 
               <%= link_to 'Delete', @book, method: :delete, class: "btn btn-danger", :data => {:confirm => 'Are you sure?'} %>
             <% end %>
-            <%= link_to 'Back', books_path, class: "btn btn-default" %>
+          </div>
         </div>
-      </div>
     </div>
   </div>
 </div>
