@@ -53,9 +53,9 @@
              <%= @book.name %>
           </h4>
         
-          <h6 class="card-subtitle sindhi">ليکڪ / مرتب <%= @book.author_sindhi %>
+          <h6 class="card-subtitle sindhi">ليکڪ / مرتب: <%= @book.author_sindhi %>
               <% if @book.translator_sindhi.present? %>
-                  <p style="margin: 0">مترجم <%= @book.translator_sindhi %></p>
+                  <p style="margin: 0">مترجم: <%= @book.translator_sindhi %></p>
               <% end %>
           </h6>
         </div>
