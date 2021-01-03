@@ -8,6 +8,11 @@ body {
   font-family: 'Ubuntu';
 }
 
+h1 {
+  text-align: center !important;
+  font-size: 1.2rem;
+}
+
 a:visited {
   color:#5755d9;
 }
@@ -34,11 +39,6 @@ table {
   font-family: 'Noto Nastaliq Urdu', serif;
   direction: rtl;
   text-align: right;
-}
-
-h1 {
-  text-align: center !important;
-  font-size: 1.5rem;
 }
 
 .bold {

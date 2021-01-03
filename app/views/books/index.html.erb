@@ -1,10 +1,11 @@
-<h1>A lake of read and unread books</h1>
-<h1 direction="rtl" class="sindhi">پڙهيل توڙي نه پڙهيل ڪتابن جي ڍنڍ ـ</h1>
+<%= stylesheet_link_tag "books" %>
+
+<h1>A river of read and unread books</h1>
+<h1 direction="rtl" class="sindhi">پڙهيل توڙي نه پڙهيل ڪتابن جي ندي۔</h1>
 
 <div class="container grid-xl hide-md">
   <div class="columns">
     <div class="column centered">
-      <p><b> Total books: <%= Book.count %></b></p>
       <div class="input-group">
         <%= form_tag(books_path, :method => "get", id: "search-form", class:"input-group", style: "min-width: 60%") do %>
           <%= select_tag :filter, options_from_collection_for_select(Category.order(:name), :id, :name, params[:filter]), {onchange: "$('#search-form').submit();", prompt: "All categories" , class: "form-select", style: "flex: 1"} %>

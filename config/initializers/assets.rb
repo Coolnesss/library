@@ -14,4 +14,4 @@ Rails.application.config.assets.paths << Rails.root.join('node_modules')
 # Rails.application.config.assets.precompile += %w( admin.js admin.css )
 
 Rails.application.config.assets.precompile << /\.(?:svg|eot|woff|ttf)\z/
-Rails.application.config.assets.precompile += %w( welcome.css spectre.min.css spectre-icons.min.css spectre-exp.min.css awesomplete.css awesomplete.min.js categories.css )
+Rails.application.config.assets.precompile += %w( welcome.css spectre.min.css spectre-icons.min.css spectre-exp.min.css awesomplete.css awesomplete.min.js categories.css books.css about.css)
