@@ -76,8 +76,7 @@ class Book < ApplicationRecord
   end
 
   def font_html_class
-
-    if language and (language == "Sindhi" or language == 'Other')
+    if language and (language == "Sindhi" or language == 'Other' or language == 'English')
       return "sindhi"
     end
     
