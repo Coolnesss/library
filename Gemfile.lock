@@ -210,7 +210,7 @@ GEM
     rb-inotify (0.10.1)
       ffi (~> 1.0)
     rdoc (4.3.0)
-    redcarpet (3.5.0)
+    redcarpet (3.5.1)
     regexp_parser (1.7.0)
     rspec-core (3.9.1)
       rspec-support (~> 3.9.1)
