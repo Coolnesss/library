@@ -87,10 +87,10 @@ class Book < ApplicationRecord
     attributes = %w{name name_eng author author_sindhi isbn language year description_sindhi description_eng publisher}
 
     CSV.generate(headers: true) do |csv|
-      csv << attributes + ['filename']
+      csv << attributes + ['filename', 'url']
 
       all.each do |book|
-        csv << attributes.map{ |attr| book.send(attr) } + [book.attachment.original_filename]
+        csv << attributes.map{ |attr| book.send(attr) } + [book.attachment.original_filename, book.attachment.url]
       end
     end
   end

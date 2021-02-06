@@ -4,6 +4,7 @@ class BooksController < ApplicationController
   helper_method :sort_column, :sort_direction
   after_action :handle_tags, only: [:update, :create]
   before_action :authorize_admin, only: [:destroy]
+  before_action :authorize_admin, only: [:index], if: :format_csv?
 
   
   # GET /books
@@ -71,8 +72,10 @@ class BooksController < ApplicationController
     if filename
       if File.file? filename
         @book.attachment = File.open(session[:attachment_path], 'r')
+        @book.attachment.instance_write(:file_name, session[:attachment_name])
       end
       session.delete(:attachment_path)
+      session.delete(:attachment_name)
     end
 
     respond_to do |format|
@@ -89,7 +92,8 @@ class BooksController < ApplicationController
         temp_file = Tempfile.new(["pdf", ".pdf"], binmode: true)
         temp_file.write Paperclip.io_adapters.for(@book.attachment).read
         temp_file.close
-        
+
+        session[:attachment_name] = @book.attachment.original_filename
         session[:attachment_path] = temp_file.path
 
         flash.now[:success] = "Note: some fields were filled automatically from the book you provided. Recheck them and submit again."
@@ -136,6 +140,10 @@ class BooksController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_book
       @book = Book.find(params[:id])
+    end
+
+    def format_csv?
+      request.format.csv?
     end
 
     def sort_column
