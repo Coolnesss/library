@@ -14,7 +14,7 @@ class ApplicationController < ActionController::Base
   end
 
   def authorize_admin
-    redirect_to login_path, notice: 'You should be an admin to do that' if current_user and not current_user.admin?
+    redirect_to login_path, notice: 'You should be an admin to do that' if (not current_user) or (current_user and not current_user.admin?)
   end
 
   def authorize_self

@@ -21,7 +21,6 @@ class Book < ApplicationRecord
   validates :author, presence: true
 
   validates :year, presence: true,
-    inclusion: { in: (0..2020), message: "Should be between 0 and 2020" },
     numericality: { only_integer: true }
   
   validates :isbn, isbn_format: true, allow_blank: true

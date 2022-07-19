@@ -2,18 +2,17 @@
 
 
 <div class="container" style="">
-  <div id="cols" class="columns">
-    <div class="column">
-        <img src=<%= image_url("transparent.png") %>>
-        <h6 style='margin-top: 5px'>Total books <b><%= Book.count %></b></h6>
-    </div>
-    
+  <div id="cols" class="columns">    
     <div class="column">
         <h1>Library / AntiLibrary</h1>
         <h5> Thought of the day </h5>
         <blockquote class="container column col-10 <%= @thought.html_class %>">
             <p> <%= @markdown.render(@thought.content).html_safe %></p>
         </blockquote>
+    </div>
+    <div class="column">
+        <h6 style='margin-top: 5px'>Total books <b><%= Book.count %></b></h6>
+        <img src=<%= image_url("transparent.png") %>>
     </div>
   </div>
 </div>
