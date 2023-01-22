@@ -55,7 +55,7 @@ gem 'origami'
 gem 'font_awesome5_rails'
 
 group :production do
-  gem 'pg', '~> 0.18'
+  gem 'pg'#, '~> 0.18'
   gem 'rails_12factor'
 end
 
