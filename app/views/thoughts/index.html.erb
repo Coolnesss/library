@@ -15,7 +15,11 @@
         <tbody>
           <% @thoughts.each do |thought| %>
             <tr>
-              <td><p direction=<%= thought.direction_html %>, class=<%= thought.html_class %> ><%= thought.content %></p></td>
+              <td>
+                <blockquote class="<%= thought.html_class %>">
+                  <p> <%= @markdown.render(thought.content).html_safe %></p>
+                </blockquote>
+              </td>
               <td><%= thought.rtl %></td>
               <td><%= link_to "Edit", edit_thought_path(thought), class: "btn btn-sm btn-warning" %></td>
               <td><%= link_to "Delete", thought, method: :delete, class: "btn btn-sm btn-danger", :data => {:confirm => 'Are you sure?'} %></td>

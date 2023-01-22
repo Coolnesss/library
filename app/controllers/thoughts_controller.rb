@@ -6,6 +6,7 @@ class ThoughtsController < ApplicationController
   # GET /thoughts
   # GET /thoughts.json
   def index
+    @markdown = Redcarpet::Markdown.new(Redcarpet::Render::HTML, extensions = {autolink: true})
     @thoughts = Thought.all
   end
 
