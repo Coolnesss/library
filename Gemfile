@@ -1,8 +1,9 @@
 source 'https://rubygems.org'
-ruby '2.6.6'
+ruby '3.0.4'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 5.2'
+#gem 'rails', '~> 5.2'
+gem 'rails', '~> 6.1'
 # Use sqlite3 as the database for Active Record
 #gem 'sqlite3'
 # Use SCSS for stylesheets
@@ -17,15 +18,16 @@ gem 'coffee-rails'
 gem 'language_list'
 gem 'bootsnap', require: false
 gem 'listen'
-
+gem 'json', '~> 2.6'
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
 # Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
 gem 'turbolinks'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
-gem 'jbuilder', '~> 2.0'
+gem 'jbuilder'#, '~> 2.0'
+gem 'rexml', '~> 3.2.4'
 # bundle exec rake doc:rails generates the API under doc/api.
-gem 'sdoc', '~> 0.4.0', group: :doc
+#gem 'sdoc', '~> 0.4.0', group: :doc
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
@@ -42,7 +44,7 @@ gem "paperclip"
 #gem 'aws-sdk', '~> 2.3'
 gem 'aws-sdk-s3'
 gem 'teacup-rails'
-gem 'will_paginate', '3.1.7'
+gem 'will_paginate'#, '3.1.7'
 gem 'isbn_validation'
 gem 'email_validator'
 gem 'puma'
@@ -71,7 +73,7 @@ group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug'
   gem 'better_errors'
-  gem 'sqlite3', '~> 1.3', '< 1.4'
+  gem 'sqlite3', '~> 1.6'#, '< 1.4'
   # Access an IRB console on exception pages or by using <%= console %> in views
   gem 'rails_layout'
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring

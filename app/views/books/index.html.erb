@@ -67,7 +67,7 @@
     <% @books.each do |book| %>
       <div class="card">
           <a href=<%= book_path(book) %> class="card-image">
-            <img src=<%= book.cover.url %> class="img-responsive" height="30%">
+            <img src=<%= book.cover.url.to_s %> class="img-responsive" height="30%">
           </a>
 
           <div class="card-header">
