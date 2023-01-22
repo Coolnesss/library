@@ -62,7 +62,8 @@
 
         </div>
         <div class="card-body sindhi">
-          <%= @book.description_sindhi %>
+          <%= @markdown.render(@book.description_sindhi).html_safe %>
+          
         </div>
       </div>
       <br>
