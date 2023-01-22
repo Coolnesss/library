@@ -344,6 +344,7 @@ DEPENDENCIES
   json (~> 2.6)
   language_list
   listen
+  matrix
   meta_request
   origami
   paperclip
