@@ -2,8 +2,14 @@
   <div class="columns">
     <div class="column centered">
       <h1> Create an account </h1>
-
+      
       <p style="text-align: center"> This is a collection of books in Sindhi accessible only to folks either known personally or who have contributed to the effort. </p>
+
+      <ul style="text-align: center; color: #e85600;">
+        <% @user.errors_parsed.each do |error| %>
+          <li><%= error %></li>
+        <% end %>
+      </ul>
 
       <%= form_for @user, class: "form-group" do |f| %>
         
