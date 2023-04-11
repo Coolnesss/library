@@ -68,6 +68,7 @@ group :development do
 end
 
 group :development, :test do
+  gem 'binding_of_caller'
   gem 'capybara'
   gem "factory_bot_rails"
   gem 'rspec-rails', '~> 3.5'

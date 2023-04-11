@@ -31,8 +31,10 @@ class Book < ApplicationRecord
 
   def extract_fields_from_metadata
     return unless self.attachment
-    
-    temp_pdf = Origami::PDF.read Paperclip.io_adapters.for(attachment)
+
+    temp_pdf = Origami::PDF.read Paperclip.io_adapters.for(attachment), lazy: true
+
+    return unless temp_pdf.metadata
 
     pdf_year = temp_pdf.metadata['DateOfPublication']
     pdf_language = temp_pdf.metadata['Language']
