@@ -12,7 +12,7 @@
         <%= search_form_for @q, id: "search-form", class:"input-group", style: "min-width: 60%" do |f| %>
           <%= f.select :language_eq, options_for_select(LanguageHelper.languages, @q.language_eq), { :include_blank => "Every Language" }, class: "form-select", style: "flex: 1" %>
           <%= f.select :categories_name_in, options_from_collection_for_select(Category.order(:name), :name, :name, @q.categories_name_in), { :include_blank => "Every Category" }, class: "form-select", style: "flex: 1" %>          
-          <%= f.search_field :name_or_author_or_name_eng_or_author_sindhi_or_year_cont, placeholder: "Search", class: "form-input", type: "text", style: "flex: 1"  %>
+          <%= f.search_field :name_or_author_or_name_eng_or_author_sindhi_cont, placeholder: "Search", class: "form-input", type: "text", style: "flex: 1"  %>
           <%= f.search_field :publisher_cont, placeholder: "Publisher only", class: "form-input", type: "text", style: "flex: 1"  %>
           <%= f.submit 'Search', class: "btn btn-primary input-group-btn" %> 
         <% end %>
