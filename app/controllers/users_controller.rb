@@ -12,17 +12,18 @@ class UsersController < ApplicationController
   end
 
   def confirm
-    user_params = params.permit(:confirm, :user_id)
+    user_params = params.permit(:confirm, :user_id, :authenticity_token)
     user = User.find(user_params[:user_id])
     user.active = true? user_params[:confirm]
     
     if user.active
       UserMailer.with(user: user).user_approved_email.deliver_later
+      user.save
     else
       user.destroy
     end
     
-    redirect_to inactive_path, notice: build_notice(user.save, user)
+    redirect_to inactive_path, notice: build_notice(user)
   end
 
   def edit
@@ -75,13 +76,11 @@ class UsersController < ApplicationController
     params.require(:user).permit(:name, :email, :password, :password_confirmation)
   end
 
-  def build_notice(result, user)
-    if result and user.active
-      "User was activated successfully."
-    elsif !result
-      "Something went wrong while saving the user."
-    elsif result and !user.active
+  def build_notice(user)
+    if user.destroyed?
       "User was rejected successfully." 
+    else
+      "User was activated successfully."
     end
   end
 
