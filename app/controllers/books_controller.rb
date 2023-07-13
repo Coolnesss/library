@@ -12,33 +12,8 @@ class BooksController < ApplicationController
   def index
     respond_to do |format| 
       format.html {
-        if sort_column == "created_at"  
-          @books = Book.preload(:categories).order(created_at: :desc)
-        else 
-          @books = Book.preload(:categories).lower_order(sort_column, sort_direction)
-        end
-
-        if params[:search].present?
-          @books = Book.search(params[:search]).order(:author)
-        end
-
-        if params[:filter].present?
-          @books = @books.joins(:book_categories).where('book_categories.category_id' => params[:filter])
-        end
-
-        if params[:filter_lang].present?
-          @books = @books.where(:language => params[:filter_lang])
-        end
-
-        if params[:filter_author].present?
-          @books = @books.where(:author => params[:filter_author])
-        end
-
-        if params[:filter_sindhi_author].present?
-          @books = @books.where(:author_sindhi => params[:filter_sindhi_author])
-        end
-
-        @books = @books.paginate(page: params[:page])
+        @q = Book.ransack(params[:q])
+        @books = @q.result(distinct: true).includes(:categories).page(params[:page])
       }
       format.json { @books = Book.all }
       format.csv { send_data Book.as_csv, filename: "books-#{Date.today}.csv" }

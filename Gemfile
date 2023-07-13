@@ -27,6 +27,7 @@ gem 'turbolinks'
 gem 'jbuilder'#, '~> 2.0'
 gem 'rexml', '~> 3.2.4'
 gem 'matrix'
+gem 'ransack'
 # bundle exec rake doc:rails generates the API under doc/api.
 #gem 'sdoc', '~> 0.4.0', group: :doc
 

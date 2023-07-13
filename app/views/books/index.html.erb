@@ -1,29 +1,31 @@
 <%= stylesheet_link_tag "books" %>
 
-<h1>A river of read and unread books</h1>
-<h1 direction="rtl" class="sindhi">پڙهيل توڙي نہ پڙهيل ڪتابن جي ندي۔</h1>
+<div style="padding: 2rem;">
+  <h1>A river of read and unread books</h1>
+  <h1 direction="rtl" class="sindhi">پڙهيل توڙي نہ پڙهيل ڪتابن جي ندي۔</h1>
+</div>
 
 <div class="container grid-xl hide-md">
   <div class="columns">
     <div class="column centered">
-      <div class="input-group">
-        <%= form_tag(books_path, :method => "get", id: "search-form", class:"input-group", style: "min-width: 60%") do %>
-          <%= select_tag :filter, options_from_collection_for_select(Category.order(:name), :id, :name, params[:filter]), {onchange: "$('#search-form').submit();", prompt: "All categories" , class: "form-select", style: "flex: 1"} %>
-          <%= select_tag :filter_lang, options_for_select(LanguageHelper.languages, params[:filter_lang]), {onchange: "$('#search-form').submit();", prompt: "All languages" , class: "form-select", style: "flex: 1"} %>
-          <%= text_field_tag :search, params[:search], placeholder: "Find a book", class: "form-input", type: "text", style: "flex: 1" %>
-          <%= submit_tag "Search", class: "btn btn-primary input-group-btn" %>
-          <%= link_to 'Reset', books_path, class: "btn btn-link" %>
+      <div class="input-group" style="display:flex;">
+        <%= search_form_for @q, id: "search-form", class:"input-group", style: "min-width: 60%" do |f| %>
+          <%= f.select :language_eq, options_for_select(LanguageHelper.languages, @q.language_eq), { :include_blank => "Every Language" }, class: "form-select", style: "flex: 1" %>
+          <%= f.select :categories_name_in, options_from_collection_for_select(Category.order(:name), :name, :name, @q.categories_name_in), { :include_blank => "Every Category" }, class: "form-select", style: "flex: 1" %>          
+          <%= f.search_field :name_or_author_or_name_eng_or_author_sindhi_or_year_cont, placeholder: "Search", class: "form-input", type: "text", style: "flex: 1"  %>
+          <%= f.search_field :publisher_cont, placeholder: "Publisher only", class: "form-input", type: "text", style: "flex: 1"  %>
+          <%= f.submit 'Search', class: "btn btn-primary input-group-btn" %> 
         <% end %>
       </div>
 
       <table class="table table-hover">
         <thead>
           <tr>
-            <th><%= sortable "name_eng", "Title" %></th>
-            <th><%= sortable "author", "Author / Editor" %></th>
-            <th class="hide-sm"><%= sortable "year", "Published" %></th>
-            <th direction="rtl" class="sindhi"><%= sortable "author_sindhi", "ليکڪ / مرتب" %></th>
-            <th direction="rtl" class="sindhi"><%= sortable "name", "نالو" %></th>
+            <th><%= sort_link(@q, :name_eng, "Name") %></th>
+            <th><%= sort_link(@q, :author, "Author / Editor") %></th>
+            <th class="hide-sm"><%= sort_link(@q, :year, "Published") %></th>
+            <th direction="rtl" class="sindhi"><%= sort_link(@q, :author_sindhi, "ليکڪ / مرتب") %></th>
+            <th direction="rtl" class="sindhi"><%= sort_link(@q, :name, "نالو") %></th>
           </tr>
         </thead>
 
@@ -53,13 +55,13 @@
     <div class="column centered">
     <p><b> Total books: <%= Book.count %></b></p>
     
-      <div>
-        <%= form_tag(books_path, :method => "get", id: "search-form-mobile", class:"form-group") do %>
-          <%= select_tag :filter, options_from_collection_for_select(Category.order(:name), :id, :name, params[:filter]), {onchange: "$('#search-form-mobile').submit();", prompt: "All categories" , class: "form-select"} %>
-          <%= select_tag :filter_lang, options_for_select(LanguageHelper.languages, params[:filter_lang]), {onchange: "$('#search-form-mobile').submit();", prompt: "All languages" , class: "form-select"} %>
-          <%= text_field_tag :search, params[:search], placeholder: "Find a book", class: "form-input", type: "text" %>
-          <br/>
-          <%= submit_tag "Search", class: "btn btn-primary input-group-btn", style:" margin: 0 auto;" %>
+      <div>      
+        <%= search_form_for @q, id: "search-form-mobile", class:"form-group" do |f| %>
+          <%= f.select :language_eq, options_for_select(LanguageHelper.languages, @q.language_eq), { :include_blank => "Every Language" }, class: "form-select" %>
+          <%= f.select :categories_name_in, options_from_collection_for_select(Category.order(:name), :name, :name, @q.categories_name_in), { :include_blank => "Every Category" }, class: "form-select" %>          
+          <%= f.search_field :name_or_author_or_name_eng_or_author_sindhi_or_year_cont, placeholder: "Search", class: "form-input", type: "text" %>
+          <%= f.search_field :publisher_cont, placeholder: "Publisher only", class: "form-input", type: "text"  %>
+          <%= f.submit 'Search', class: "btn btn-primary input-group-btn" %> 
         <% end %>
       </div>
     <br />

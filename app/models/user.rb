@@ -8,7 +8,7 @@ class User < ApplicationRecord
   validates :name, 
       :presence => {message: "Please provide a name"}
 
-  before_validation :strip_whitespace  
+  before_validation :strip_whitespace, on: :create
 
   def strip_whitespace
     self.name = self.name.strip unless self.name.nil?

@@ -29,6 +29,14 @@ class Book < ApplicationRecord
 
   self.per_page = 10
 
+  def self.ransackable_associations(auth_object = nil)
+    ["book_categories", "categories"]
+  end
+
+  def self.ransackable_attributes(auth_object = nil)
+    ["author", "language", "name", "name_eng", "year", "isbn", "description_eng", "description_sindhi", "author_sindhi", "publisher"]
+  end
+
   def extract_fields_from_metadata
     return unless self.attachment
 
