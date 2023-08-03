@@ -13,6 +13,7 @@ class BooksController < ApplicationController
     respond_to do |format| 
       format.html {
         @q = Book.ransack(params[:q])
+        @q.sorts = 'created_at desc' if @q.sorts.empty?
         @books = @q.result(distinct: true).includes(:categories).page(params[:page])
       }
       format.json { @books = Book.all }

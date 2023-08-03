@@ -34,7 +34,7 @@ class Book < ApplicationRecord
   end
 
   def self.ransackable_attributes(auth_object = nil)
-    ["author", "language", "name", "name_eng", "year", "isbn", "description_eng", "description_sindhi", "author_sindhi", "publisher"]
+    ["created_at", "author", "language", "name", "name_eng", "year", "isbn", "description_eng", "description_sindhi", "author_sindhi", "publisher"]
   end
 
   def extract_fields_from_metadata
