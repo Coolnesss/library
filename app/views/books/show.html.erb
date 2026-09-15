@@ -29,7 +29,7 @@
 
           <%= @markdown.render(@book.description_eng).html_safe %>
 
-          <% if @book.attachment.exists? %>
+          <% if @book.attachment.present? %>
             <div class="tile tile-centered">
               <div class="tile-icon">
                   <i class="icon icon-download centered"></i>
@@ -103,7 +103,7 @@
 
         <%= @markdown.render(@book.description_eng).html_safe %>
 
-        <% if @book.attachment.exists? %>
+        <% if @book.attachment.present? %>
           <div class="tile tile-centered">
             <div class="tile-icon">
                 <i class="icon icon-download centered"></i>

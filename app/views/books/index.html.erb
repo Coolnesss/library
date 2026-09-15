@@ -86,7 +86,7 @@
             </div>
 
             <div class="card-footer" style="justify-content: center; display: flex;">
-              <% if book.attachment.exists? %>
+              <% if book.attachment.present? %>
                 <%= link_to "<i class='icon icon-download centered'></i> Download".html_safe, book.attachment.url, class: "btn btn-link" %>
               <% end %>
             </div>
