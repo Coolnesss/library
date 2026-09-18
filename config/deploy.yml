@@ -52,6 +52,25 @@ env:
 volumes:
   - "antilibrary_storage:/rails/storage"
 
+# Continuous backup of the SQLite database to a private S3 bucket. Runs as the
+# same uid as the app so the files it writes next to the database stay writable
+# by Puma.
+accessories:
+  litestream:
+    image: litestream/litestream:0.3.13
+    host: <%= ENV.fetch("KAMAL_HOST") %>
+    cmd: replicate -config /etc/litestream.yml
+    options:
+      user: 1000:1000
+    volumes:
+      - antilibrary_storage:/rails/storage
+    files:
+      - config/litestream.yml.erb:/etc/litestream.yml
+    env:
+      secret:
+        - AWS_ACCESS_KEY_ID
+        - AWS_SECRET_ACCESS_KEY
+
 aliases:
   console: app exec --interactive --reuse "bin/rails console"
   dbconsole: app exec --interactive --reuse "bin/rails dbconsole"

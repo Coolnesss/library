@@ -1,0 +1,17 @@
+# Continuous replication of the production SQLite database to S3.
+#
+# Kamal renders this with ERB and uploads it to the server, so the bucket and
+# region come from the deploy environment rather than being committed. The
+# destination must be a private bucket: the database holds user emails and
+# password hashes, unlike the public bucket the book files are served from.
+dbs:
+  - path: /rails/storage/production.sqlite3
+    replicas:
+      - type: s3
+        bucket: <%= ENV.fetch("BACKUP_BUCKET") %>
+        path: production
+        region: <%= ENV.fetch("AWS_REGION") %>
+        # A full snapshot daily, with the write-ahead log streamed continuously
+        # in between, kept for 30 days.
+        snapshot-interval: 24h
+        retention: 720h
