@@ -4,8 +4,8 @@ ruby '3.2.11'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 #gem 'rails', '~> 5.2'
 gem 'rails', '~> 6.1'
-# Use sqlite3 as the database for Active Record
-#gem 'sqlite3'
+# Use sqlite3 as the database for Active Record, in every environment
+gem 'sqlite3', '~> 1.6'
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 5.0'
 # Use Uglifier as compressor for JavaScript assets
@@ -56,11 +56,6 @@ gem 'redcarpet'
 gem 'origami'
 gem 'font_awesome5_rails'
 
-group :production do
-  gem 'pg'#, '~> 0.18'
-  gem 'rails_12factor'
-end
-
 group :development do
   gem 'web-console', '~> 3.7'
   gem 'pry-rails'
@@ -76,7 +71,6 @@ group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug'
   gem 'better_errors'
-  gem 'sqlite3', '~> 1.6'#, '< 1.4'
   # Access an IRB console on exception pages or by using <%= console %> in views
   gem 'rails_layout'
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring

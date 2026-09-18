@@ -1,4 +1,8 @@
 Rails.application.routes.draw do
+  # Health check for kamal-proxy. Deliberately not a controller, so it skips
+  # the login filters.
+  get '/up' => proc { [200, { 'Content-Type' => 'text/plain' }, ['OK']] }
+
   resources :thoughts
   resources :categories
   resources :books

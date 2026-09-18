@@ -1,0 +1,21 @@
+.git/
+.github/
+.gitignore
+.dockerignore
+
+CLAUDE.md
+.kamal/
+.bundle/
+
+# Databases, logs and anything generated locally.
+db/*.sqlite3
+db/*.sqlite3-*
+storage/
+log/*
+tmp/*
+public/system/
+public/assets/
+node_modules/
+
+spec/
+.DS_Store

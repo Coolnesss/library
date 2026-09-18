@@ -17,4 +17,11 @@
 /tmp
 
 /public/system
+
+# Precompiled assets, built inside the Docker image.
+/public/assets
 .DS_Store
+
+# SQLite database for production, mounted as a Docker volume
+/storage/*
+!/storage/.keep

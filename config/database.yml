@@ -20,6 +20,8 @@ test:
   <<: *default
   database: db/test.sqlite3
 
+# The production database lives in storage/, which Kamal mounts as a Docker
+# volume, so it survives deploys. Do not move it back under db/.
 production:
   <<: *default
-  database: db/production.sqlite3
+  database: storage/production.sqlite3

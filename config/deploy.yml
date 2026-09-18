@@ -1,0 +1,59 @@
+# Deploy with Kamal: https://kamal-deploy.org
+#
+# The server address and every secret are read from the environment, never
+# committed. See .kamal/secrets for the full list.
+service: antilibrary
+
+# Kamal prepends registry.server below, giving ghcr.io/coolnesss/library.
+image: coolnesss/library
+
+servers:
+  web:
+    - <%= ENV.fetch("KAMAL_HOST") %>
+
+proxy:
+  ssl: true
+  app_port: 3000
+  healthcheck:
+    path: /up
+  hosts:
+    - antilibrary.net
+    - www.antilibrary.net
+    # Used to test the server before DNS moves over. Safe to drop afterwards.
+    - new.antilibrary.net
+
+registry:
+  server: ghcr.io
+  username: Coolnesss
+  password:
+    - KAMAL_REGISTRY_PASSWORD
+
+# Built on the server itself: it is x86 and the laptop is ARM, so building
+# locally would mean emulation.
+builder:
+  arch: amd64
+  remote: ssh://root@<%= ENV.fetch("KAMAL_HOST") %>
+
+env:
+  clear:
+    WEB_CONCURRENCY: 2
+    RAILS_MAX_THREADS: 5
+  secret:
+    - SECRET_KEY_BASE
+    - S3_BUCKET_NAME
+    - AWS_ACCESS_KEY_ID
+    - AWS_SECRET_ACCESS_KEY
+    - AWS_REGION
+    - S3_ENDPOINT
+    - GMAIL_APP_USER
+    - GMAIL_APP_PASS
+
+# The SQLite database. Without this volume every deploy would start an empty one.
+volumes:
+  - "antilibrary_storage:/rails/storage"
+
+aliases:
+  console: app exec --interactive --reuse "bin/rails console"
+  dbconsole: app exec --interactive --reuse "bin/rails dbconsole"
+  shell: app exec --interactive --reuse "bash"
+  logs: app logs --follow

@@ -188,6 +188,10 @@ GEM
     nokogiri (1.14.0)
       mini_portile2 (~> 2.8.0)
       racc (~> 1.4)
+    nokogiri (1.14.0-arm64-darwin)
+      racc (~> 1.4)
+    nokogiri (1.14.0-x86_64-linux)
+      racc (~> 1.4)
     origami (2.1.0)
       colorize (~> 0.7)
     paperclip (6.1.0)
@@ -196,7 +200,6 @@ GEM
       mime-types
       mimemagic (~> 0.3.0)
       terrapin (~> 0.6.0)
-    pg (1.4.5)
     pry (0.14.2)
       coderay (~> 1.1)
       method_source (~> 1.0)
@@ -231,16 +234,11 @@ GEM
       nokogiri (>= 1.6)
     rails-html-sanitizer (1.5.0)
       loofah (~> 2.19, >= 2.19.1)
-    rails_12factor (0.0.3)
-      rails_serve_static_assets
-      rails_stdout_logging
     rails_layout (1.0.42)
     rails_real_favicon (0.1.1)
       json (>= 1.7, < 3)
       rails
       rubyzip (~> 2)
-    rails_serve_static_assets (0.0.5)
-    rails_stdout_logging (0.0.5)
     railties (6.1.7.1)
       actionpack (= 6.1.7.1)
       activesupport (= 6.1.7.1)
@@ -297,6 +295,8 @@ GEM
       sprockets (>= 3.0.0)
     sqlite3 (1.6.0)
       mini_portile2 (~> 2.8.0)
+    sqlite3 (1.6.0-arm64-darwin)
+    sqlite3 (1.6.0-x86_64-linux)
     teacup-rails (0.2.3)
       coffee-script (~> 2.2.0)
       railties (>= 3.1.0)
@@ -330,7 +330,9 @@ GEM
     zeitwerk (2.6.6)
 
 PLATFORMS
+  arm64-darwin
   ruby
+  x86_64-linux
 
 DEPENDENCIES
   aws-sdk-s3
@@ -356,11 +358,9 @@ DEPENDENCIES
   meta_request
   origami
   paperclip
-  pg
   pry-rails
   puma
   rails (~> 6.1)
-  rails_12factor
   rails_layout
   rails_real_favicon
   ransack
