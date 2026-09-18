@@ -1,4 +1,10 @@
 class BooksController < ApplicationController
+  # Where a failed create keeps the uploaded file until the user resubmits.
+  # Deliberately not Tempfile: Tempfile deletes the file when the object is
+  # garbage collected, which happens long before the form comes back.
+  PENDING_UPLOAD_DIR = Rails.root.join("tmp", "pending_uploads")
+  PENDING_UPLOAD_TTL = 1.day
+
   before_action :set_book, only: [:show, :edit, :update, :destroy, :categories]
   before_action :authorize
   helper_method :sort_column, :sort_direction
@@ -44,18 +50,30 @@ class BooksController < ApplicationController
   # POST /books.json
   def create
     @book = Book.new(book_params)
-    filename = session[:attachment_path]
-    if filename
-      if File.file? filename
-        @book.attachment = File.open(session[:attachment_path], 'r')
-        @book.attachment.instance_write(:file_name, session[:attachment_name])
+
+    stashed_path = session.delete(:attachment_path)
+    stashed_name = session.delete(:attachment_name)
+
+    if stashed_path && !pending_upload?(stashed_path)
+      # The stashed upload is gone. Saving now would create a book with no file
+      # and still report success, which is how books 192 and 213 ended up empty.
+      flash.now[:error] = "The file you uploaded is no longer available. Please choose it again and resubmit."
+
+      respond_to do |format|
+        format.html { render :new }
+        format.json { render json: { attachment: ["must be uploaded again"] }, status: :unprocessable_entity }
       end
-      session.delete(:attachment_path)
-      session.delete(:attachment_name)
+      return
+    end
+
+    if stashed_path
+      @book.attachment = File.open(stashed_path, 'rb')
+      @book.attachment.instance_write(:file_name, stashed_name)
     end
 
     respond_to do |format|
       if @book.save
+        File.delete(stashed_path) if stashed_path && File.file?(stashed_path)
 
         # Create cover in background task if book was successfully created
         CreateCoversJob.perform_later @book
@@ -65,12 +83,10 @@ class BooksController < ApplicationController
       else
         @book.extract_fields_from_metadata
 
-        temp_file = Tempfile.new(["pdf", ".pdf"], binmode: true)
-        temp_file.write Paperclip.io_adapters.for(@book.attachment).read
-        temp_file.close
-
-        session[:attachment_name] = @book.attachment.original_filename
-        session[:attachment_path] = temp_file.path
+        if @book.attachment.present?
+          session[:attachment_name] = @book.attachment.original_filename
+          session[:attachment_path] = stash_upload(@book.attachment)
+        end
 
         flash.now[:success] = "Note: some fields were filled automatically from the book you provided. Recheck them and submit again."
         format.html { render :new }
@@ -133,6 +149,30 @@ class BooksController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def book_params
       params.require(:book).permit(:name, :isbn, :name_eng, :author, :translator, :translator_sindhi, :author_sindhi, :language, :description_sindhi, :description_eng, :year, :publisher, :attachment, categories_attributes: [:id, :name, :_destroy])
+    end
+
+    # True only for a file this controller stashed and that is still there.
+    def pending_upload?(path)
+      File.file?(path) && File.dirname(File.expand_path(path)) == PENDING_UPLOAD_DIR.to_s
+    end
+
+    # Writes the upload somewhere it will survive until the user resubmits, and
+    # returns the path. Old stashes are swept on the way past.
+    def stash_upload(attachment)
+      FileUtils.mkdir_p PENDING_UPLOAD_DIR
+      sweep_pending_uploads
+
+      path = PENDING_UPLOAD_DIR.join("#{SecureRandom.uuid}#{File.extname(attachment.original_filename)}")
+      File.binwrite path, Paperclip.io_adapters.for(attachment).read
+      path.to_s
+    end
+
+    def sweep_pending_uploads
+      Dir.glob(PENDING_UPLOAD_DIR.join("*")).each do |file|
+        File.delete(file) if File.mtime(file) < PENDING_UPLOAD_TTL.ago
+      rescue Errno::ENOENT
+        # Swept by another request in the meantime.
+      end
     end
 
     def handle_tags
