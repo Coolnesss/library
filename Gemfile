@@ -14,18 +14,16 @@ gem 'uglifier', '>= 1.3.0'
 gem 'coffee-rails'
 # See https://github.com/sstephenson/execjs#readme for more supported runtimes
 # gem 'therubyracer', platforms: :ruby
-# Language list for books, see https://github.com/scsmith/language_list
-gem 'language_list'
 gem 'bootsnap', require: false
 gem 'listen'
-gem 'json', '~> 2.6'
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
 # Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
 gem 'turbolinks'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder'#, '~> 2.0'
-gem 'rexml', '~> 3.2.4'
+# Origami needs rexml and matrix, neither of which is a default gem any more.
+gem 'rexml'
 gem 'matrix'
 gem 'ransack'
 # bundle exec rake doc:rails generates the API under doc/api.
@@ -41,17 +39,14 @@ gem 'ransack'
 # gem 'capistrano-rails', group: :development
 
 gem 'bcrypt'
-gem "font-awesome-rails"
 gem "paperclip"
 #gem 'aws-sdk', '~> 2.3'
 gem 'aws-sdk-s3'
-gem 'teacup-rails'
 gem 'will_paginate'#, '3.1.7'
 gem 'isbn_validation'
 gem 'email_validator'
 gem 'puma'
 gem 'grim'
-gem 'thin' 
 gem 'redcarpet'
 gem 'origami'
 gem 'font_awesome5_rails'
@@ -60,19 +55,11 @@ group :development do
   gem 'web-console', '~> 3.7'
   gem 'pry-rails'
   gem 'rails_real_favicon'
-  gem 'meta_request'
 end
 
 group :development, :test do
   gem 'binding_of_caller'
-  gem 'capybara'
-  gem "factory_bot_rails"
-  gem 'rspec-rails', '~> 3.5'
-  # Call 'byebug' anywhere in the code to stop execution and get a debugger console
-  gem 'byebug'
+  # Call 'debugger' anywhere in the code to stop execution and get a console
+  gem 'debug'
   gem 'better_errors'
-  # Access an IRB console on exception pages or by using <%= console %> in views
-  gem 'rails_layout'
-  # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
-  gem 'spring'
 end
