@@ -26,11 +26,13 @@ ready = ->
         }
 
     current_book_id = location.pathname.split("/")[2]
-    url = location.origin + "/books/" + current_book_id + "/categories.json"
-    
-    $.getJSON url, (tags) ->
-        $.each tags, (index, tag) ->
-            $("#tags").append(createTag(tag.name))
+
+    if current_book_id and current_book_id isnt "new"
+        url = location.origin + "/books/" + current_book_id + "/categories.json"
+
+        $.getJSON url, (tags) ->
+            $.each tags, (index, tag) ->
+                $("#tags").append(createTag(tag.name))
 
     $("#addNewTag").on 'keydown', (e) ->
         if e.which == 13 # User pressed enter

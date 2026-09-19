@@ -1,7 +1,7 @@
 class CategoriesController < ApplicationController
   before_action :set_category, only: [:show, :edit, :update, :destroy]
   before_action :authorize
-  before_action :authorize_admin
+  before_action :authorize_admin, unless: :tag_list?
 
   # GET /categories
   # GET /categories.json
@@ -74,5 +74,11 @@ class CategoriesController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def category_params
       params.require(:category).permit(:name)
+    end
+
+    # The tag autocomplete on the book form reads this list, and any signed-in
+    # user can edit a book. Everything else here stays admin-only.
+    def tag_list?
+      action_name == 'index' && request.format.json?
     end
 end

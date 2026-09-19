@@ -1,7 +1,5 @@
-# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+poetry:
+  name: Poetry
 
-one:
-  name: MyString
-
-two:
-  name: MyString
+history:
+  name: History

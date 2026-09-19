@@ -9,8 +9,7 @@ class BooksController < ApplicationController
   before_action :authorize
   helper_method :sort_column, :sort_direction
   after_action :handle_tags, only: [:update, :create]
-  before_action :authorize_admin, only: [:destroy]
-  before_action :authorize_admin, only: [:index], if: :format_csv?
+  before_action :authorize_admin, if: :admin_only_action?
 
   
   # GET /books
@@ -34,7 +33,6 @@ class BooksController < ApplicationController
   # GET /books/1
   # GET /books/1.json
   def show
-    @markdown = Redcarpet::Markdown.new(Redcarpet::Render::HTML, extensions = {autolink: true})
   end
 
   # GET /books/new
@@ -134,8 +132,12 @@ class BooksController < ApplicationController
       @book = Book.find(params[:id])
     end
 
-    def format_csv?
-      request.format.csv?
+    # Deleting books and the CSV export are admin-only, and both are checked
+    # here. They cannot be two `before_action :authorize_admin` lines: Rails
+    # keeps only the last one declared for a method, so the earlier one is
+    # dropped and its action left unguarded.
+    def admin_only_action?
+      action_name == 'destroy' || (action_name == 'index' && request.format.csv?)
     end
 
     def sort_column
@@ -176,18 +178,24 @@ class BooksController < ApplicationController
     end
 
     def handle_tags
-      tags = params[:tags] || []
+      # Nothing to tag when the save failed. Without this, a failed create
+      # still creates the categories the user typed.
+      return unless @book&.persisted?
+
+      # Capitalized once, so the names compared below are the names stored.
+      # Comparing the two forms deleted any tag typed with a capital in it
+      # ("Folk Tales" is stored as "Folk tales") right after creating it.
+      tags = (params[:tags] || []).map(&:capitalize)
 
       # Add new ones
-      tags.each do |tag|
-        tag_name = tag.capitalize
+      tags.each do |tag_name|
         category = Category.find_or_create_by name: tag_name
-        BookCategory.find_or_create_by category: category, book: @book   
+        BookCategory.find_or_create_by category: category, book: @book
       end
 
       # Remove those that user chose not to keep
       @book.categories.reject{|c| tags.include? c.name.capitalize }.each do |category|
         BookCategory.find_by(category: category, book: @book).destroy
-      end     
+      end
     end
 end

@@ -1,9 +1,21 @@
-# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+<% digest = BCrypt::Password.create('password', cost: BCrypt::Engine::MIN_COST) %>
 
-one:
-  name: MyString
-  password_digest: MyString
+admin:
+  name: Admin
+  email: admin@example.com
+  password_digest: <%= digest %>
+  admin: true
+  active: true
 
-two:
-  name: MyString
-  password_digest: MyString
+reader:
+  name: Reader
+  email: reader@example.com
+  password_digest: <%= digest %>
+  admin: false
+  active: true
+
+# Registered, waiting for an admin to approve them.
+pending:
+  name: Pending
+  email: pending@example.com
+  password_digest: <%= digest %>

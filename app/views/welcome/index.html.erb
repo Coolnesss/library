@@ -7,7 +7,7 @@
         <h1>Library / AntiLibrary</h1>
         <h5> Thought of the day </h5>
         <blockquote class="container column col-10 <%= @thought.html_class %>">
-            <p> <%= @markdown.render(@thought.content).html_safe %></p>
+            <p> <%= markdown(@thought.content) %></p>
         </blockquote>
     </div>
     <div class="column">

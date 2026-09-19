@@ -17,7 +17,7 @@
             <tr>
               <td>
                 <blockquote class="<%= thought.html_class %>">
-                  <p> <%= @markdown.render(thought.content).html_safe %></p>
+                  <p> <%= markdown(thought.content) %></p>
                 </blockquote>
               </td>
               <td><%= thought.rtl %></td>

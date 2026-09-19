@@ -17,7 +17,15 @@ class ApplicationController < ActionController::Base
     redirect_to login_path, notice: 'You should be an admin to do that' if (not current_user) or (current_user and not current_user.admin?)
   end
 
+  # Guards pages about one user. Registering has no :id, so it stays open to
+  # visitors who are not signed in; asking current_user for its admin flag
+  # there used to raise.
   def authorize_self
-    redirect_to login_path, notice: "This isn't yours to modify!" if (params[:id] and User.find(params[:id]) != current_user) and not current_user.admin?
+    return unless params[:id]
+
+    user = User.find_by(id: params[:id])
+    return if current_user and (user == current_user or current_user.admin?)
+
+    redirect_to login_path, notice: "This isn't yours to modify!"
   end
 end

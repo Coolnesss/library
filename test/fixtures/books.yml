@@ -1,17 +1,21 @@
-# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+sindhi:
+  name: شاهه جو رسالو
+  name_eng: Shah jo Risalo
+  author: Shah Abdul Latif
+  author_sindhi: شاهه عبداللطيف ڀٽائي
+  language: Sindhi
+  year: 1866
+  publisher: Sindhi Adabi Board
+  description_sindhi: شاعريءَ جو **مجموعو**
+  description_eng: A collection of **poems**.
+  created_at: <%= 2.days.ago.to_formatted_s(:db) %>
 
-one:
-  name: MyString
-  name_eng: MyString
-  author: MyString
-  description_sindhi: MyText
-  description_eng: MyText
-  year: 1
-
-two:
-  name: MyString
-  name_eng: MyString
-  author: MyString
-  description_sindhi: MyText
-  description_eng: MyText
-  year: 1
+english:
+  name: ٽو نيشنس
+  name_eng: Two Nations
+  author: Giorgio Shani
+  language: English
+  year: 2007
+  description_sindhi: ''
+  description_eng: ''
+  created_at: <%= 1.day.ago.to_formatted_s(:db) %>

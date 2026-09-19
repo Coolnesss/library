@@ -38,9 +38,16 @@ class Book < ApplicationRecord
   end
 
   def extract_fields_from_metadata
-    return unless self.attachment
+    # Submitted without a file, or with a Word file: there is nothing to read.
+    # Asking Origami anyway raised, which turned a failed save into a 500.
+    return unless attachment.present? && attachment_content_type == 'application/pdf'
 
-    temp_pdf = Origami::PDF.read Paperclip.io_adapters.for(attachment), lazy: true
+    begin
+      temp_pdf = Origami::PDF.read Paperclip.io_adapters.for(attachment), lazy: true
+    rescue StandardError => e
+      Rails.logger.warn "Could not read the PDF metadata of #{attachment_file_name}: #{e.class}"
+      return
+    end
 
     return unless temp_pdf.metadata
 

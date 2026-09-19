@@ -41,6 +41,12 @@ Rails.application.configure do
   # Print deprecation notices to the stderr.
   config.active_support.deprecation = :stderr
 
+  # Keep test uploads out of public/system, where development's files live.
+  config.paperclip_defaults = {
+    path: ":rails_root/tmp/test_uploads/:class/:attachment/:id_partition/:style/:filename",
+    url: "/test_uploads/:class/:attachment/:id_partition/:style/:filename"
+  }
+
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
 end
