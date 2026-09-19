@@ -19,8 +19,6 @@ proxy:
   hosts:
     - antilibrary.net
     - www.antilibrary.net
-    # Used to test the server before DNS moves over. Safe to drop afterwards.
-    - new.antilibrary.net
 
 registry:
   server: ghcr.io
@@ -100,8 +98,6 @@ accessories:
     proxy:
       hosts:
         - analytics.antilibrary.net
-        # Temporary alias; safe to drop once nothing uses it.
-        - analytics-new.antilibrary.net
       app_port: 3000
       ssl: true
       healthcheck:
