@@ -71,6 +71,45 @@ accessories:
         - AWS_ACCESS_KEY_ID
         - AWS_SECRET_ACCESS_KEY
 
+  # Umami analytics. Postgres is only ever used by Umami; the library itself
+  # stays on SQLite so that an Umami upgrade cannot take the books offline.
+  umami-db:
+    image: postgres:17
+    host: <%= ENV.fetch("KAMAL_HOST") %>
+    env:
+      clear:
+        POSTGRES_DB: umami
+        POSTGRES_USER: umami
+      secret:
+        - POSTGRES_PASSWORD
+    volumes:
+      - umami_db_data:/var/lib/postgresql/data
+
+  umami:
+    image: ghcr.io/umami-software/umami:3.4.0
+    host: <%= ENV.fetch("KAMAL_HOST") %>
+    env:
+      clear:
+        # The layout loads script.js, the v3 default, which is still served.
+        # This also serves the tracker at umami.js, the name used before the
+        # upgrade, for pages that still reference it; safe to drop later.
+        TRACKER_SCRIPT_NAME: umami.js
+      secret:
+        - DATABASE_URL
+        - APP_SECRET
+    proxy:
+      hosts:
+        - analytics.antilibrary.net
+        # Temporary alias; safe to drop once nothing uses it.
+        - analytics-new.antilibrary.net
+      app_port: 3000
+      ssl: true
+      healthcheck:
+        # Umami has no /up. It also runs database migrations before serving,
+        # so allow more than the default 30s on a cold boot.
+        path: /api/heartbeat
+        timeout: 120
+
 aliases:
   console: app exec --interactive --reuse "bin/rails console"
   dbconsole: app exec --interactive --reuse "bin/rails dbconsole"

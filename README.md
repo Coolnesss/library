@@ -38,4 +38,13 @@ rspec
 
 ## Deployment
 
-The current app is deployed in [Heroku](https://www.heroku.com/). This is by far the easiest to setup. Simply follow [their instructions](https://devcenter.heroku.com/articles/getting-started-with-rails4).
+The app deploys as a Docker image with [Kamal](https://kamal-deploy.org/), configured in `config/deploy.yml`. Nothing environment-specific is committed: the server address comes from `KAMAL_HOST`, the backup bucket from `BACKUP_BUCKET`, and every secret named in `.kamal/secrets` is read from the environment of the shell you deploy from.
+
+```bash
+kamal setup    # first deploy
+kamal deploy   # later deploys
+```
+
+To deploy your own fork, change `image` and `registry` in `config/deploy.yml`.
+
+The production database is SQLite, kept in a Docker volume and backed up continuously to S3 by a [Litestream](https://litestream.io/) accessory. Book files are stored on S3. [Umami](https://umami.is/) analytics runs as two more accessories: Umami itself and its Postgres database.
