@@ -48,6 +48,19 @@ class BookTest < ActiveSupport::TestCase
     assert_equal 1999, book.year
   end
 
+  test "escapes spaces and brackets in an attachment's URL" do
+    book = books(:english)
+    book.attachment = file_fixture('sample.pdf').open
+    book.attachment.instance_write(:file_name, 'عاشق جيوڙو (ڪهاڻي).pdf')
+    book.save!
+
+    url = book.attachment.url
+    assert_not_includes url, ' '
+    assert_includes url, '%20'
+    assert_includes url, '%28'
+    assert url.end_with?('.pdf?' + book.attachment_updated_at.to_i.to_s), url
+  end
+
   test "skips the metadata when there is no PDF to read" do
     assert_nothing_raised do
       Book.new.extract_fields_from_metadata

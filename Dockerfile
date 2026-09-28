@@ -18,11 +18,9 @@ ENV RAILS_ENV="production" \
 FROM base AS build
 
 # nodejs is the JavaScript runtime CoffeeScript and Uglifier compile with.
-# shared-mime-info is needed by mimemagic, a Paperclip dependency, which builds
-# its tables from the freedesktop MIME database at install time.
 RUN apt-get update -qq && \
     apt-get install --no-install-recommends -y \
-      build-essential git pkg-config libsqlite3-dev nodejs shared-mime-info && \
+      build-essential git pkg-config libsqlite3-dev nodejs && \
     rm -rf /var/lib/apt/lists/*
 
 COPY Gemfile Gemfile.lock ./
@@ -50,11 +48,10 @@ FROM base
 ENV EXECJS_RUNTIME="Disabled"
 
 # imagemagick: Paperclip's cover processing. ghostscript: Grim renders page 1
-# of the PDF. file: Paperclip detects content types with it. shared-mime-info:
-# mimemagic reads the freedesktop MIME database at run time, not just at build.
+# of the PDF. file: Paperclip detects content types with it.
 RUN apt-get update -qq && \
     apt-get install --no-install-recommends -y \
-      imagemagick ghostscript file libsqlite3-0 shared-mime-info && \
+      imagemagick ghostscript file libsqlite3-0 && \
     rm -rf /var/lib/apt/lists/* && \
     # Debian forbids ImageMagick from reading PDFs. Grim shells out to
     # `convert`, so leaving this in place means covers silently never appear.

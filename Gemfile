@@ -39,7 +39,7 @@ gem 'ransack'
 # gem 'capistrano-rails', group: :development
 
 gem 'bcrypt'
-gem "paperclip"
+gem "kt-paperclip", "~> 8.0"
 #gem 'aws-sdk', '~> 2.3'
 gem 'aws-sdk-s3'
 gem 'will_paginate'#, '3.1.7'
