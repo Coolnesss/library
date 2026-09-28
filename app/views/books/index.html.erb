@@ -69,7 +69,7 @@
     <% @books.each do |book| %>
       <div class="card">
           <a href=<%= book_path(book) %> class="card-image">
-            <img src=<%= book.cover.url.to_s %> class="img-responsive" height="30%">
+            <img src=<%= cover_url(book) %> class="img-responsive" height="30%">
           </a>
 
           <div class="card-header">
@@ -86,7 +86,7 @@
             </div>
 
             <div class="card-footer" style="justify-content: center; display: flex;">
-              <% if book.attachment.present? %>
+              <% if book.attachment.attached? %>
                 <%= link_to "<i class='icon icon-download centered'></i> Download".html_safe, book.attachment.url, class: "btn btn-link" %>
               <% end %>
             </div>

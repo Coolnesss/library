@@ -3,7 +3,7 @@
     <div class="column">
       <div class="card">
         <div class="card-image">
-          <img src=<%= @book.cover.url %> class="img-responsive">
+          <img src=<%= cover_url(@book) %> class="img-responsive">
         </div>
       </div>
     </div>
@@ -29,14 +29,14 @@
 
           <%= markdown(@book.description_eng) %>
 
-          <% if @book.attachment.present? %>
+          <% if @book.attachment.attached? %>
             <div class="tile tile-centered">
               <div class="tile-icon">
                   <i class="icon icon-download centered"></i>
                 </div>
               <div class="tile-content">
                 <div class="tile-title"><%= link_to "Download", @book.attachment.url, data: { umami_event: "download-button" } %></div>
-                <div class="tile-subtitle"> <%= number_to_human_size(@book.attachment_file_size) %> · <%= @book.attachment_updated_at.to_date %></div>
+                <div class="tile-subtitle"> <%= number_to_human_size(@book.attachment.byte_size) %> · <%= @book.attachment.blob.created_at.to_date %></div>
               </div>
             </div>
           <% end %>
@@ -80,7 +80,7 @@
 </div>
 
 <div class="container grid-sm show-md">
-    <img src=<%= @book.cover.url %> class="img-responsive">
+    <img src=<%= cover_url(@book) %> class="img-responsive">
 
     <br/>
     <div class="card">
@@ -103,14 +103,14 @@
 
         <%= markdown(@book.description_eng) %>
 
-        <% if @book.attachment.present? %>
+        <% if @book.attachment.attached? %>
           <div class="tile tile-centered">
             <div class="tile-icon">
                 <i class="icon icon-download centered"></i>
               </div>
             <div class="tile-content">
               <div class="tile-title"><%= link_to "Download", @book.attachment.url, data: { umami_event: "download-button" } %></div>
-              <div class="tile-subtitle"> <%= number_to_human_size(@book.attachment_file_size) %> · <%= @book.attachment_updated_at.to_date %></div>
+              <div class="tile-subtitle"> <%= number_to_human_size(@book.attachment.byte_size) %> · <%= @book.attachment.blob.created_at.to_date %></div>
             </div>
           </div>
         <% end %>

@@ -10,6 +10,10 @@
 #     schedule: at 5am every day
 
 production:
+  # Files uploaded with a form that was never saved (see BooksController#keep_new_attachment).
+  purge_unattached_blobs:
+    command: "ActiveStorage::Blob.unattached.where(created_at: ..1.day.ago).find_each(&:purge_later)"
+    schedule: every day at 4am
   clear_solid_queue_finished_jobs:
     command: "SolidQueue::Job.clear_finished_in_batches(sleep_between_batches: 0.3)"
     schedule: every hour at minute 12

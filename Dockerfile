@@ -47,15 +47,11 @@ FROM base
 # at boot makes ExecJS look for one and raise.
 ENV EXECJS_RUNTIME="Disabled"
 
-# imagemagick: Paperclip's cover processing. ghostscript: Grim renders page 1
-# of the PDF. file: Paperclip detects content types with it.
+# poppler-utils: CreateCoversJob renders page 1 of the PDF with pdftoppm.
 RUN apt-get update -qq && \
     apt-get install --no-install-recommends -y \
-      imagemagick ghostscript file libsqlite3-0 && \
-    rm -rf /var/lib/apt/lists/* && \
-    # Debian forbids ImageMagick from reading PDFs. Grim shells out to
-    # `convert`, so leaving this in place means covers silently never appear.
-    sed -i '/rights="none" pattern="PDF"/d' /etc/ImageMagick-6/policy.xml
+      poppler-utils libsqlite3-0 && \
+    rm -rf /var/lib/apt/lists/*
 
 COPY --from=build "${BUNDLE_PATH}" "${BUNDLE_PATH}"
 COPY --from=build /rails /rails

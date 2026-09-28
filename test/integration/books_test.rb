@@ -91,8 +91,8 @@ class BooksTest < ActionDispatch::IntegrationTest
 
     book = Book.last
     assert_redirected_to book_path(book)
-    assert_equal 'sample.pdf', book.attachment_file_name
-    assert File.file?(book.attachment.path)
+    assert_equal 'sample.pdf', book.attachment.filename.to_s
+    assert_equal file_fixture('sample.pdf').binread, book.attachment.download
   end
 
   test "a failed create pre-fills from the PDF and keeps the file for the resubmit" do
@@ -107,25 +107,13 @@ class BooksTest < ActionDispatch::IntegrationTest
     assert_select 'input[name="book[author]"][value="Fixture Author"]'
     assert_select 'input[name="book[publisher]"][value="Fixture Press"]'
     assert_select 'input[name="book[year]"][value="1999"]'
-
-    stashed = session[:attachment_path]
-    assert File.file?(stashed)
+    assert_includes response.body, 'Keeping sample.pdf'
 
     assert_difference 'Book.count', 1 do
-      post books_path, params: { book: book_params }
+      post books_path, params: { book: book_params.merge(attachment: kept_attachment) }
     end
-    assert_equal 'sample.pdf', Book.last.attachment_file_name
-    assert_not File.exist?(stashed)
-  end
-
-  test "a resubmit whose stashed file has gone asks for the file again" do
-    post books_path, params: { book: { attachment: pdf_upload } }
-    File.delete(session[:attachment_path])
-
-    assert_no_difference 'Book.count' do
-      post books_path, params: { book: book_params }
-    end
-    assert_includes response.body, 'no longer available'
+    assert_equal 'sample.pdf', Book.last.attachment.filename.to_s
+    assert_equal file_fixture('sample.pdf').binread, Book.last.attachment.download
   end
 
   test "tags are saved with a new book" do
@@ -195,6 +183,11 @@ class BooksTest < ActionDispatch::IntegrationTest
 
   def book_params
     { name: 'فڪسچر', name_eng: 'Fixture Title', author: 'Fixture Author', year: 1999 }
+  end
+
+  # The signed id of the file a failed save kept, as the form sends it back.
+  def kept_attachment
+    css_select('input[type=hidden][name="book[attachment]"]').first['value']
   end
 
   def pdf_upload

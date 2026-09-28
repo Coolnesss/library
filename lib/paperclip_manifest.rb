@@ -7,20 +7,23 @@ require "net/http"
 # reads, and never writes to the bucket.
 #
 # With a source URL (the public bucket's base URL) it streams every object over
-# plain HTTPS, so it needs no credentials. Without one it reads the files that
-# Paperclip stored locally. A rerun keeps the rows of files that have not
-# changed since, so refreshing the manifest only reads new and changed books.
+# plain HTTPS, so it needs no credentials. With a source directory it reads the
+# files Paperclip stored locally under the same keys. A rerun keeps the rows of
+# files that have not changed since, so refreshing the manifest only reads new
+# and changed books.
+#
+# It uses only the Paperclip columns, not Paperclip itself, so it still runs
+# once Book has moved to Active Storage.
 class PaperclipManifest
   HEADERS = %w[book_id name key filename content_type byte_size checksum updated_at error].freeze
   ATTACHMENTS = %w[attachment cover].freeze
 
-  # Paperclip's default S3 path. Keys come from this rather than from the
-  # environment's own storage, so they match the bucket in every environment.
-  KEY_PATTERN = ":class/:attachment/:id_partition/:style/:filename".freeze
+  def initialize(path, source_url: nil, source_dir: nil, io: $stdout)
+    raise ArgumentError, "give a source_url or a source_dir" unless source_url || source_dir
 
-  def initialize(path, source_url: nil, io: $stdout)
     @path = Pathname(path)
     @source_url = source_url&.delete_suffix("/")
+    @source_dir = source_dir && Pathname(source_dir)
     @io = io
   end
 
@@ -31,7 +34,7 @@ class PaperclipManifest
     rows = []
     Book.find_each.with_index(1) do |book, index|
       ATTACHMENTS.each do |name|
-        next unless book.public_send(name).present?
+        next if book.public_send("#{name}_file_name").blank?
 
         row = previous_row(book, name, previous)
         if row
@@ -50,8 +53,14 @@ class PaperclipManifest
     stats
   end
 
+  # Paperclip's default S3 path, ":class/:attachment/:id_partition/:style/:filename".
+  # The cover's :original style converts to JPEG, so a cover recorded as
+  # cover.png is stored as cover.jpg.
   def self.key_for(book, name)
-    Paperclip::Interpolations.interpolate(KEY_PATTERN, book.public_send(name), :original)
+    file_name = book.public_send("#{name}_file_name")
+    file_name = "#{File.basename(file_name, '.*')}.jpg" if name == "cover"
+    partition = format("%09d", book.id).scan(/\d{3}/).join("/")
+    "books/#{name.pluralize}/#{partition}/original/#{file_name}"
   end
 
   def url_for(key)
@@ -73,20 +82,18 @@ class PaperclipManifest
       "book_id" => book.id.to_s,
       "name" => name,
       "key" => key,
-      # The key's basename rather than the *_file_name column: the cover's
-      # :original style converts to JPEG, so a cover recorded as cover.png is
-      # stored as cover.jpg.
+      # The key's basename rather than the *_file_name column, for the covers.
       "filename" => File.basename(key),
       "updated_at" => updated_at(book, name)
-    }.merge(@source_url ? read_remote(key) : read_local(book.public_send(name)))
+    }.merge(@source_url ? read_remote(key) : read_local(key))
   end
 
-  def read_local(attachment)
-    file = attachment.path(:original)
-    return { "error" => "missing" } unless file && File.file?(file)
+  def read_local(key)
+    file = @source_dir.join(key)
+    return { "error" => "missing" } unless file.file?
 
     {
-      "content_type" => Marcel::MimeType.for(Pathname(file), name: File.basename(file)),
+      "content_type" => Marcel::MimeType.for(file, name: file.basename.to_s),
       "byte_size" => File.size(file).to_s,
       "checksum" => Digest::MD5.file(file).base64digest
     }

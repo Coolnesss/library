@@ -1,4 +1,7 @@
 class ApplicationController < ActionController::Base
+  # Lets file URLs from the local disk service (development) include the host.
+  include ActiveStorage::SetCurrent
+
   # Prevent CSRF attacks by raising an exception.
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :exception

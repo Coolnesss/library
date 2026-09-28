@@ -6,9 +6,11 @@ namespace :paperclip do
 
   desc "Write the Active Storage backfill manifest (read-only). " \
        "MANIFEST=path (default storage/paperclip_manifest.csv), " \
-       "SOURCE_URL=public bucket base URL (default: read local files)"
+       "SOURCE_URL=public bucket base URL (default: read the files in public/system)"
   task manifest: :environment do
-    PaperclipManifest.new(manifest_path.call, source_url: ENV["SOURCE_URL"].presence).run
+    source_url = ENV["SOURCE_URL"].presence
+    PaperclipManifest.new(manifest_path.call, source_url: source_url,
+                                              source_dir: (Rails.root.join("public/system") unless source_url)).run
   end
 
   desc "Create Active Storage blobs and attachments from the manifest, reusing the Paperclip keys. " \

@@ -1,19 +1,20 @@
 require 'test_helper'
 
 class PaperclipBackfillTest < ActiveSupport::TestCase
-  # Where the tests' Paperclip uploads live; see paperclip_defaults in config/environments/test.rb.
-  SOURCE_DIR = Rails.root.join('tmp', 'test_uploads')
-
   setup do
     @book = books(:english)
-    @book.update!(attachment: file_fixture('sample.pdf').open)
-    @manifest = Rails.root.join('tmp', "manifest-#{SecureRandom.hex(4)}.csv")
-    PaperclipManifest.new(@manifest, io: StringIO.new).run
-    @key = CSV.read(@manifest, headers: true).find { |r| r['book_id'] == @book.id.to_s }['key']
+    @book.update_columns(attachment_file_name: 'sample.pdf', attachment_content_type: 'application/pdf',
+                         attachment_file_size: file_fixture('sample.pdf').size, attachment_updated_at: Time.current)
+    @dir = Rails.root.join('tmp', "paperclip-#{SecureRandom.hex(4)}")
+    @key = "books/attachments/#{format('%09d', @book.id).scan(/\d{3}/).join('/')}/original/sample.pdf"
+    FileUtils.mkdir_p(@dir.join(@key).dirname)
+    FileUtils.cp(file_fixture('sample.pdf'), @dir.join(@key))
+    @manifest = @dir.join('manifest.csv')
+    PaperclipManifest.new(@manifest, source_dir: @dir, io: StringIO.new).run
     ActiveStorage::Blob.service.delete(@key) # left over from an earlier run
   end
 
-  teardown { FileUtils.rm_f(@manifest) }
+  teardown { FileUtils.rm_rf(@dir) }
 
   def backfill(**options)
     PaperclipBackfill.new(@manifest, io: StringIO.new, **options).run
@@ -24,7 +25,7 @@ class PaperclipBackfillTest < ActiveSupport::TestCase
   end
 
   test "attaches a blob under the Paperclip key and copies the file" do
-    assert_equal({ attached: 1 }, backfill(source_dir: SOURCE_DIR).to_h)
+    assert_equal({ attached: 1 }, backfill(source_dir: @dir).to_h)
 
     blob = attachment.blob
     assert_equal @key, blob.key
@@ -42,22 +43,22 @@ class PaperclipBackfillTest < ActiveSupport::TestCase
   end
 
   test "a rerun changes nothing" do
-    backfill(source_dir: SOURCE_DIR)
+    backfill(source_dir: @dir)
 
     assert_no_difference -> { ActiveStorage::Blob.count } do
-      assert_equal({ already_attached: 1 }, backfill(source_dir: SOURCE_DIR).to_h)
+      assert_equal({ already_attached: 1 }, backfill(source_dir: @dir).to_h)
     end
   end
 
   test "a dry run only counts" do
     assert_no_difference -> { ActiveStorage::Attachment.count } do
-      assert_equal({ would_attach: 1 }, backfill(source_dir: SOURCE_DIR, dry_run: true).to_h)
+      assert_equal({ would_attach: 1 }, backfill(source_dir: @dir, dry_run: true).to_h)
     end
   end
 
   test "skips rows it cannot use" do
-    FileUtils.rm(@book.attachment.path)
-    assert_equal({ source_missing: 1 }, backfill(source_dir: SOURCE_DIR).to_h)
+    FileUtils.rm(@dir.join(@key))
+    assert_equal({ source_missing: 1 }, backfill(source_dir: @dir).to_h)
 
     @book.book_categories.delete_all
     @book.destroy!

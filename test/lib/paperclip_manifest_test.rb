@@ -3,31 +3,33 @@ require 'test_helper'
 class PaperclipManifestTest < ActiveSupport::TestCase
   setup do
     @book = books(:english)
-    @book.update!(attachment: file_fixture('sample.pdf').open)
-    @path = Rails.root.join('tmp', "manifest-#{SecureRandom.hex(4)}.csv")
+    @book.update_columns(attachment_file_name: 'sample.pdf', attachment_content_type: 'application/pdf',
+                         attachment_file_size: file_fixture('sample.pdf').size, attachment_updated_at: Time.current)
+    @dir = Rails.root.join('tmp', "paperclip-#{SecureRandom.hex(4)}")
+    @key = "books/attachments/#{format('%09d', @book.id).scan(/\d{3}/).join('/')}/original/sample.pdf"
+    FileUtils.mkdir_p(@dir.join(@key).dirname)
+    FileUtils.cp(file_fixture('sample.pdf'), @dir.join(@key))
+    @path = @dir.join('manifest.csv')
   end
 
-  teardown { FileUtils.rm_f(@path) }
+  teardown { FileUtils.rm_rf(@dir) }
 
   def run_manifest(**options)
-    PaperclipManifest.new(@path, io: StringIO.new, **options).run
+    PaperclipManifest.new(@path, source_dir: @dir, io: StringIO.new, **options).run
   end
 
-  def rows
-    CSV.read(@path, headers: true).map(&:to_h)
+  def row(name)
+    CSV.read(@path, headers: true).map(&:to_h).find { |r| r['book_id'] == @book.id.to_s && r['name'] == name }
   end
 
   test "records the Paperclip key, size and MD5 of each local file" do
     run_manifest
 
-    row = rows.find { |r| r['book_id'] == @book.id.to_s && r['name'] == 'attachment' }
     fixture = file_fixture('sample.pdf')
-    assert_equal "books/attachments/#{@book.attachment.path.split('/attachments/').last}", row['key']
-    assert_equal 'sample.pdf', row['filename']
-    assert_equal 'application/pdf', row['content_type']
-    assert_equal fixture.size.to_s, row['byte_size']
-    assert_equal Digest::MD5.file(fixture).base64digest, row['checksum']
-    assert_nil row['error']
+    assert_equal({ 'book_id' => @book.id.to_s, 'name' => 'attachment', 'key' => @key, 'filename' => 'sample.pdf',
+                   'content_type' => 'application/pdf', 'byte_size' => fixture.size.to_s,
+                   'checksum' => Digest::MD5.file(fixture).base64digest,
+                   'updated_at' => @book.attachment_updated_at.utc.iso8601(6), 'error' => nil }, row('attachment'))
   end
 
   test "keys a cover by its stored JPEG name, not the recorded one" do
@@ -35,22 +37,20 @@ class PaperclipManifestTest < ActiveSupport::TestCase
                          cover_file_size: 1, cover_updated_at: Time.current)
     run_manifest
 
-    row = rows.find { |r| r['book_id'] == @book.id.to_s && r['name'] == 'cover' }
-    assert row['key'].end_with?('/original/cover.jpg'), row['key']
-    assert_equal 'cover.jpg', row['filename']
+    assert row('cover')['key'].end_with?('/original/cover.jpg'), row('cover')['key']
+    assert_equal 'cover.jpg', row('cover')['filename']
   end
 
   test "records a missing file as an error" do
-    FileUtils.rm(@book.attachment.path)
+    FileUtils.rm(@dir.join(@key))
     run_manifest
 
-    row = rows.find { |r| r['book_id'] == @book.id.to_s && r['name'] == 'attachment' }
-    assert_equal 'missing', row['error']
-    assert_nil row['checksum']
+    assert_equal 'missing', row('attachment')['error']
+    assert_nil row('attachment')['checksum']
   end
 
   test "a rerun only reads files that changed" do
-    assert_equal 1, run_manifest[:read]
+    assert_equal({ read: 1 }, run_manifest.to_h)
     assert_equal({ reused: 1 }, run_manifest.to_h)
 
     @book.update_columns(attachment_updated_at: 1.minute.from_now)

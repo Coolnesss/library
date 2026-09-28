@@ -19,7 +19,6 @@ gem 'coffee-rails'
 # See https://github.com/sstephenson/execjs#readme for more supported runtimes
 # gem 'therubyracer', platforms: :ruby
 gem 'bootsnap', require: false
-gem 'listen'
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
 # Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
@@ -43,7 +42,6 @@ gem 'ransack'
 # gem 'capistrano-rails', group: :development
 
 gem 'bcrypt'
-gem "kt-paperclip", "~> 8.0"
 #gem 'aws-sdk', '~> 2.3'
 gem 'aws-sdk-s3'
 gem 'will_paginate'#, '3.1.7'
@@ -52,7 +50,6 @@ gem 'email_validator'
 gem 'puma'
 # Active Job backend. Runs inside Puma through its plugin; see config/puma.rb.
 gem 'solid_queue'
-gem 'grim'
 gem 'redcarpet'
 gem 'origami'
 gem 'font_awesome5_rails'

@@ -17,5 +17,5 @@ class ActionDispatch::IntegrationTest
   end
 end
 
-# Uploads made by the tests; see paperclip_defaults in config/environments/test.rb.
-Minitest.after_run { FileUtils.rm_rf(Rails.root.join('tmp', 'test_uploads')) }
+# Files the tests stored through Active Storage's test service (config/storage.yml).
+Minitest.after_run { FileUtils.rm_rf(Rails.root.join('tmp', 'storage')) }

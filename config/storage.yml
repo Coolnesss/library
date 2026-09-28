@@ -6,7 +6,7 @@ local:
   service: Disk
   root: <%= Rails.root.join("storage") %>
 
-# Production. The bucket and keys come from the environment, like Paperclip's.
+# Production. The bucket and keys come from the environment.
 # ENV[] rather than ENV.fetch, because every environment parses this file.
 # public: true makes `url` a permanent direct link rather than an expiring one.
 # Checksum settings for every S3 client are in config/initializers/aws.rb.

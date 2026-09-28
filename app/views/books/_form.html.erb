@@ -8,6 +8,11 @@
               <p class='text-center'> Some empty fields will be autofilled after you upload a PDF, and click submit. <br> Then, fill in the rest of the fields and submit again to publish the book. </p>
             <% end %>
             <%= f.label :attachment, "PDF", class:"form-label" %>
+            <%# A file chosen before a failed save is already uploaded. Send it back, so it need not be chosen again. %>
+            <% if @book.attachment.attached? && @book.attachment_changes['attachment'] %>
+              <%= f.hidden_field :attachment, value: @book.attachment.signed_id %>
+              <p class="form-input-hint">Keeping <%= @book.attachment.filename %>. Choose another file to replace it.</p>
+            <% end %>
             <%= f.file_field :attachment, class:"form-input" %>
             
             <div class="divider"></div>

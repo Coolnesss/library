@@ -76,10 +76,6 @@ Rails.application.configure do
   # Raise error when a before_action's only/except options reference missing actions.
   config.action_controller.raise_on_missing_callback_actions = true
 
-  # Use an evented file watcher to asynchronously detect changes in source code,
-  # routes, locales, etc. This feature depends on the listen gem.
-  config.file_watcher = ActiveSupport::EventedFileUpdateChecker
-
   config.action_mailer.delivery_method = :test
   host = 'gmail.com' #replace with your own url
   config.action_mailer.default_url_options = { host: host }
