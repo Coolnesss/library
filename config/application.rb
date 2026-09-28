@@ -10,7 +10,7 @@ module Library
   class Application < Rails::Application
     # Raised from 5.0 in steps. This also turns on Zeitwerk, which Rails 7.0
     # requires; `bin/rails zeitwerk:check` verifies the file names.
-    config.load_defaults 6.1
+    config.load_defaults 7.0
 
     # Configuration for the application, engines, and railties goes here.
     #
