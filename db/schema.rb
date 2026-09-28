@@ -10,13 +10,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[6.1].define(version: 2026_09_15_203828) do
-
+ActiveRecord::Schema[8.1].define(version: 2026_09_15_203828) do
   create_table "book_categories", force: :cascade do |t|
     t.integer "book_id"
     t.integer "category_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["book_id", "category_id"], name: "index_book_categories_on_book_id_and_category_id", unique: true
     t.index ["book_id"], name: "index_book_categories_on_book_id"
     t.index ["category_id"], name: "index_book_categories_on_category_id"
@@ -29,46 +28,45 @@ ActiveRecord::Schema[6.1].define(version: 2026_09_15_203828) do
     t.text "description_sindhi"
     t.text "description_eng"
     t.integer "year"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.string "publisher"
     t.string "attachment_file_name"
     t.string "attachment_content_type"
     t.integer "attachment_file_size"
-    t.datetime "attachment_updated_at"
+    t.datetime "attachment_updated_at", precision: nil
     t.string "language"
     t.string "isbn"
     t.string "author_sindhi"
     t.string "cover_file_name"
     t.string "cover_content_type"
     t.bigint "cover_file_size"
-    t.datetime "cover_updated_at"
+    t.datetime "cover_updated_at", precision: nil
     t.string "translator"
     t.string "translator_sindhi"
   end
 
   create_table "categories", force: :cascade do |t|
     t.string "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
   end
 
   create_table "thoughts", force: :cascade do |t|
     t.text "content"
     t.boolean "rtl"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
   end
 
   create_table "users", force: :cascade do |t|
     t.string "name"
     t.string "password_digest"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.boolean "admin"
     t.boolean "active"
     t.string "email"
     t.index ["email"], name: "index_users_on_email", unique: true
   end
-
 end

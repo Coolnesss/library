@@ -3,7 +3,7 @@ ruby '3.2.11'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 #gem 'rails', '~> 5.2'
-gem 'rails', '~> 8.0.0'
+gem 'rails', '~> 8.1.0'
 # Rails 7 no longer pulls in Sprockets; it stays until the frontend moves to Propshaft.
 gem 'sprockets-rails'
 # Sprockets 3 calls ERB.new with positional arguments, which erb 6 removed.
