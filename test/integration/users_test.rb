@@ -19,7 +19,7 @@ class UsersTest < ActionDispatch::IntegrationTest
     assert_no_difference 'User.count' do
       post users_path, params: { user: { name: '', email: 'not-an-email', password: 'secret1', password_confirmation: 'secret1' } }
     end
-    assert_response :success
+    assert_response :unprocessable_entity
     assert_includes response.body, 'Please provide a name'
   end
 

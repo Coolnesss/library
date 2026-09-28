@@ -17,10 +17,9 @@ ENV RAILS_ENV="production" \
 # --- Build stage: gems and assets -------------------------------------------
 FROM base AS build
 
-# nodejs is the JavaScript runtime CoffeeScript and Uglifier compile with.
 RUN apt-get update -qq && \
     apt-get install --no-install-recommends -y \
-      build-essential git pkg-config libsqlite3-dev nodejs && \
+      build-essential git pkg-config libsqlite3-dev && \
     rm -rf /var/lib/apt/lists/*
 
 COPY Gemfile Gemfile.lock ./
@@ -41,11 +40,6 @@ RUN SECRET_KEY_BASE=dummy \
 
 # --- Final image ------------------------------------------------------------
 FROM base
-
-# Assets are precompiled into the image and config.assets.compile is false, so
-# nothing here needs a JavaScript runtime. Without this, requiring coffee-rails
-# at boot makes ExecJS look for one and raise.
-ENV EXECJS_RUNTIME="Disabled"
 
 # poppler-utils: CreateCoversJob renders page 1 of the PDF with pdftoppm.
 RUN apt-get update -qq && \

@@ -8,6 +8,15 @@ module ApplicationHelper
     sanitize renderer.render(text.to_s)
   end
 
+  # A Font Awesome 5 Free solid icon (CC BY 4.0), inlined as SVG, with an
+  # optional label. The icons in use are copied into app/assets/images/icons.
+  def fa_icon(name, text: nil)
+    @fa_icons ||= {}
+    svg = @fa_icons[name] ||= Rails.root.join("app/assets/images/icons/#{name}.svg").read
+                                    .sub('<svg ', '<svg class="fa-icon" aria-hidden="true" ').html_safe
+    text ? safe_join([svg, text]) : svg
+  end
+
   def bootstrap_class_for flash_type
     { success: "toast-success", error: "toast-error", alert: "toast-warning", notice: "toast-primary" }[flash_type.to_sym] || flash_type.to_s
   end

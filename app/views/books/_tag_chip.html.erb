@@ -1,0 +1,5 @@
+<label class="chip">
+  <span data-tag-name><%= name %></span>
+  <%= hidden_field_tag 'book[tag_names][]', name, id: nil %>
+  <button type="button" class="btn btn-clear" data-remove-tag aria-label="Remove tag"></button>
+</label>

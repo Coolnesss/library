@@ -33,7 +33,7 @@ class ThoughtsController < ApplicationController
         format.html { redirect_to thoughts_path, notice: 'Thought was successfully created.' }
         format.json { render :show, status: :created, location: @thought }
       else
-        format.html { render :new }
+        format.html { render :new, status: :unprocessable_entity }
         format.json { render json: @thought.errors, status: :unprocessable_entity }
       end
     end
@@ -47,7 +47,7 @@ class ThoughtsController < ApplicationController
         format.html { redirect_to thoughts_url, notice: 'Thought was successfully updated.' }
         format.json { render :show, status: :ok, location: @thought }
       else
-        format.html { render :edit }
+        format.html { render :edit, status: :unprocessable_entity }
         format.json { render json: @thought.errors, status: :unprocessable_entity }
       end
     end

@@ -1,8 +1,7 @@
 class BooksController < ApplicationController
-  before_action :set_book, only: [:show, :edit, :update, :destroy, :categories]
+  before_action :set_book, only: [:show, :edit, :update, :destroy]
   before_action :authorize
   helper_method :sort_column, :sort_direction
-  after_action :handle_tags, only: [:update, :create]
   before_action :authorize_admin, if: :admin_only_action?
 
   
@@ -18,10 +17,6 @@ class BooksController < ApplicationController
       format.json { @books = Book.all }
       format.csv { send_data Book.as_csv, filename: "books-#{Date.today}.csv" }
     end
-  end
-
-  def categories
-    render json: @book.categories, status: 200
   end
 
   # GET /books/1
@@ -55,7 +50,7 @@ class BooksController < ApplicationController
         @book.extract_fields_from_metadata
 
         flash.now[:success] = "Note: some fields were filled automatically from the book you provided. Recheck them and submit again."
-        format.html { render :new }
+        format.html { render :new, status: :unprocessable_entity }
         format.json { render json: @book.errors, status: :unprocessable_entity }
       end
     end
@@ -76,7 +71,7 @@ class BooksController < ApplicationController
         format.json { render :show, status: :ok, location: @book }
       else
         keep_new_attachment
-        format.html { render :edit }
+        format.html { render :edit, status: :unprocessable_entity }
         format.json { render json: @book.errors, status: :unprocessable_entity }
       end
     end
@@ -116,7 +111,7 @@ class BooksController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def book_params
-      params.require(:book).permit(:name, :isbn, :name_eng, :author, :translator, :translator_sindhi, :author_sindhi, :language, :description_sindhi, :description_eng, :year, :publisher, :attachment, categories_attributes: [:id, :name, :_destroy])
+      params.require(:book).permit(:name, :isbn, :name_eng, :author, :translator, :translator_sindhi, :author_sindhi, :language, :description_sindhi, :description_eng, :year, :publisher, :attachment, tag_names: [])
     end
 
     # A failed save uploads nothing. Upload the new file anyway, so the form can
@@ -128,27 +123,5 @@ class BooksController < ApplicationController
 
       change.upload
       change.blob.save!
-    end
-
-    def handle_tags
-      # Nothing to tag when the save failed. Without this, a failed create
-      # still creates the categories the user typed.
-      return unless @book&.persisted?
-
-      # Capitalized once, so the names compared below are the names stored.
-      # Comparing the two forms deleted any tag typed with a capital in it
-      # ("Folk Tales" is stored as "Folk tales") right after creating it.
-      tags = (params[:tags] || []).map(&:capitalize)
-
-      # Add new ones
-      tags.each do |tag_name|
-        category = Category.find_or_create_by name: tag_name
-        BookCategory.find_or_create_by category: category, book: @book
-      end
-
-      # Remove those that user chose not to keep
-      @book.categories.reject{|c| tags.include? c.name.capitalize }.each do |category|
-        BookCategory.find_by(category: category, book: @book).destroy
-      end
     end
 end

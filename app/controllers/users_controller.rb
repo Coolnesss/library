@@ -40,7 +40,7 @@ class UsersController < ApplicationController
         format.html { redirect_to root_path, notice: 'Password changed successfully.' }
         format.json { render :show, status: :ok }
       else
-        format.html { render :edit }
+        format.html { render :edit, status: :unprocessable_entity }
         format.json { render json: @user.errors, status: :unprocessable_entity }
       end
     end
@@ -56,7 +56,7 @@ class UsersController < ApplicationController
     if @user.save
       redirect_to login_path, notice: 'User created succesfully. Wait for an admin to activate your account.'
     else
-      render :register
+      render :register, status: :unprocessable_entity
     end
   end
 

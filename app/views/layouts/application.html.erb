@@ -3,17 +3,12 @@
 <head>
   <title>Library</title>
   <%= render 'application/favicon' %>
-  <%= stylesheet_link_tag 'spectre.min.css' %>
-  <%= stylesheet_link_tag 'spectre-icons.min.css' %>
-  <%= stylesheet_link_tag 'spectre-exp.min.css' %>
-  <%= stylesheet_link_tag "awesomplete.css" %>
-  <%= javascript_include_tag "awesomplete.min.js" %>
-  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
-  <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+  <%= stylesheet_link_tag 'spectre.min', 'spectre-icons.min', 'spectre-exp.min', 'application', 'data-turbo-track': 'reload' %>
   <link href="https://fonts.googleapis.com/css?family=Ubuntu:400,700&display=swap" rel="stylesheet"> 
   <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no" />
   <%= csrf_meta_tags %>
   <script async defer data-website-id="8c2bb5bf-6b31-4241-85e4-d2fbd93b0d4d" src="https://analytics.antilibrary.net/script.js"></script>
+  <%= javascript_importmap_tags %>
 </head>
 
 <body>

@@ -1,8 +1,4 @@
-//@import "bootstrap-sprockets";
-//@import "bootstrap";
-@import 'font_awesome5_webfont';
-@import url(//fonts.googleapis.com/earlyaccess/notonastaliqurdu.css);
-@import "spectre.min";
+@import url(https://fonts.googleapis.com/earlyaccess/notonastaliqurdu.css);
 
 body {
   font-family: 'Ubuntu';
@@ -26,7 +22,7 @@ table {
 
 @font-face {
   font-family: 'Sindhi';
-  src: font-url('MBLATEEFIv2.TTF') format('truetype');
+  src: url('MBLATEEFIv2.TTF') format('truetype');
 }
 
 .sindhi {
@@ -107,7 +103,20 @@ table {
   color: white;
 }
 
-.field_with_errors { @extend .has-error; }
+/* Rails wraps fields with errors in .field_with_errors: style them like Spectre's .has-error. */
+.field_with_errors .form-label {
+  color: #e85600;
+}
+
+.field_with_errors .form-input,
+.field_with_errors .form-select {
+  border-color: #e85600;
+}
+
+.field_with_errors .form-input:focus,
+.field_with_errors .form-select:focus {
+  box-shadow: 0 0 0 .1rem rgba(232, 86, 0, .2);
+}
 
 .navbar-right {
   text-align: right;
@@ -119,4 +128,18 @@ ul {
 
 i {
   padding-right: 3px;
+}
+
+/* Font Awesome icons, inlined as SVG by ApplicationHelper#fa_icon. */
+.fa-icon {
+  width: 1em;
+  height: 1em;
+  fill: currentColor;
+  vertical-align: -.125em;
+  margin-right: .3em;
+}
+
+/* button_to wraps its button in a form; keep it in line with the links beside it. */
+form.button_to {
+  display: inline-block;
 }

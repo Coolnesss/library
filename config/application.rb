@@ -2,7 +2,6 @@ require_relative "boot"
 
 require "rails"
 # Every framework in rails/all except Action Text, which the app does not use.
-# Its Trix editor asset is modern JavaScript that Uglifier cannot compress.
 %w[
   active_record/railtie
   active_storage/engine

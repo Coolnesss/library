@@ -24,7 +24,7 @@ class Book < ApplicationRecord
   
   validates :isbn, isbn_format: true, allow_blank: true
 
-  accepts_nested_attributes_for :categories, :allow_destroy => true
+  before_save :apply_tag_names, if: -> { @tag_names }
 
   self.per_page = 10
 
@@ -112,7 +112,27 @@ class Book < ApplicationRecord
     end
   end
 
+  # The book form sends its tag chips as book[tag_names][], plus one blank
+  # entry so that removing every chip still sends the list. The tags change
+  # only when the book saves, so a failed save leaves them and creates none.
+  def tag_names
+    @tag_names || categories.map(&:name)
+  end
+
+  def tag_names=(names)
+    @tag_names = Array(names).map { |name| name.to_s.strip.capitalize }.reject(&:blank?).uniq
+  end
+
   private
+
+  # Existing categories are matched case-insensitively, so "Folk Tales" does
+  # not become a second "Folk tales".
+  def apply_tag_names
+    self.categories = @tag_names.map do |name|
+      Category.where('lower(name) = ?', name.downcase).first || Category.create!(name: name)
+    end
+    @tag_names = nil
+  end
 
   def attachment_metadata
     attachment.blob.open { |file| Origami::PDF.read(file.path, lazy: true).metadata }

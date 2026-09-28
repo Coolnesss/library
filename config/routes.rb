@@ -7,7 +7,6 @@ Rails.application.routes.draw do
   resources :categories
   resources :books
 
-  get 'books/:id/categories' => 'books#categories'
 
   root 'welcome#index'
 

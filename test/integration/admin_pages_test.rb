@@ -11,14 +11,12 @@ class AdminPagesTest < ActionDispatch::IntegrationTest
     end
   end
 
-  test "readers read the tag list, because they edit books too" do
+  test "categories are admin-only, the JSON list included" do
     sign_in users(:reader)
 
     get categories_path(format: :json)
-    assert_response :success
-    assert_equal %w[History Poetry], response.parsed_body.map { |c| c['name'] }.sort
+    assert_redirected_to login_path
 
-    # Everything else about categories stays admin-only.
     assert_no_difference 'Category.count' do
       post categories_path, params: { category: { name: 'Sneaky' } }
     end

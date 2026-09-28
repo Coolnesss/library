@@ -1,7 +1,7 @@
 class CategoriesController < ApplicationController
   before_action :set_category, only: [:show, :edit, :update, :destroy]
   before_action :authorize
-  before_action :authorize_admin, unless: :tag_list?
+  before_action :authorize_admin
 
   # GET /categories
   # GET /categories.json
@@ -35,7 +35,7 @@ class CategoriesController < ApplicationController
         format.html { redirect_to @category, notice: 'Category was successfully created.' }
         format.json { render :show, status: :created, location: @category }
       else
-        format.html { render :new }
+        format.html { render :new, status: :unprocessable_entity }
         format.json { render json: @category.errors, status: :unprocessable_entity }
       end
     end
@@ -49,7 +49,7 @@ class CategoriesController < ApplicationController
         format.html { redirect_to categories_path, notice: 'Category was successfully updated.' }
         format.json { render :show, status: :ok, location: @category }
       else
-        format.html { render :edit }
+        format.html { render :edit, status: :unprocessable_entity }
         format.json { render json: @category.errors, status: :unprocessable_entity }
       end
     end
@@ -76,9 +76,4 @@ class CategoriesController < ApplicationController
       params.require(:category).permit(:name)
     end
 
-    # The tag autocomplete on the book form reads this list, and any signed-in
-    # user can edit a book. Everything else here stays admin-only.
-    def tag_list?
-      action_name == 'index' && request.format.json?
-    end
 end

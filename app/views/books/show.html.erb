@@ -71,7 +71,7 @@
           <div class="card-header">
             <%= link_to 'Edit', edit_book_path(@book), class: "btn btn-warning" %>
             <% if current_user.admin? %> 
-              <%= link_to 'Delete', @book, method: :delete, class: "btn btn-danger", :data => {:confirm => 'Are you sure?'} %>
+              <%= button_to 'Delete', @book, method: :delete, class: "btn btn-danger", form: { data: { turbo_confirm: 'Are you sure?' } } %>
             <% end %>
           </div>
         </div>
@@ -133,7 +133,7 @@
       <div class="card-body">
         <%= link_to 'Edit', edit_book_path(@book), class: "btn btn-warning" %>
           <% if current_user.admin? %> 
-            <%= link_to 'Delete', @book, method: :delete, class: "btn btn-danger", :data => {:confirm => 'Are you sure?'} %>
+            <%= button_to 'Delete', @book, method: :delete, class: "btn btn-danger", form: { data: { turbo_confirm: 'Are you sure?' } } %>
           <% end %>
           <%= link_to 'Back', books_path, class: "btn btn-default" %>
       </div>

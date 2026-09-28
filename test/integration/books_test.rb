@@ -67,11 +67,6 @@ class BooksTest < ActionDispatch::IntegrationTest
     assert_equal ['Poetry'], books.find { |b| b['name_eng'] == 'Shah jo Risalo' }['categories']
   end
 
-  test "a book's tags are served as JSON" do
-    get "/books/#{books(:sindhi).id}/categories.json"
-    assert_equal ['Poetry'], response.parsed_body.map { |c| c['name'] }
-  end
-
   test "only admins export the CSV" do
     get books_path(format: :csv)
     assert_redirected_to login_path
@@ -99,7 +94,7 @@ class BooksTest < ActionDispatch::IntegrationTest
     assert_no_difference 'Book.count' do
       post books_path, params: { book: { attachment: pdf_upload } }
     end
-    assert_response :success
+    assert_response :unprocessable_entity
 
     # From the fixture PDF's XMP metadata.
     assert_select 'select[name="book[language]"] option[selected][value="English"]'
@@ -117,7 +112,7 @@ class BooksTest < ActionDispatch::IntegrationTest
   end
 
   test "tags are saved with a new book" do
-    post books_path, params: { book: book_params, tags: ['Poetry', 'Folk tales'] }
+    post books_path, params: { book: book_params.merge(tag_names: ['', 'Poetry', 'Folk tales']) }
     assert_equal ['Folk tales', 'Poetry'], Book.last.categories.pluck(:name).sort
   end
 
@@ -125,7 +120,7 @@ class BooksTest < ActionDispatch::IntegrationTest
     book = books(:sindhi)
 
     assert_difference 'Category.count', 1 do
-      patch book_path(book), params: { book: { publisher: 'Another publisher' }, tags: ['History', 'New tag'] }
+      patch book_path(book), params: { book: { publisher: 'Another publisher', tag_names: ['', 'History', 'New tag'] } }
     end
     assert_redirected_to book_path(book)
     assert_equal ['History', 'New tag'], book.reload.categories.pluck(:name).sort
@@ -153,16 +148,48 @@ class BooksTest < ActionDispatch::IntegrationTest
   end
 
   test "tags keep the capitals the user typed inside them" do
-    post books_path, params: { book: book_params, tags: ['Folk Tales'] }
+    post books_path, params: { book: book_params.merge(tag_names: ['Folk Tales']) }
 
     assert_equal ['Folk tales'], Book.last.categories.pluck(:name)
   end
 
   test "a failed create does not create the tags" do
     assert_no_difference ['Book.count', 'Category.count'] do
-      post books_path, params: { book: { name_eng: 'No Sindhi name' }, tags: ['Brand new tag'] }
+      post books_path, params: { book: { name_eng: 'No Sindhi name', tag_names: ['Brand new tag'] } }
     end
-    assert_response :success
+    assert_response :unprocessable_entity
+  end
+
+  test "a failed update leaves the tags as they were" do
+    book = books(:sindhi)
+
+    assert_no_difference 'Category.count' do
+      patch book_path(book), params: { book: { name: '', tag_names: ['', 'Brand new tag'] } }
+    end
+    assert_response :unprocessable_entity
+    assert_equal ['Poetry'], book.reload.categories.pluck(:name)
+  end
+
+  test "removing every chip removes every tag" do
+    book = books(:sindhi)
+
+    patch book_path(book), params: { book: { tag_names: [''] } }
+    assert_empty book.reload.categories
+  end
+
+  test "a tag typed in another case reuses the existing one" do
+    assert_no_difference 'Category.count' do
+      post books_path, params: { book: book_params.merge(tag_names: ['POETRY']) }
+    end
+    assert_equal ['Poetry'], Book.last.categories.pluck(:name)
+  end
+
+  test "the book form renders the chips and the suggestions" do
+    get edit_book_path(books(:sindhi))
+
+    assert_select '#tags input[type=hidden][name="book[tag_names][]"][value=""]', 1
+    assert_select '#tags .chip input[value="Poetry"]'
+    assert_select 'datalist#tag-suggestions option[value="History"]'
   end
 
   test "only admins delete books" do
