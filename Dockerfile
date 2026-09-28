@@ -66,5 +66,8 @@ RUN groupadd --system --gid 1000 rails && \
     chown -R rails:rails db log tmp storage
 USER 1000:1000
 
+# Runs db:prepare before the server starts, so a deploy applies new migrations.
+ENTRYPOINT ["/rails/bin/docker-entrypoint"]
+
 EXPOSE 3000
-CMD ["bundle", "exec", "puma", "-C", "config/puma.rb"]
+CMD ["./bin/rails", "server"]

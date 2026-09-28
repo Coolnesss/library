@@ -3,13 +3,13 @@ ruby '3.2.11'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 #gem 'rails', '~> 5.2'
-gem 'rails', '~> 7.2.0'
+gem 'rails', '~> 8.0.0'
 # Rails 7 no longer pulls in Sprockets; it stays until the frontend moves to Propshaft.
 gem 'sprockets-rails'
 # Sprockets 3 calls ERB.new with positional arguments, which erb 6 removed.
 gem 'erb', '< 6'
 # Use sqlite3 as the database for Active Record, in every environment
-gem 'sqlite3', '~> 1.6'
+gem 'sqlite3', '~> 2.1'
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 5.0'
 # Use Uglifier as compressor for JavaScript assets

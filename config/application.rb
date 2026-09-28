@@ -11,6 +11,9 @@ module Library
     # Raised from 5.0 in steps. This also turns on Zeitwerk, which Rails 7.0
     # requires; `bin/rails zeitwerk:check` verifies the file names.
     config.load_defaults 7.2
+    # The 8.0 default, set here because Rails reads it before the initializers
+    # run. Drop this line once load_defaults is 8.0.
+    config.active_support.to_time_preserves_timezone = :zone
 
     # Please, add to the `ignore` list any other `lib` subdirectories that do
     # not contain `.rb` files, or that should not be reloaded or eager loaded.
