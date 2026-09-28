@@ -8,6 +8,12 @@ if ENV['RAILS_ENV'] == 'production'
   preload_app!
 end
 
+# Run Solid Queue's supervisor inside Puma, so jobs need no separate process.
+# Production turns it on in config/deploy.yml; development always runs it.
+if ENV['SOLID_QUEUE_IN_PUMA'] || ENV.fetch('RAILS_ENV', 'development') == 'development'
+  plugin :solid_queue
+end
+
 port        ENV['PORT']     || 3000
 environment ENV['RACK_ENV'] || 'development'
 pidfile     ENV['PIDFILE']  || 'tmp/pids/server.pid'

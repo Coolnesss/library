@@ -35,6 +35,7 @@ builder:
 env:
   clear:
     WEB_CONCURRENCY: 2
+    SOLID_QUEUE_IN_PUMA: true
     RAILS_MAX_THREADS: 5
   secret:
     - SECRET_KEY_BASE

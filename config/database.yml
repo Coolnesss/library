@@ -9,9 +9,17 @@ default: &default
   pool: 5
   timeout: 5000
 
+# Solid Queue keeps its tables in a separate "queue" database, built from
+# db/queue_schema.rb. It holds only transient job state, so Litestream does not
+# need to replicate it.
 development:
-  <<: *default
-  database: db/development.sqlite3
+  primary:
+    <<: *default
+    database: db/development.sqlite3
+  queue:
+    <<: *default
+    database: db/development_queue.sqlite3
+    migrations_paths: db/queue_migrate
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
@@ -23,5 +31,10 @@ test:
 # The production database lives in storage/, which Kamal mounts as a Docker
 # volume, so it survives deploys. Do not move it back under db/.
 production:
-  <<: *default
-  database: storage/production.sqlite3
+  primary:
+    <<: *default
+    database: storage/production.sqlite3
+  queue:
+    <<: *default
+    database: storage/production_queue.sqlite3
+    migrations_paths: db/queue_migrate

@@ -50,6 +50,8 @@ gem 'will_paginate'#, '3.1.7'
 gem 'isbn_validation'
 gem 'email_validator'
 gem 'puma'
+# Active Job backend. Runs inside Puma through its plugin; see config/puma.rb.
+gem 'solid_queue'
 gem 'grim'
 gem 'redcarpet'
 gem 'origami'
