@@ -8,12 +8,9 @@ Bundler.require(*Rails.groups)
 
 module Library
   class Application < Rails::Application
-    # Initialize configuration defaults for originally generated Rails version.
-    config.load_defaults 5.0
-
-    # Rails 7.0 removes the classic autoloader, so the app runs on Zeitwerk
-    # ahead of that hop. `bin/rails zeitwerk:check` verifies the file names.
-    config.autoloader = :zeitwerk
+    # Raised from 5.0 in steps. This also turns on Zeitwerk, which Rails 7.0
+    # requires; `bin/rails zeitwerk:check` verifies the file names.
+    config.load_defaults 6.1
 
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration can go into files in config/initializers
