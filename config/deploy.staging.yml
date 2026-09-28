@@ -1,0 +1,19 @@
+# Staging: `kamal deploy -d staging`, merged over config/deploy.yml.
+#
+# A separate service and volume, so it never touches production's containers
+# or database. Never run `kamal setup` or accessory commands with -d staging:
+# the accessories in deploy.yml are production's (Litestream, Umami).
+service: antilibrary-staging
+
+proxy:
+  hosts:
+    - staging.antilibrary.net
+
+env:
+  clear:
+    # Its database is a copy of production's, with real users' addresses.
+    MAIL_DELIVERY: log
+    ANALYTICS: "off"
+
+volumes:
+  - "antilibrary_staging_storage:/rails/storage"

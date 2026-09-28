@@ -58,7 +58,9 @@ Rails.application.configure do
   # config.action_mailer.raise_delivery_errors = false
 
 
-  config.action_mailer.delivery_method = :smtp
+  # Staging runs on a copy of the production database, so with real users'
+  # addresses: MAIL_DELIVERY=log keeps its mail in the log instead.
+  config.action_mailer.delivery_method = ENV["MAIL_DELIVERY"] == "log" ? :test : :smtp
   host = 'gmail.com' #replace with your own url
   config.action_mailer.default_url_options = { host: host }
 

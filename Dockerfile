@@ -28,13 +28,10 @@ RUN bundle install && \
 
 COPY . .
 
-# config/environments/production.rb reads the S3 and Gmail settings with
-# ENV.fetch at boot, so precompiling needs values for all of them. These are
-# throwaway; the real ones are injected by Kamal at run time.
-RUN SECRET_KEY_BASE=dummy \
-    S3_BUCKET_NAME=dummy AWS_ACCESS_KEY_ID=dummy AWS_SECRET_ACCESS_KEY=dummy \
-    AWS_REGION=dummy S3_ENDPOINT=dummy \
-    GMAIL_APP_USER=dummy GMAIL_APP_PASS=dummy \
+# config/environments/production.rb reads the Gmail settings with ENV.fetch at
+# boot, so precompiling needs values for them. These are throwaway; the real
+# ones are injected by Kamal at run time.
+RUN SECRET_KEY_BASE_DUMMY=1 GMAIL_APP_USER=dummy GMAIL_APP_PASS=dummy \
     bundle exec rails assets:precompile
 
 
