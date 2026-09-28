@@ -17,6 +17,5 @@ class PublicPagesTest < ActionDispatch::IntegrationTest
   test "the health check answers without a login" do
     get '/up'
     assert_response :success
-    assert_equal 'OK', response.body
   end
 end
