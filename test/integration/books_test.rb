@@ -22,6 +22,7 @@ class BooksTest < ActionDispatch::IntegrationTest
     get books_path, params: { q: { name_or_author_or_name_eng_or_author_sindhi_cont: 'Shani' } }
     assert_includes response.body, 'Two Nations'
     assert_not_includes response.body, 'Shah jo Risalo'
+    assert_select "input[name='q[name_or_author_or_name_eng_or_author_sindhi_cont]'][value='Shani']"
   end
 
   test "the index filters by language and category" do
