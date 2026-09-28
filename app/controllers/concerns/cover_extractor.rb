@@ -1,14 +1,6 @@
 require 'grim'
-require 'paperclip/media_type_spoof_detector'
 
-module Paperclip
-  class MediaTypeSpoofDetector
-    def spoofed?
-      false
-    end
-  end
-end
-
+# Paperclip's spoof detection is turned off in config/initializers/paperclip.rb.
 module CoverExtractor
     def self.extract(book)
       
