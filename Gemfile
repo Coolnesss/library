@@ -16,7 +16,6 @@ gem 'jbuilder'#, '~> 2.0'
 # Origami needs rexml and matrix, neither of which is a default gem any more.
 gem 'rexml'
 gem 'matrix'
-gem 'ransack'
 # bundle exec rake doc:rails generates the API under doc/api.
 #gem 'sdoc', '~> 0.4.0', group: :doc
 

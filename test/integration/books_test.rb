@@ -18,26 +18,49 @@ class BooksTest < ActionDispatch::IntegrationTest
     assert_operator response.body.index('Two Nations'), :<, response.body.index('Shah jo Risalo')
   end
 
-  test "the index searches names and authors" do
-    get books_path, params: { q: { name_or_author_or_name_eng_or_author_sindhi_cont: 'Shani' } }
+  test "the index searches with one box" do
+    get books_path, params: { q: 'Shani' }
     assert_includes response.body, 'Two Nations'
     assert_not_includes response.body, 'Shah jo Risalo'
-    assert_select "input[name='q[name_or_author_or_name_eng_or_author_sindhi_cont]'][value='Shani']"
+    assert_select "input[name='q'][value='Shani']"
+    assert_select '.search-summary', /1 book/
   end
 
-  test "the index filters by language and category" do
-    get books_path, params: { q: { language_eq: 'English' } }
+  test "the index filters by field, language and tags" do
+    get books_path, params: { language: 'English' }
     assert_includes response.body, 'Two Nations'
     assert_not_includes response.body, 'Shah jo Risalo'
+    assert_select 'details.search-filters[open]'
 
-    get books_path, params: { q: { categories_name_in: ['Poetry'] } }
+    get books_path, params: { tags: ['Poetry'] }
+    assert_includes response.body, 'Shah jo Risalo'
+    assert_not_includes response.body, 'Two Nations'
+
+    get books_path, params: { author: 'Latif' }
     assert_includes response.body, 'Shah jo Risalo'
     assert_not_includes response.body, 'Two Nations'
   end
 
-  test "the index sorts" do
-    get books_path, params: { q: { s: 'year asc' } }
+  test "each filter shows as a chip that removes only itself" do
+    get books_path, params: { q: 'risalo', language: 'Sindhi', tags: ['Poetry'] }
+    assert_select '.search-summary .chip', 3
+    assert_select '.search-summary a[href=?]', '/books?language=Sindhi&tags%5B%5D=Poetry'
+    assert_select '.search-summary a[href=?]', '/books?q=risalo&tags%5B%5D=Poetry'
+    assert_select '.search-summary a[href=?]', '/books?language=Sindhi&q=risalo'
+  end
+
+  test "the index sorts, and keeps the search when sorting" do
+    get books_path, params: { sort: 'year', dir: 'asc' }
     assert_operator response.body.index('Shah jo Risalo'), :<, response.body.index('Two Nations')
+
+    get books_path, params: { q: 'a', sort: 'year', dir: 'asc' }
+    assert_select 'th a[href=?]', '/books?dir=desc&q=a&sort=year', text: /▲/
+    assert_select "input[type=hidden][name=sort][value=year]"
+  end
+
+  test "old search links do not break the index" do
+    get books_path, params: { q: { author_eq: 'Shah Abdul Latif' } }
+    assert_response :success
   end
 
   test "the index shows ten books a page" do
@@ -187,8 +210,8 @@ class BooksTest < ActionDispatch::IntegrationTest
   test "the book form renders the chips and the suggestions" do
     get edit_book_path(books(:sindhi))
 
-    assert_select '#tags input[type=hidden][name="book[tag_names][]"][value=""]', 1
-    assert_select '#tags .chip input[value="Poetry"]'
+    assert_select '[data-tag-chips] input[type=hidden][name="book[tag_names][]"][value=""]', 1
+    assert_select '[data-tag-chips] .chip input[value="Poetry"]'
     assert_select 'datalist#tag-suggestions option[value="History"]'
   end
 

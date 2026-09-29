@@ -17,7 +17,8 @@ namespace :paperclip do
        "MANIFEST=path (default storage/paperclip_manifest.csv), DRY_RUN=1 to only count. " \
        "Copies from public/system when the service is the local disk."
   task backfill: :environment do
-    local = ActiveStorage::Blob.service.is_a?(ActiveStorage::Service::DiskService)
+    # DiskService is only loaded where it is configured, so not in production.
+    local = defined?(ActiveStorage::Service::DiskService) && ActiveStorage::Blob.service.is_a?(ActiveStorage::Service::DiskService)
     PaperclipBackfill.new(manifest_path.call, source_dir: (Rails.root.join("public/system") if local),
                                          dry_run: ENV["DRY_RUN"].present?).run
   end

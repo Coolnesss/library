@@ -28,14 +28,6 @@ class Book < ApplicationRecord
 
   self.per_page = 10
 
-  def self.ransackable_associations(auth_object = nil)
-    ["book_categories", "categories"]
-  end
-
-  def self.ransackable_attributes(auth_object = nil)
-    ["created_at", "author", "language", "name", "name_eng", "year", "isbn", "description_eng", "description_sindhi", "author_sindhi", "publisher"]
-  end
-
   # Reads the PDF's metadata into the fields left empty. The attachment has to
   # be uploaded already (BooksController#create does that for a failed save).
   def extract_fields_from_metadata
@@ -72,18 +64,6 @@ class Book < ApplicationRecord
     end
 
     self.year = self.year.presence || pdf_year
-  end
-
-  def self.search(term)
-    term = term.downcase
-    where("lower(author) LIKE ? OR lower(author_sindhi) LIKE ? OR lower(name_eng) LIKE ? OR lower(name) LIKE ? OR lower(publisher) LIKE ? OR lower(translator) LIKE ?", "%#{term}%", "%#{term}%", "%#{term}%", "%#{term}%", "%#{term}%", "%#{term}%")
-  end
-
-  def self.lower_order(sort_column, sort_direction)
-    if Book.column_for_attribute(sort_column).type == :integer
-      return Book.order(sort_column + " " + sort_direction)
-    end
-    Book.order("LOWER(" + sort_column + ") " + sort_direction)
   end
 
   def year_str

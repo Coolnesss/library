@@ -2,30 +2,24 @@
 
 <div style="padding: 2rem;">
   <h1>A river of read and unread books</h1>
-  <h1 direction="rtl" class="sindhi">پڙهيل توڙي نہ پڙهيل ڪتابن جي ندي۔</h1>
+  <h1 dir="rtl" class="sindhi">پڙهيل توڙي نہ پڙهيل ڪتابن جي ندي۔</h1>
+</div>
+
+<div class="container grid-xl">
+  <%= render 'search', search: @search, count: @books.total_entries %>
 </div>
 
 <div class="container grid-xl hide-md">
   <div class="columns">
     <div class="column centered">
-      <div class="input-group" style="display:flex;">
-        <%= search_form_for @q, id: "search-form", class:"input-group", style: "min-width: 60%" do |f| %>
-          <%= f.select :language_eq, options_for_select(LanguageHelper.languages, @q.language_eq), { :include_blank => "Every Language" }, class: "form-select", style: "flex: 1" %>
-          <%= f.select :categories_name_in, options_from_collection_for_select(Category.order(:name), :name, :name, @q.categories_name_in), { :include_blank => "Every Category" }, class: "form-select", style: "flex: 1" %>          
-          <%= f.search_field :name_or_author_or_name_eng_or_author_sindhi_cont, placeholder: "Search", class: "form-input", type: "text", style: "flex: 1"  %>
-          <%= f.search_field :publisher_cont, placeholder: "Publisher only", class: "form-input", type: "text", style: "flex: 1"  %>
-          <%= f.submit 'Search', class: "btn btn-primary input-group-btn" %> 
-        <% end %>
-      </div>
-
       <table class="table table-hover">
         <thead>
           <tr>
-            <th><%= sort_link(@q, :name_eng, "Name") %></th>
-            <th><%= sort_link(@q, :author, "Author / Editor") %></th>
-            <th class="hide-sm"><%= sort_link(@q, :year, "Published") %></th>
-            <th direction="rtl" class="sindhi"><%= sort_link(@q, :author_sindhi, "ليکڪ / مرتب") %></th>
-            <th direction="rtl" class="sindhi"><%= sort_link(@q, :name, "نالو") %></th>
+            <th><%= sort_header(@search, 'title', t('books.search.title')) %></th>
+            <th><%= sort_header(@search, 'author', t('books.search.author')) %></th>
+            <th class="hide-sm"><%= sort_header(@search, 'year', t('books.search.year')) %></th>
+            <th dir="rtl" class="sindhi"><%= sort_header(@search, 'author_sindhi', "ليکڪ / مرتب") %></th>
+            <th dir="rtl" class="sindhi"><%= sort_header(@search, 'name', "نالو") %></th>
           </tr>
         </thead>
 
@@ -33,10 +27,10 @@
           <% @books.each do |book| %>
             <tr>
               <td><%= link_to book.name_eng, book %></td>
-              <td><%= link_to book.author, books_path(q: { author_eq: book.author }) %></td>
+              <td><%= link_to book.author, books_search_path(author: book.author) %></td>
               <td class="hide-sm"><%= book.year_str or "Unknown" %></td>
-              <td direction="rtl" class=<%= book.font_html_class %>><%= link_to book.author_sindhi, books_path(q: { author_sindhi_eq: book.author_sindhi }) %></td>              
-              <td direction="rtl" class=<%= book.font_html_class %>><%= link_to book.name, book %></td>              
+              <td dir="rtl" class="<%= book.font_html_class %>"><%= link_to book.author_sindhi, books_search_path(author: book.author_sindhi) if book.author_sindhi.present? %></td>
+              <td dir="rtl" class="<%= book.font_html_class %>"><%= link_to book.name, book %></td>
             </tr>
           <% end %>
         </tbody>
@@ -53,19 +47,6 @@
 <div class="container grid-sm show-md">
   <div class="columns">
     <div class="column centered">
-    <p><b> Total books: <%= Book.count %></b></p>
-    
-      <div>      
-        <%= search_form_for @q, id: "search-form-mobile", class:"form-group" do |f| %>
-          <%= f.select :language_eq, options_for_select(LanguageHelper.languages, @q.language_eq), { :include_blank => "Every Language" }, class: "form-select" %>
-          <%= f.select :categories_name_in, options_from_collection_for_select(Category.order(:name), :name, :name, @q.categories_name_in), { :include_blank => "Every Category" }, class: "form-select" %>          
-          <%= f.search_field :name_or_author_or_name_eng_or_author_sindhi_cont, placeholder: "Search", class: "form-input", type: "text" %>
-          <%= f.search_field :publisher_cont, placeholder: "Publisher only", class: "form-input", type: "text"  %>
-          <%= f.submit 'Search', class: "btn btn-primary input-group-btn" %> 
-        <% end %>
-      </div>
-    <br />
-
     <% @books.each do |book| %>
       <div class="card">
           <a href=<%= book_path(book) %> class="card-image">
@@ -80,7 +61,7 @@
             <div class="card-body" style="display: flex; justify-content: center;">
               <% book.categories.each do |category| %>
               <div style="flex: 1; flex-grow:0;">
-                <label class="chip" style="display: inline-block;"><%= category.name %></label>
+                <%= link_to category.name, add_tag_path(@search, category.name), class: "chip" %>
                 </div>
               <% end %>
             </div>

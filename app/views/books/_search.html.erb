@@ -1,0 +1,80 @@
+<%= form_with url: books_path, method: :get, class: "book-search", data: { book_search: true } do %>
+  <%# Sorting stays when the search changes. %>
+  <% if search.sort %>
+    <%= hidden_field_tag :sort, search.sort, id: nil %>
+    <%= hidden_field_tag :dir, search.dir, id: nil %>
+  <% end %>
+
+  <div class="input-group">
+    <%= search_field_tag :q, search.q, class: "form-input", dir: "auto", autocomplete: "off",
+                         placeholder: t('books.search.placeholder'), 'aria-label': t('books.search.placeholder') %>
+    <button class="btn btn-primary input-group-btn"><%= t('books.search.submit') %></button>
+  </div>
+
+  <details class="search-filters" <%= 'open' if search.filtering_fields? %>>
+    <summary><%= t('books.search.more') %></summary>
+
+    <div class="columns">
+      <% BookSearch::FIELDS.each_key do |field| %>
+        <div class="column col-6 col-sm-12">
+          <label class="form-label" for="search-<%= field %>"><%= t("books.search.#{field}") %></label>
+          <%= search_field_tag field, search.field(field), id: "search-#{field}", class: "form-input", dir: "auto", autocomplete: "off" %>
+        </div>
+      <% end %>
+
+      <div class="column col-6 col-sm-12">
+        <label class="form-label" for="search-year-from"><%= t('books.search.year') %></label>
+        <div class="input-group">
+          <%= number_field_tag :year_from, search.year_from, id: "search-year-from", class: "form-input",
+                               placeholder: t('books.search.from'), 'aria-label': t('books.search.from') %>
+          <span class="input-group-addon">–</span>
+          <%= number_field_tag :year_to, search.year_to, class: "form-input",
+                               placeholder: t('books.search.to'), 'aria-label': t('books.search.to') %>
+        </div>
+      </div>
+
+      <div class="column col-6 col-sm-12">
+        <label class="form-label" for="search-language"><%= t('books.search.language') %></label>
+        <%= select_tag :language, options_for_select(LanguageHelper.languages, search.language),
+                       include_blank: t('books.search.any_language'), id: "search-language", class: "form-select" %>
+      </div>
+
+      <div class="column col-12" data-tags>
+        <label class="form-label" for="search-tag"><%= t('books.search.tags') %></label>
+        <div class="tags" data-tag-chips>
+          <% search.tags.each do |tag| %>
+            <%= render 'tag_chip', name: tag, field_name: 'tags[]' %>
+          <% end %>
+        </div>
+        <template><%= render 'tag_chip', name: '', field_name: 'tags[]' %></template>
+        <%# Named like the chips, so a tag typed but not yet added still counts. %>
+        <input class="form-input" id="search-tag" name="tags[]" list="tag-suggestions" autocomplete="off"
+               placeholder="<%= t('books.search.add_tag') %>" data-tag-input>
+        <datalist id="tag-suggestions">
+          <% Category.order(:name).pluck(:name).each do |name| %>
+            <option value="<%= name %>">
+          <% end %>
+        </datalist>
+      </div>
+
+      <div class="column col-12">
+        <button class="btn btn-primary"><%= t('books.search.submit') %></button>
+      </div>
+    </div>
+  </details>
+<% end %>
+
+<div class="search-summary">
+  <strong><%= t('books.search.count', count: count) %></strong>
+  <% chips = search_filter_chips(search) %>
+  <% chips.each do |label, value, path| %>
+    <span class="chip">
+      <%# One span: the chip is a flex box, which drops the space between separate pieces. %>
+      <span><%= label %>: <bdi><%= value %></bdi></span>
+      <%= link_to '', path, class: "btn btn-clear", 'aria-label': t('books.search.remove') %>
+    </span>
+  <% end %>
+  <% if chips.any? %>
+    <%= link_to t('books.search.clear'), books_path(search.sort ? { sort: search.sort, dir: search.dir } : {}) %>
+  <% end %>
+</div>

@@ -2,3 +2,4 @@
 import "@hotwired/turbo-rails"
 import "nav"
 import "tags"
+import "search"

@@ -1,7 +1,6 @@
 class BooksController < ApplicationController
   before_action :set_book, only: [:show, :edit, :update, :destroy]
   before_action :authorize
-  helper_method :sort_column, :sort_direction
   before_action :authorize_admin, if: :admin_only_action?
 
   
@@ -10,9 +9,8 @@ class BooksController < ApplicationController
   def index
     respond_to do |format| 
       format.html {
-        @q = Book.ransack(params[:q])
-        @q.sorts = 'created_at desc' if @q.sorts.empty?
-        @books = @q.result(distinct: true).includes(:categories).with_attached_cover.with_attached_attachment.page(params[:page])
+        @search = BookSearch.new(params.permit(*BookSearch::PARAMS))
+        @books = @search.results.includes(:categories).with_attached_cover.with_attached_attachment.page(params[:page])
       }
       format.json { @books = Book.all }
       format.csv { send_data Book.as_csv, filename: "books-#{Date.today}.csv" }
@@ -99,14 +97,6 @@ class BooksController < ApplicationController
     # dropped and its action left unguarded.
     def admin_only_action?
       action_name == 'destroy' || (action_name == 'index' && request.format.csv?)
-    end
-
-    def sort_column
-      Book.column_names.include?(params[:sort]) ? params[:sort] : "created_at"
-    end
-
-    def sort_direction
-      %w[asc desc].include?(params[:direction]) ? params[:direction] : "desc"
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

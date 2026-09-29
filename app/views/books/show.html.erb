@@ -14,7 +14,7 @@
           <h4 class="card-title">
              <%= @book.name_eng %>
           </h4>
-          <h6 class="card-subtitle">by <%= @book.author %> in <label class="label"><%= @book.year_str %></label>
+          <h6 class="card-subtitle">by <%= link_to @book.author, books_path(author: @book.author) %> in <label class="label"><%= @book.year_str %></label>
             <p>Published by <%= @book.publisher %></p>
             <% if @book.translator.present? %>
                 <p style="margin: 0">Translated by <%= @book.translator %></p>
@@ -42,7 +42,7 @@
           <% end %>
           <br />
           <% @book.categories.each do |category| %>
-            <label class="chip"><%= category.name %></label>
+            <%= link_to category.name, books_path(tags: [category.name]), class: "chip" %>
           <% end %>
         </div>
       </div>
@@ -88,7 +88,7 @@
         <h4 class="card-title">
           <%= @book.name_eng %>
         </h4>
-        <h6 class="card-subtitle">by <%= @book.author %> in <label class="label"><%= @book.year_str %></label>
+        <h6 class="card-subtitle">by <%= link_to @book.author, books_path(author: @book.author) %> in <label class="label"><%= @book.year_str %></label>
           <p>Published by <%= @book.publisher %></p>
           <% if @book.translator.present? %>
               <p style="margin: 0">Translated by <%= @book.translator %></p>
@@ -116,7 +116,7 @@
         <% end %>
         <br />
         <% @book.categories.each do |category| %>
-          <label class="chip"><%= category.name %></label>
+          <%= link_to category.name, books_path(tags: [category.name]), class: "chip" %>
         <% end %>
       </div>
     </div>

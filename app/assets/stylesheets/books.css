@@ -5,10 +5,6 @@ h1 {
     padding: 0;
 }
 
-#search-form {
-  margin: 0 auto;
-}
-
 .apple_pagination {
     background: #f1f1f1;
     border: 1px solid #e5e5e5;
@@ -37,3 +33,43 @@ h1 {
       .apple_pagination a:hover, .apple_pagination a:focus {
         text-decoration: underline; }
   
+
+/* The search above the book list (books/_search.html.erb). */
+.book-search {
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+.search-filters {
+  margin-top: .4rem;
+}
+
+.search-filters summary {
+  cursor: pointer;
+  color: #5755d9;
+  padding: .2rem 0;
+}
+
+/* Chrome wraps a <details>' content in a box that Spectre's border-box
+   sizing does not reach, so two half-width columns no longer fit a row. */
+.search-filters .columns {
+  box-sizing: border-box;
+  padding: .4rem 0 .8rem;
+}
+
+.search-filters .column {
+  margin-bottom: .4rem;
+}
+
+.search-summary {
+  max-width: 960px;
+  margin: .6rem auto 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .4rem;
+}
+
+.search-summary .chip {
+  margin: 0;
+}

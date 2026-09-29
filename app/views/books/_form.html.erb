@@ -57,24 +57,26 @@
             <br>
 
             
-            Tags:
-            <div class="tags" id="tags">
-              <%# Keeps the list in the params when every chip is removed. %>
-              <%= hidden_field_tag 'book[tag_names][]', '', id: nil %>
-              <% @book.tag_names.each do |name| %>
-                <%= render 'tag_chip', name: name %>
-              <% end %>
-            </div>
-            <template id="tag-template"><%= render 'tag_chip', name: '' %></template>
+            <div data-tags>
+              Tags:
+              <div class="tags" data-tag-chips>
+                <%# Keeps the list in the params when every chip is removed. %>
+                <%= hidden_field_tag 'book[tag_names][]', '', id: nil %>
+                <% @book.tag_names.each do |name| %>
+                  <%= render 'tag_chip', name: name %>
+                <% end %>
+              </div>
+              <template><%= render 'tag_chip', name: '' %></template>
 
-            <br>
-            <label class="form-label" for="new-tag">Add a new tag (press enter to add)</label>
-            <input class="form-input" id="new-tag" list="tag-suggestions" autocomplete="off">
-            <datalist id="tag-suggestions">
-              <% Category.order(:name).pluck(:name).each do |name| %>
-                <option value="<%= name %>">
-              <% end %>
-            </datalist>
+              <br>
+              <label class="form-label" for="new-tag">Add a new tag (press enter to add)</label>
+              <input class="form-input" id="new-tag" list="tag-suggestions" autocomplete="off" data-tag-input>
+              <datalist id="tag-suggestions">
+                <% Category.order(:name).pluck(:name).each do |name| %>
+                  <option value="<%= name %>">
+                <% end %>
+              </datalist>
+            </div>
 
             <div class="actions">
               <br>
