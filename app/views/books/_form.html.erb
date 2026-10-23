@@ -2,20 +2,45 @@
 <div class="container grid-lg">
   <div class="columns">
     <div class="column centered">
-      <%= form_for @book, html: { multipart: true } do |f| %>
+      <%= stylesheet_link_tag "books" %>
+      <%# The upload in the browser: app/javascript/book_form.js. %>
+      <%= javascript_import_module_tag 'book_form' %>
+      <%= form_for @book, html: { multipart: true, data: { pdf_worker: asset_path('pdfjs-worker.js') } } do |f| %>
         <div class="form-group">
-            <% if action_name == 'new' %>
-              <p class='text-center' lang='en' dir='ltr'> Some empty fields will be autofilled after you upload a PDF, and click submit. <br> Then, fill in the rest of the fields and submit again to publish the book. </p>
-            <% end %>
-            <%= f.label :attachment, t('books.form.file'), class:"form-label" %>
-            <%# A file chosen before a failed save is already uploaded. Send it back, so it need not be chosen again. %>
-            <% if @book.attachment.attached? && @book.attachment_changes['attachment'] %>
-              <%= f.hidden_field :attachment, value: @book.attachment.signed_id %>
-              <p class="form-input-hint" lang="en" dir="ltr">Keeping <%= @book.attachment.filename %>. Choose another file to replace it.</p>
-            <% end %>
-            <%= f.file_field :attachment, class:"form-input" %>
-            <%= field_error f, :attachment %>
-            
+            <div class="book-file">
+              <%= tag.img class: "book-file-cover", alt: "", data: { cover_preview: true },
+                          src: (url_for(@book.cover) if @book.cover.attached?), hidden: !@book.cover.attached? %>
+              <div class="book-file-pick">
+                <%= f.label :attachment, t('books.form.file'), class:"form-label" %>
+                <%# Files from before a failed save are uploaded already: send them back, so they need not be chosen again. %>
+                <% if @book.attachment.attached? && @book.attachment_changes['attachment'] %>
+                  <%= f.hidden_field :attachment, value: @book.attachment.signed_id, data: { kept: true } %>
+                  <p class="form-input-hint" data-kept><%= t('books.form.keeping', file: @book.attachment.filename) %></p>
+                <% end %>
+                <% if @book.cover.attached? && @book.attachment_changes['cover'] %>
+                  <%= f.hidden_field :cover, value: @book.cover.signed_id, data: { kept: true } %>
+                <% end %>
+                <%# Our own button and file name: the browser's would be in its own
+                    interface language, whatever the page's. %>
+                <div class="file-picker">
+                  <%= f.file_field :attachment, class: "file-picker-input", direct_upload: true, accept: ".pdf,application/pdf",
+                                   data: { book_file: true, name: "book[attachment]" } %>
+                  <label for="book_attachment" class="btn"><%= t('books.form.choose_file') %></label>
+                  <span class="file-picker-name" data-file-name data-none="<%= t('books.form.no_file') %>" dir="auto">
+                    <%= @book.attachment_changes['attachment'] && @book.attachment.attached? ? @book.attachment.filename : t('books.form.no_file') %>
+                  </span>
+                </div>
+                <div class="book-upload" data-upload hidden
+                     data-uploading="<%= t('books.form.uploading') %>" data-done="<%= t('books.form.uploaded') %>" data-failed="<%= t('books.form.upload_failed') %>">
+                  <progress max="1" value="0"></progress>
+                  <span data-upload-label></span>
+                </div>
+                <%= field_error f, :attachment %>
+                <%= f.hidden_field :pages, data: { book_pages: true } %>
+                <p class="form-input-hint book-autofill-note" data-autofill-note hidden><%= t('books.form.autofilled') %></p>
+              </div>
+            </div>
+
             <div class="divider"></div>
 
             <%= f.label :name, "نالو", class:"form-label sindhi bold" %>

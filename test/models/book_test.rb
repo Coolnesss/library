@@ -39,29 +39,6 @@ class BookTest < ActiveSupport::TestCase
     assert_equal %w[Shah\ jo\ Risalo Two\ Nations], csv.map { |row| row['name_eng'] }
   end
 
-  test "reads an English PDF's title and author into the English fields" do
-    book = Book.new(attachment: uploaded_pdf)
-    book.extract_fields_from_metadata
-
-    assert_equal 'Fixture Title', book.name_eng
-    assert_equal 'Fixture Author', book.author
-    assert_nil book.name
-    assert_equal 'Fixture Press', book.publisher
-    assert_equal 1999, book.year
-  end
-
-  test "puts a Sindhi title and author into the Sindhi fields, even with no Language" do
-    book = Book.new(attachment: uploaded_pdf)
-    book.stub(:attachment_metadata, { 'title' => 'هڪ سسئي سو سور (ناول)', 'creator' => 'امرتا پريتم' }) do
-      book.extract_fields_from_metadata
-    end
-
-    assert_equal 'هڪ سسئي سو سور (ناول)', book.name
-    assert_equal 'امرتا پريتم', book.author_sindhi
-    assert_nil book.name_eng
-    assert_nil book.author
-  end
-
   test "file URLs escape Sindhi names and spaces" do
     ActiveStorage::Current.url_options = { host: 'example.com' }
     book = books(:english)
@@ -80,27 +57,12 @@ class BookTest < ActiveSupport::TestCase
     assert book.errors.added?(:attachment, :not_a_document)
   end
 
-  test "skips the metadata when there is no PDF to read" do
-    assert_nothing_raised do
-      Book.new.extract_fields_from_metadata
-      Book.new(attachment: uploaded_pdf(content_type: 'application/msword')).extract_fields_from_metadata
-    end
-  end
+  test "only takes an image as the cover" do
+    book = books(:english)
+    book.cover.attach(io: StringIO.new('%PDF'), filename: 'cover.pdf', content_type: 'application/pdf')
 
-  test "never overwrites what the user typed" do
-    book = Book.new(name_eng: 'Typed', attachment: uploaded_pdf)
-    book.extract_fields_from_metadata
-
-    assert_equal 'Typed', book.name_eng
-    assert_equal 'Fixture Author', book.author
-  end
-
-  private
-
-  # extract_fields_from_metadata reads an uploaded blob, as after a failed create.
-  def uploaded_pdf(content_type: 'application/pdf')
-    ActiveStorage::Blob.create_and_upload!(io: file_fixture('sample.pdf').open, filename: 'sample.pdf',
-                                           content_type: content_type, identify: false)
+    assert_not book.valid?
+    assert book.errors.added?(:cover, :not_an_image)
   end
 
   test "the home page's numbers leave out what is not known yet" do

@@ -124,25 +124,52 @@ class BooksTest < ActionDispatch::IntegrationTest
     assert_equal file_fixture('sample.pdf').binread, book.attachment.download
   end
 
-  test "a failed create pre-fills from the PDF and keeps the file for the resubmit" do
+  test "a failed create keeps the file for the resubmit" do
     assert_no_difference 'Book.count' do
       post books_path, params: { book: { attachment: pdf_upload } }
     end
     assert_response :unprocessable_entity
-
-    # From the fixture PDF's XMP metadata.
-    assert_select 'select[name="book[language]"] option[selected][value="English"]'
-    assert_select 'input[name="book[name_eng]"][value="Fixture Title"]'
-    assert_select 'input[name="book[author]"][value="Fixture Author"]'
-    assert_select 'input[name="book[publisher]"][value="Fixture Press"]'
-    assert_select 'input[name="book[year]"][value="1999"]'
-    assert_includes response.body, 'Keeping sample.pdf'
+    assert_select 'p[data-kept]', /sample\.pdf/
+    assert_select '.toast-error', /#{I18n.t('form_errors', locale: :sd)}/
 
     assert_difference 'Book.count', 1 do
       post books_path, params: { book: book_params.merge(attachment: kept_attachment) }
     end
     assert_equal 'sample.pdf', Book.last.attachment.filename.to_s
     assert_equal file_fixture('sample.pdf').binread, Book.last.attachment.download
+  end
+
+  test "a book from the browser's uploads needs no job: the file, cover and page count come as signed ids" do
+    assert_no_enqueued_jobs only: CreateCoversJob do
+      post books_path, params: { book: book_params.merge(attachment: uploaded('sample.pdf').signed_id,
+                                                         cover: uploaded_cover.signed_id, pages: 1) }
+    end
+    book = Book.last
+    assert_redirected_to book_path(book)
+    assert book.attachment.attached?
+    assert book.cover.attached?
+    assert_equal 1, book.pages
+  end
+
+  test "a failed create keeps the browser's cover too" do
+    post books_path, params: { book: { attachment: uploaded('sample.pdf').signed_id, cover: uploaded_cover.signed_id, pages: 1 } }
+    assert_response :unprocessable_entity
+    assert_select 'input[type=hidden][name="book[cover]"][data-kept]'
+    assert_select 'img[data-cover-preview][src]'
+    assert_select 'input[name="book[pages]"][value="1"]'
+  end
+
+  test "a new file on an edit drops the old cover and page count unless new ones come" do
+    book = books(:english)
+    book.cover.attach(uploaded_cover)
+    book.update_column(:pages, 99)
+
+    assert_enqueued_with(job: CreateCoversJob) do
+      patch book_path(book), params: { book: { attachment: pdf_upload } }
+    end
+    book.reload
+    assert_not book.cover.attached?
+    assert_nil book.pages
   end
 
   test "tags are saved with a new book" do
@@ -253,5 +280,14 @@ class BooksTest < ActionDispatch::IntegrationTest
 
   def pdf_upload
     fixture_file_upload('sample.pdf', 'application/pdf')
+  end
+
+  # A blob as the browser's direct upload leaves it.
+  def uploaded(name, content_type: 'application/pdf')
+    ActiveStorage::Blob.create_and_upload!(io: file_fixture(name).open, filename: name, content_type: content_type)
+  end
+
+  def uploaded_cover
+    ActiveStorage::Blob.create_and_upload!(io: StringIO.new("\xFF\xD8\xFF".b), filename: 'cover.jpg', content_type: 'image/jpeg')
   end
 end

@@ -5,35 +5,6 @@ h1 {
     padding: 0;
 }
 
-.apple_pagination {
-    background: #f1f1f1;
-    border: 1px solid #e5e5e5;
-    text-align: center;
-    padding: 1em;
-    cursor: default; }
-    .apple_pagination a, .apple_pagination span {
-      padding: 0.2em 0.3em; }
-    .apple_pagination .disabled {
-      color: #aaaaaa; }
-    .apple_pagination .current {
-      font-style: normal;
-      font-weight: bold;
-      background-color: #bebebe;
-      display: inline-block;
-      width: 1.4em;
-      height: 1.4em;
-      line-height: 1.5;
-      -moz-border-radius: 1em;
-      -webkit-border-radius: 1em;
-      border-radius: 1em;
-      text-shadow: rgba(255, 255, 255, 0.8) 1px 1px 1px; }
-    .apple_pagination a {
-      text-decoration: none;
-      color: black; }
-      .apple_pagination a:hover, .apple_pagination a:focus {
-        text-decoration: underline; }
-  
-
 /* The search above the book list (books/_search.html.erb). */
 .book-search {
   max-width: 960px;
@@ -169,9 +140,39 @@ h1 {
   margin-inline-end: .2rem;
 }
 
+/* Page links: Spectre's pagination, with targets big enough for a thumb. */
 .book-pages {
   justify-content: center;
-  margin: 1rem 0;
+  flex-wrap: wrap;
+  margin: 1.2rem 0;
+}
+
+.book-pages .page-item a,
+.book-pages .page-item span {
+  min-width: 2rem;
+  height: 2rem;
+  line-height: 2rem;
+  padding: 0 .4rem;
+  text-align: center;
+  font-size: .8rem;
+}
+
+.book-pages .page-item a {
+  border-radius: 50%;
+}
+
+/* ‹ and › in a heavier size, so the arrows read as arrows. */
+.book-pages .previous_page a,
+.book-pages .next_page a {
+  font-size: 1.1rem;
+}
+
+/* Phones: only the pages around the current one, so it stays on one line. */
+@media (max-width: 600px) {
+  .book-pages .page-edge,
+  .book-pages .gap {
+    display: none;
+  }
 }
 
 @media (max-width: 600px) {
@@ -275,4 +276,75 @@ h1 {
 
 .list-stats dt {
   font-weight: normal;
+}
+
+/* The book form's file: the cover preview beside the picker and progress. */
+.book-file {
+  display: flex;
+  gap: .8rem;
+  align-items: flex-start;
+}
+
+.book-file-pick {
+  flex: 1;
+  min-width: 0;
+}
+
+.book-file-cover {
+  flex: 0 0 5rem;
+  width: 5rem;
+  height: auto;
+  border: 1px solid #e7e9ed;
+  background: #fff;
+}
+
+.book-upload {
+  display: flex;
+  align-items: center;
+  gap: .6rem;
+  margin-top: .4rem;
+}
+
+.book-upload progress {
+  flex: 1;
+  max-width: 16rem;
+}
+
+/* Fields filled in from the file, to be checked. */
+.form-input.autofilled {
+  background: #fffbea;
+  border-color: #ffd367;
+}
+
+.book-autofill-note {
+  color: #a17800;
+}
+
+/* The file picker: the real input is invisible but still takes focus and
+   clicks through its label, our button. */
+.file-picker {
+  display: flex;
+  align-items: center;
+  gap: .6rem;
+  position: relative;
+}
+
+.file-picker-input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  overflow: hidden;
+}
+
+.file-picker-input:focus-visible + .btn {
+  box-shadow: 0 0 0 .1rem rgba(87, 85, 217, .2);
+}
+
+.file-picker-name {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: #66758c;
 }

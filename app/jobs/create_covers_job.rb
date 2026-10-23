@@ -1,7 +1,8 @@
 require 'open3'
 
 # Renders page 1 of a book's PDF as its cover, with poppler's pdftoppm, and
-# counts its pages while the file is open. Word files get neither.
+# counts its pages, doing only what the browser has not done already (see
+# books/_form.html.erb). Word files get neither.
 class CreateCoversJob < ApplicationJob
   queue_as :default
 
@@ -16,20 +17,22 @@ class CreateCoversJob < ApplicationJob
 
   def attach_cover(book)
     return unless book.attachment.attached? && book.attachment.content_type == 'application/pdf'
+    return if book.cover.attached? && book.pages
 
     # A directory of its own, so covers rendered at the same time cannot
     # overwrite each other.
     Dir.mktmpdir do |dir|
       output = File.join(dir, 'cover')
       book.attachment.open do |pdf|
+        book.update_column(:pages, Book.count_pages(pdf.path)) unless book.pages
+        next if book.cover.attached?
+
         _out, err, status = Open3.capture3('pdftoppm', '-singlefile', '-f', '1', '-l', '1', '-scale-to', SIZE.to_s,
                                            '-jpeg', '-jpegopt', 'quality=80', pdf.path, output)
         raise "pdftoppm failed for book #{book.id}: #{err}" unless status.success?
 
-        book.update_column(:pages, Book.count_pages(pdf.path))
+        book.cover.attach(io: File.open("#{output}.jpg"), filename: 'cover.jpg', content_type: 'image/jpeg')
       end
-
-      book.cover.attach(io: File.open("#{output}.jpg"), filename: 'cover.jpg', content_type: 'image/jpeg')
     end
   end
 end

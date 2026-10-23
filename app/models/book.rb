@@ -19,6 +19,7 @@ class Book < ApplicationRecord
     application/vnd.openxmlformats-officedocument.wordprocessingml.document
   ].freeze
   validate :attachment_is_a_document
+  validate :cover_is_an_image
 
   validates :name, presence: true
   validates :name_eng, presence: true
@@ -32,44 +33,6 @@ class Book < ApplicationRecord
   before_save :apply_tag_names, if: -> { @tag_names }
 
   self.per_page = 10
-
-  # Reads the PDF's metadata into the fields left empty. The attachment has to
-  # be uploaded already (BooksController#create does that for a failed save).
-  def extract_fields_from_metadata
-    # Submitted without a file, or with a Word file: there is nothing to read.
-    # Asking Origami anyway raised, which turned a failed save into a 500.
-    return unless attachment.attached? && attachment.blob.persisted? && attachment.content_type == 'application/pdf'
-
-    metadata = attachment_metadata
-    return unless metadata
-
-    pdf_year = metadata['DateOfPublication']
-    pdf_language = metadata['Language']
-    pdf_publisher = metadata['PublishedBy']
-    pdf_title = metadata['title']
-    pdf_author = metadata['creator']
-
-    if pdf_language and (LanguageHelper.languages.include? pdf_language.capitalize)
-      self.language = self.language.presence || pdf_language
-    end
-
-    self.publisher = self.publisher.presence || pdf_publisher
-
-    # By the text's script, not the language: most PDFs carry no Language, and
-    # a Sindhi title used to land in the English fields.
-    if arabic_script?(pdf_title)
-      self.name = self.name.presence || pdf_title
-    else
-      self.name_eng = self.name_eng.presence || pdf_title
-    end
-    if arabic_script?(pdf_author)
-      self.author_sindhi = self.author_sindhi.presence || pdf_author
-    else
-      self.author = self.author.presence || pdf_author
-    end
-
-    self.year = self.year.presence || pdf_year
-  end
 
   # The numbers for the home page (all books) and the book list (the books
   # found: `Book.where(id: ...).stats`), leaving out what is not known. Pages are counted
@@ -145,20 +108,16 @@ class Book < ApplicationRecord
     @tag_names = nil
   end
 
-  def attachment_metadata
-    attachment.blob.open { |file| Origami::PDF.read(file.path, lazy: true).metadata }
-  rescue StandardError => e
-    Rails.logger.warn "Could not read the PDF metadata of #{attachment.filename}: #{e.class}"
-    nil
-  end
-
-  def arabic_script?(text)
-    text.to_s.match?(/\p{Arabic}/)
-  end
-
   def attachment_is_a_document
     return unless attachment.attached?
 
     errors.add(:attachment, :not_a_document) unless DOCUMENT_TYPES.include?(attachment.content_type)
+  end
+
+  # The cover comes from the browser (books/_form.html.erb) as a signed id.
+  def cover_is_an_image
+    return unless cover.attached?
+
+    errors.add(:cover, :not_an_image) unless cover.content_type.to_s.start_with?('image/')
   end
 end

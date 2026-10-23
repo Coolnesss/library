@@ -32,7 +32,7 @@ module ApplicationHelper
     flash.each do |msg_type, message|
       concat(content_tag(:div, message, class: "toast #{bootstrap_class_for(msg_type)} alert-dismissible", role: 'alert') do
         concat(content_tag(:button, class: 'btn btn-clear float-right', data: { dismiss: 'alert' }) do
-          concat content_tag(:span, t('layout.close'), class: 'sr-only')
+          concat content_tag(:span, t('layout.close'), class: 'text-assistive')
         end)
         concat message
       end)

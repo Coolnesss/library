@@ -1,3 +1,11 @@
+// A form that came back with errors: put the cursor in the first field to
+// fix, which also scrolls it into view.
+for (const name of ["turbo:load", "turbo:render"]) {
+  document.addEventListener(name, () => {
+    document.querySelector(".field_with_errors :is(input, select, textarea)")?.focus()
+  })
+}
+
 // The menu button opens the off-canvas sidebar on narrow screens; the overlay
 // behind it closes it. The ✕ on a flash message dismisses it. A click outside
 // the language menu closes it.

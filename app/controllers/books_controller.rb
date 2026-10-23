@@ -41,17 +41,15 @@ class BooksController < ApplicationController
 
     respond_to do |format|
       if @book.save
-        # Create cover in background task if book was successfully created
-        CreateCoversJob.perform_later @book
+        # The browser normally sends the cover and page count; otherwise
+        # (Word files, no JavaScript) the job makes what is missing.
+        CreateCoversJob.perform_later @book unless @book.cover.attached? && @book.pages
 
         format.html { redirect_to @book, notice: t('books.created') }
         format.json { render :show, status: :created, location: @book }
       else
         keep_new_attachment
-        @book.extract_fields_from_metadata
-
-        flash.now[:success] = "Note: some fields were filled automatically from the book you provided. Recheck them and submit again."
-        format.html { render :new, status: :unprocessable_entity }
+        format.html { flash.now[:error] = t('form_errors'); render :new, status: :unprocessable_entity }
         format.json { render json: @book.errors, status: :unprocessable_entity }
       end
     end
@@ -62,17 +60,22 @@ class BooksController < ApplicationController
   def update
     @book.assign_attributes(book_params)
     new_file = @book.attachment_changes.key?('attachment')
+    if new_file
+      # The old file's cover and page count no longer apply; the browser sends
+      # new ones, or the job makes them.
+      @book.cover = nil unless @book.attachment_changes.key?('cover')
+      @book.pages = nil unless book_params[:pages].present?
+    end
 
     respond_to do |format|
       if @book.save
-        # A new file needs a new cover.
-        CreateCoversJob.perform_later @book if new_file
+        CreateCoversJob.perform_later @book if new_file && !(@book.cover.attached? && @book.pages)
 
         format.html { redirect_to @book, notice: t('books.updated') }
         format.json { render :show, status: :ok, location: @book }
       else
         keep_new_attachment
-        format.html { render :edit, status: :unprocessable_entity }
+        format.html { flash.now[:error] = t('form_errors'); render :edit, status: :unprocessable_entity }
         format.json { render json: @book.errors, status: :unprocessable_entity }
       end
     end
@@ -104,7 +107,7 @@ class BooksController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def book_params
-      params.require(:book).permit(:name, :isbn, :name_eng, :author, :translator, :translator_sindhi, :author_sindhi, :language, :description_sindhi, :description_eng, :year, :publisher, :attachment, tag_names: [])
+      params.require(:book).permit(:name, :isbn, :name_eng, :author, :translator, :translator_sindhi, :author_sindhi, :language, :description_sindhi, :description_eng, :year, :publisher, :attachment, :cover, :pages, tag_names: [])
     end
 
     # A failed save uploads nothing. Upload the new file anyway, so the form can

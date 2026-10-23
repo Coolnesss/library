@@ -1,6 +1,9 @@
 # Sindhi. Drafted from the labels already in the templates and the wording
 # Chang agreed on 2026-09-29; keys match en.yml (test/i18n_test.rb checks).
 sd:
+  # Above a form that came back with errors.
+  form_errors: "محفوظ نه ٿيو. ڳاڙهي نشان وارا خانا درست ڪريو۔"
+
   layout:
     title: "ائنٽي لائبريري"
     home: "گهر"
@@ -73,7 +76,14 @@ sd:
     form:
       new: "نئون ڪتاب"
       edit: "ڪتاب ۾ ترميم"
-      file: "PDF يا Word فائل"
+      file: "PDF"
+      choose_file: "PDF چونڊيو"
+      no_file: "ڪا فائل نه چونڊي وئي"
+      keeping: "%{file} رکيل آهي. بدلائڻ لاءِ ٻي فائل چونڊيو۔"
+      uploading: "اپلوڊ ٿي رهيو آهي"
+      uploaded: "اپلوڊ ٿي ويو۔"
+      upload_failed: "اپلوڊ نه ٿيو. فائل محفوظ ڪرڻ وقت موڪلي ويندي۔"
+      autofilled: "ڪجهه خانا فائل مان ڀريا ويا. مهرباني ڪري چڪاس ڪريو۔"
       isbn: "ISBN"
       publisher: "ڇپائيندڙ"
       language: "ٻولي"
@@ -151,6 +161,7 @@ sd:
       too_long: "تمام ڊگهو آهي"
       invalid_isbn: "ISBN صحيح ناهي"
       not_a_document: "PDF يا Word فائل هجڻ گهرجي"
+      not_an_image: "تصوير هجڻ گهرجي"
   activerecord:
     errors:
       models:
@@ -168,3 +179,7 @@ sd:
     previous_label: "‹"
     next_label: "›"
     page_gap: "…"
+    container_aria_label: "صفحا"
+    page_aria_label: "صفحو %{page}"
+    previous_aria_label: "پويون صفحو"
+    next_aria_label: "ايندڙ صفحو"

@@ -40,7 +40,7 @@ class UsersController < ApplicationController
         format.html { redirect_to root_path, notice: t('users.password_changed') }
         format.json { render :show, status: :ok }
       else
-        format.html { render :edit, status: :unprocessable_entity }
+        format.html { flash.now[:error] = t('form_errors'); render :edit, status: :unprocessable_entity }
         format.json { render json: @user.errors, status: :unprocessable_entity }
       end
     end
@@ -58,6 +58,7 @@ class UsersController < ApplicationController
     if @user.save
       redirect_to login_path, notice: t('users.created')
     else
+      flash.now[:error] = t('form_errors')
       render :register, status: :unprocessable_entity
     end
   end

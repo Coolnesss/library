@@ -49,7 +49,7 @@
     <% end %>
   </ol>
 
-  <%= will_paginate @books, class: "pagination book-pages", inner_window: 2, outer_window: 0 %>
+  <%= will_paginate @books, renderer: SpectrePaginationRenderer, class: "pagination book-pages", inner_window: 1, outer_window: 0 %>
 
   <p class="text-center">
     <%= link_to t("books.new_book"), new_book_path, class: "btn" %>

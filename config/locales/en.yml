@@ -1,4 +1,7 @@
 en:
+  # Above a form that came back with errors.
+  form_errors: "Not saved. Please fix the fields marked in red."
+
   layout:
     title: "Antilibrary"
     home: "Home"
@@ -71,7 +74,14 @@ en:
     form:
       new: "New book"
       edit: "Edit book"
-      file: "PDF or Word file"
+      file: "PDF"
+      choose_file: "Choose a PDF"
+      no_file: "No file chosen"
+      keeping: "Keeping %{file}. Choose another file to replace it."
+      uploading: "Uploading"
+      uploaded: "Uploaded."
+      upload_failed: "The upload failed. The file will be sent when you save."
+      autofilled: "Some fields were filled in from the file. Please check them."
       isbn: "ISBN"
       publisher: "Publisher"
       language: "Language"
@@ -150,6 +160,7 @@ en:
       too_long: "is too long"
       invalid_isbn: "isn't a valid ISBN"
       not_a_document: "must be a PDF or Word file"
+      not_an_image: "must be an image"
   activerecord:
     errors:
       models:
@@ -167,3 +178,7 @@ en:
     previous_label: "‹"
     next_label: "›"
     page_gap: "…"
+    container_aria_label: "Pages"
+    page_aria_label: "Page %{page}"
+    previous_aria_label: "Previous page"
+    next_aria_label: "Next page"
