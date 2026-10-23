@@ -6,8 +6,12 @@ require "net/http"
 # file, with the size and MD5 checksum Active Storage needs for a blob. It only
 # reads, and never writes to the bucket.
 #
-# With a source URL (the public bucket's base URL) it streams every object over
-# plain HTTPS, so it needs no credentials. With a source directory it reads the
+# With a source URL (the public bucket's base URL) it asks S3 about every
+# object over plain HTTPS, so it needs no credentials. A HEAD request gives the
+# size, the type and the ETag, which for a file uploaded in one piece (all of
+# Paperclip's) is the MD5 Active Storage wants, so nothing is downloaded. Only
+# an object whose ETag is not an MD5 (a multipart upload) is streamed and
+# hashed instead. S3 charges for downloads, not for HEAD requests to speak of. With a source directory it reads the
 # files Paperclip stored locally under the same keys. A rerun keeps the rows of
 # files that have not changed since, so refreshing the manifest only reads new
 # and changed books.
@@ -99,29 +103,46 @@ class PaperclipManifest
     }
   end
 
+  # A single-part upload's ETag is the hex MD5 of its bytes, in quotes; a
+  # multipart upload's ends in "-<parts>" and is not an MD5.
+  def self.etag_checksum(etag)
+    hex = etag.to_s.delete('"')
+    [[hex].pack("H*")].pack("m0") if hex.match?(/\A\h{32}\z/)
+  end
+
   def read_remote(key)
     uri = URI(url_for(key))
+    Net::HTTP.start(uri.host, uri.port, use_ssl: uri.scheme == "https", open_timeout: 10, read_timeout: 60) do |http|
+      head = http.request_head(uri)
+      return { "error" => "HTTP #{head.code}" } unless head.is_a?(Net::HTTPSuccess)
+
+      checksum = self.class.etag_checksum(head["ETag"])
+      return { "content_type" => head.content_type, "byte_size" => head["Content-Length"].to_s, "checksum" => checksum } if checksum
+
+      download(http, uri)
+    end
+  rescue IOError, SystemCallError, Timeout::Error, OpenSSL::SSL::SSLError, Net::ProtocolError => e
+    { "error" => "#{e.class}: #{e.message}" }
+  end
+
+  # Streams the object and hashes it: for the rare one without an MD5 ETag.
+  def download(http, uri)
     md5 = Digest::MD5.new
     size = 0
     result = nil
-
-    Net::HTTP.start(uri.host, uri.port, use_ssl: uri.scheme == "https", open_timeout: 10, read_timeout: 60) do |http|
-      http.request_get(uri) do |response|
-        unless response.is_a?(Net::HTTPSuccess)
-          result = { "error" => "HTTP #{response.code}" }
-          next
-        end
-
-        response.read_body do |chunk|
-          md5 << chunk
-          size += chunk.bytesize
-        end
-        result = { "content_type" => response.content_type, "byte_size" => size.to_s, "checksum" => md5.base64digest }
+    http.request_get(uri) do |response|
+      unless response.is_a?(Net::HTTPSuccess)
+        result = { "error" => "HTTP #{response.code}" }
+        next
       end
+
+      response.read_body do |chunk|
+        md5 << chunk
+        size += chunk.bytesize
+      end
+      result = { "content_type" => response.content_type, "byte_size" => size.to_s, "checksum" => md5.base64digest }
     end
     result
-  rescue IOError, SystemCallError, Timeout::Error, OpenSSL::SSL::SSLError, Net::ProtocolError => e
-    { "error" => "#{e.class}: #{e.message}" }
   end
 
   def updated_at(book, name)

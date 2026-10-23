@@ -1,6 +1,8 @@
 namespace :books do
+  # By hand only: it downloads every PDF without a count once (about 20 GB of
+  # S3 traffic for the whole library).
   desc "Count the pages of every PDF that has no count yet (for the home page). " \
-       "Reads the files one at a time; run on the server, where the bucket is close."
+       "Downloads each of those PDFs once, one at a time."
   task count_pages: :environment do
     books = Book.where(pages: nil).joins(attachment_attachment: :blob)
                 .where(active_storage_blobs: { content_type: 'application/pdf' })

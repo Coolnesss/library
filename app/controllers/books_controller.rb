@@ -41,9 +41,9 @@ class BooksController < ApplicationController
 
     respond_to do |format|
       if @book.save
-        # The browser normally sends the cover and page count; otherwise
-        # (Word files, no JavaScript) the job makes what is missing.
-        CreateCoversJob.perform_later @book unless @book.cover.attached? && @book.pages
+        # The browser normally sends the cover; otherwise (Word files, no
+        # JavaScript) the job makes it.
+        CreateCoversJob.perform_later @book unless @book.cover.attached?
 
         format.html { redirect_to @book, notice: t('books.created') }
         format.json { render :show, status: :created, location: @book }
@@ -69,7 +69,7 @@ class BooksController < ApplicationController
 
     respond_to do |format|
       if @book.save
-        CreateCoversJob.perform_later @book if new_file && !(@book.cover.attached? && @book.pages)
+        CreateCoversJob.perform_later @book if new_file && !@book.cover.attached?
 
         format.html { redirect_to @book, notice: t('books.updated') }
         format.json { render :show, status: :ok, location: @book }

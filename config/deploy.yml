@@ -45,6 +45,10 @@ env:
     - AWS_REGION
     - GMAIL_APP_USER
     - GMAIL_APP_PASS
+    # Read only by the pre-Rails-8 image (Paperclip's ENV.fetch at boot): kept
+    # so `kamal rollback` to that image can still start. Drop it once the
+    # switch has settled.
+    - S3_ENDPOINT
 
 # The SQLite database. Without this volume every deploy would start an empty one.
 volumes:

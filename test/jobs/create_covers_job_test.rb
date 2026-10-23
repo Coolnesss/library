@@ -25,17 +25,14 @@ class CreateCoversJobTest < ActiveJob::TestCase
     assert_not book.reload.cover.attached?
   end
 
-  test "only counts the pages when the browser sent a cover" do
-    skip 'needs poppler (pdfinfo)' unless system('which pdfinfo > /dev/null 2>&1')
-
+  test "never downloads a PDF only to count its pages" do
     book = books(:english)
     book.attachment.attach(io: file_fixture('sample.pdf').open, filename: 'sample.pdf')
     book.cover.attach(io: StringIO.new("\xFF\xD8\xFF".b), filename: 'cover.jpg', content_type: 'image/jpeg')
-    cover = book.cover.blob
 
-    CreateCoversJob.perform_now(book)
-
-    assert_equal cover, book.reload.cover.blob
-    assert_equal 1, book.pages
+    book.attachment.blob.stub(:open, ->(*) { flunk 'downloaded the PDF' }) do
+      CreateCoversJob.perform_now(book)
+    end
+    assert_nil book.reload.pages
   end
 end
