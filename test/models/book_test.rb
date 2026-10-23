@@ -24,7 +24,8 @@ class BookTest < ActiveSupport::TestCase
   end
 
   test "a year of 0 is shown as Unknown" do
-    assert_equal 'Unknown', Book.new(year: 0).year_str
+    assert_equal 'نامعلوم', Book.new(year: 0).year_str
+    I18n.with_locale(:en) { assert_equal 'Unknown', Book.new(year: 0).year_str }
     assert_equal 2007, books(:english).year_str
   end
 
@@ -76,7 +77,7 @@ class BookTest < ActiveSupport::TestCase
     book.attachment.attach(io: StringIO.new('not a book'), filename: 'notes.txt', content_type: 'text/plain')
 
     assert_not book.valid?
-    assert_includes book.errors[:attachment], 'Should be a document'
+    assert book.errors.added?(:attachment, :not_a_document)
   end
 
   test "skips the metadata when there is no PDF to read" do
@@ -100,5 +101,22 @@ class BookTest < ActiveSupport::TestCase
   def uploaded_pdf(content_type: 'application/pdf')
     ActiveStorage::Blob.create_and_upload!(io: file_fixture('sample.pdf').open, filename: 'sample.pdf',
                                            content_type: content_type, identify: false)
+  end
+
+  test "the home page's numbers leave out what is not known yet" do
+    stats = Book.stats
+    assert_equal 2, stats[:books]
+    assert_nil stats[:pages]
+
+    books(:english).attachment.attach(io: file_fixture('sample.pdf').open, filename: 'sample.pdf')
+    books(:sindhi).attachment.attach(io: file_fixture('sample.pdf').open, filename: 'sample.pdf')
+    books(:english).update_column(:pages, 120)
+    assert_nil Book.stats[:pages], 'shown with only half the PDFs counted'
+
+    books(:sindhi).update_column(:pages, 80)
+    stats = Book.stats
+    assert_equal 200, stats[:pages]
+    assert_equal Book.where('year > 0').minimum(:year), stats[:oldest]
+    assert_equal 2, stats[:languages]
   end
 end

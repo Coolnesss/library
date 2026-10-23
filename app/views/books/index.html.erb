@@ -1,81 +1,57 @@
 <%= stylesheet_link_tag "books" %>
 
-<div style="padding: 2rem;">
-  <h1>A river of read and unread books</h1>
-  <h1 dir="rtl" class="sindhi">پڙهيل توڙي نہ پڙهيل ڪتابن جي ندي۔</h1>
+<div class="page-heading">
+  <h1><%= t('books.heading') %></h1>
 </div>
 
-<div class="container grid-xl">
-  <%= render 'search', search: @search, count: @books.total_entries %>
-</div>
+<div class="container grid-lg">
+  <%= render 'search', search: @search, count: @books.total_entries, stats: @stats %>
 
-<div class="container grid-xl hide-md">
-  <div class="columns">
-    <div class="column centered">
-      <table class="table table-hover">
-        <thead>
-          <tr>
-            <th><%= sort_header(@search, 'title', t('books.search.title')) %></th>
-            <th><%= sort_header(@search, 'author', t('books.search.author')) %></th>
-            <th class="hide-sm"><%= sort_header(@search, 'year', t('books.search.year')) %></th>
-            <th dir="rtl" class="sindhi"><%= sort_header(@search, 'author_sindhi', "ليکڪ / مرتب") %></th>
-            <th dir="rtl" class="sindhi"><%= sort_header(@search, 'name', "نالو") %></th>
-          </tr>
-        </thead>
+  <nav class="book-sort">
+    <%= sort_link(@search, t('books.newest')) %>
+    <%= sort_link(@search, t('books.search.title'), %w[title name]) %>
+    <%= sort_link(@search, t('books.search.author'), %w[author author_sindhi]) %>
+    <%= sort_link(@search, t('books.search.year'), %w[year]) %>
+  </nav>
 
-        <tbody>
-          <% @books.each do |book| %>
-            <tr>
-              <td><%= link_to book.name_eng, book %></td>
-              <td><%= link_to book.author, books_search_path(author: book.author) %></td>
-              <td class="hide-sm"><%= book.year_str or "Unknown" %></td>
-              <td dir="rtl" class="<%= book.font_html_class %>"><%= link_to book.author_sindhi, books_search_path(author: book.author_sindhi) if book.author_sindhi.present? %></td>
-              <td dir="rtl" class="<%= book.font_html_class %>"><%= link_to book.name, book %></td>
-            </tr>
-          <% end %>
-        </tbody>
-      </table>
-      <br>
-      <%= will_paginate @books %>
-      <br>
-      <%= link_to 'New Book', new_book_path, class: "btn", style: "color: #5755d9" %>
-    </div>
-  </div>
-</div>
-<br />
-
-<div class="container grid-sm show-md">
-  <div class="columns">
-    <div class="column centered">
+  <ol class="book-list">
     <% @books.each do |book| %>
-      <div class="card">
-          <a href=<%= book_path(book) %> class="card-image">
-            <img src=<%= cover_url(book) %> class="img-responsive" height="30%">
-          </a>
+      <li class="book-row">
+        <%= link_to book, class: "book-thumb", tabindex: -1, 'aria-hidden': true do %>
+          <img src="<%= cover_thumb_url(book) %>" alt="" loading="lazy">
+        <% end %>
 
-          <div class="card-header">
-            <h4 class="card-title" style="text-align: center;">
-              <%= book.name_eng %>
-            </h4>
+        <div class="book-text">
+          <% titles = book_texts(book, :title) %>
+          <% if titles.any? %>
+            <h2 class="book-title"><%= link_to titles.first[0], book, **titles.first[1] %></h2>
+          <% end %>
+          <% titles.drop(1).each do |text, attributes| %>
+            <div class="book-alt-title"><%= tag.span text, **attributes %></div>
+          <% end %>
 
-            <div class="card-body" style="display: flex; justify-content: center;">
-              <% book.categories.each do |category| %>
-              <div style="flex: 1; flex-grow:0;">
-                <%= link_to category.name, add_tag_path(@search, category.name), class: "chip" %>
-                </div>
-              <% end %>
-            </div>
-
-            <div class="card-footer" style="justify-content: center; display: flex;">
-              <% if book.attachment.attached? %>
-                <%= link_to "<i class='icon icon-download centered'></i> Download".html_safe, book.attachment.url, class: "btn btn-link" %>
-              <% end %>
-            </div>
+          <div class="book-meta">
+            <% book_texts(book, :author).each do |text, attributes| %>
+              <%= link_to text, books_search_path(author: text), **attributes %>
+            <% end %>
+            <span class="book-year"><%= book.year_str %></span>
           </div>
-      <br />
-      
-    </div>
+
+          <% if book.categories.any? %>
+            <div class="book-tags">
+              <% book.categories.each do |category| %>
+                <%= link_to category.name, add_tag_path(@search, category.name), class: "chip", dir: "auto" %>
+              <% end %>
+            </div>
+          <% end %>
+        </div>
+      </li>
     <% end %>
-    <%= will_paginate @books, class: "pagination" %>
-  </div>  
+  </ol>
+
+  <%= will_paginate @books, class: "pagination book-pages", inner_window: 2, outer_window: 0 %>
+
+  <p class="text-center">
+    <%= link_to t("books.new_book"), new_book_path, class: "btn" %>
+  </p>
 </div>

@@ -1,0 +1,170 @@
+# Sindhi. Drafted from the labels already in the templates and the wording
+# Chang agreed on 2026-09-29; keys match en.yml (test/i18n_test.rb checks).
+sd:
+  layout:
+    title: "ائنٽي لائبريري"
+    home: "گهر"
+    books: "ڪتاب"
+    about: "اسان جي باري ۾"
+    change_password: "پاسورڊ مٽايو"
+    register: "رجسٽر ٿيو"
+    sign_in: "داخل ٿيو"
+    sign_out: "ٻاهر نڪرو"
+    menu: "مينيو"
+    close: "بند ڪريو"
+    # The language menu names each language in its own script.
+    language: "ٻولي"
+    language_name: "سنڌي"
+
+  welcome:
+    index:
+      heading: "لائبريري / ائنٽي لائبريري"
+      thought: "اڄ جو خيال"
+      total_books: "ڪل ڪتاب"
+    about:
+      heading: "ائنٽي لائبريري ڇا آهي؟"
+
+  # The library's numbers, on the home page and above the book list.
+  stats:
+    books:
+      one: "ڪتاب"
+      other: "ڪتاب"
+    pages:
+      one: "صفحو"
+      other: "صفحا"
+    languages:
+      one: "ٻولي"
+      other: "ٻوليون"
+    authors:
+      one: "ليکڪ"
+      other: "ليکڪ"
+    oldest: "سڀ کان پراڻو ڪتاب"
+    size: "ڪتابن جي ماپ"
+
+  languages:
+    Sindhi: "سنڌي"
+    Urdu: "اردو"
+    English: "انگريزي"
+    Punjabi: "پنجابي"
+    Baluchi: "بلوچي"
+    Siraiki: "سرائڪي"
+    Pushto: "پشتو"
+    Other: "ٻي"
+
+  books:
+    heading: "پڙهيل توڙي نہ پڙهيل ڪتابن جي ندي۔"
+    unknown_year: "نامعلوم"
+    new_book: "نئون ڪتاب"
+    newest: "نوان"
+    created: "ڪتاب شامل ٿي ويو۔"
+    updated: "ڪتاب ۾ تبديلي ٿي وئي۔"
+    destroyed: "ڪتاب ختم ٿي ويو۔"
+    show:
+      author: "ليکڪ / مرتب"
+      translator: "مترجم"
+      publisher: "ڇپائيندڙ"
+      year: "سال"
+      language: "ٻولي"
+      download: "ڊائونلوڊ"
+      edit: "ترميم"
+      delete: "ختم ڪريو"
+      back: "واپس"
+      confirm_delete: "ڇا توهان کي پڪ آهي؟"
+    form:
+      new: "نئون ڪتاب"
+      edit: "ڪتاب ۾ ترميم"
+      file: "PDF يا Word فائل"
+      isbn: "ISBN"
+      publisher: "ڇپائيندڙ"
+      language: "ٻولي"
+      choose_language: "ٻولي چونڊيو"
+      year: "سال"
+      tags: "موضوع"
+      add_tag: "موضوع وڌايو (Enter دٻايو)"
+      remove_tag: "موضوع هٽايو"
+      submit: "موڪليو"
+    search:
+      placeholder: "نالو، ليکڪ، مترجم، ڇپائيندڙ، موضوع يا ISBN ڳوليو"
+      submit: "ڳوليو"
+      more: "وڌيڪ چونڊ"
+      everywhere: "ڳولا"
+      title: "نالو"
+      author: "ليکڪ / مرتب"
+      translator: "مترجم"
+      publisher: "ڇپائيندڙ"
+      intro: "تعارف"
+      year: "سال"
+      from: "کان"
+      to: "تائين"
+      language: "ٻولي"
+      any_language: "ڪا به ٻولي"
+      tags: "موضوع"
+      tag: "موضوع"
+      add_tag: "موضوع وڌايو (Enter دٻايو)"
+      remove: "هٽايو"
+      clear: "سڀ هٽايو"
+      count:
+        one: "1 ڪتاب"
+        other: "%{number} ڪتاب"
+
+  sessions:
+    new:
+      heading: "داخل ٿيو"
+      email: "اي ميل"
+      password: "پاسورڊ"
+      submit: "داخل ٿيو"
+    wrong_password: "اي ميل يا پاسورڊ غلط آهي۔"
+    not_approved: "توهان جو کاتو اڃا منظور نه ٿيو آهي۔"
+    sign_in_first: "پهريان داخل ٿيو۔"
+
+  users:
+    register:
+      heading: "کاتو کوليو"
+      intro: "هي سنڌي ڪتابن جو ذخيرو آهي، جيڪو رڳو سڃاتل ماڻهن يا هن ڪم ۾ مدد ڪندڙن لاءِ کليل آهي۔"
+      name: "نالو"
+      email: "اي ميل"
+      password: "پاسورڊ"
+      password_confirmation: "پاسورڊ وري لکو"
+      approval: "سڃاڻپ ٿيڻ کان پوءِ توهان جو کاتو کلي ويندو۔"
+      submit: "کاتو کوليو"
+    edit:
+      heading: "پاسورڊ مٽايو"
+      password: "نئون پاسورڊ"
+      password_confirmation: "نئون پاسورڊ وري لکو"
+      submit: "موڪليو"
+    created: "کاتو ٺهي ويو۔ منظوري جو انتظار ڪريو۔"
+    password_changed: "پاسورڊ مٽجي ويو۔"
+
+  user_mailer:
+    user_approved_email:
+      subject: "توهان جو ائنٽي لائبريري کاتو منظور ٿي ويو"
+      hello: "سلام %{name}۔"
+      approved: "توهان جو کاتو منظور ٿي ويو آهي۔"
+      sign_in_here: "هتي داخل ٿي سگهو ٿا:"
+      automated: "هي پاڻمرادي اي ميل آهي۔"
+
+  errors:
+    messages:
+      blank: "خالي نٿو ٿي سگهي"
+      not_a_number: "انگ هجڻ گهرجي"
+      not_an_integer: "پورو انگ هجڻ گهرجي"
+      too_long: "تمام ڊگهو آهي"
+      invalid_isbn: "ISBN صحيح ناهي"
+      not_a_document: "PDF يا Word فائل هجڻ گهرجي"
+  activerecord:
+    errors:
+      models:
+        user:
+          attributes:
+            name:
+              blank: "پنهنجو نالو لکو"
+            email:
+              invalid: "صحيح اي ميل لکو"
+              taken: "هن اي ميل سان اڳ ۾ ئي کاتو آهي"
+            password_confirmation:
+              confirmation: "پاسورڊ ساڳيا ناهن"
+
+  will_paginate:
+    previous_label: "‹"
+    next_label: "›"
+    page_gap: "…"

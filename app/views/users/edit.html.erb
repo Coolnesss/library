@@ -1,20 +1,20 @@
 <div class="container grid-sm">
   <div class="columns">
     <div class="column centered">
-      <h1> Change password </h1>
-      
-      <%= form_for @user, class: "form-group" do |f| %>
+      <h1><%= t('users.edit.heading') %></h1>
 
-          <label class="form-label" for="password">New Password</label>
-          <input class="form-input" type="password" id="user_password" name="user[password]" placeholder="New password" />
-          <br>
-          
-          <label class="form-label" for="password">Password Confirmation</label>
-          <input class="form-input" type="password" id="user_password_confirmation" name="user[password_confirmation]" placeholder="New password again" />
-          <br>
-          
-          <%= f.submit "Submit", class:"btn btn-primary" %>
+      <%= form_for @user, html: { class: "form-group" } do |f| %>
+        <%= f.label :password, t('users.edit.password'), class: "form-label" %>
+        <%= f.password_field :password, class: "form-input", dir: "ltr", autocomplete: "new-password" %>
+        <%= field_error f, :password %>
+        <br>
 
+        <%= f.label :password_confirmation, t('users.edit.password_confirmation'), class: "form-label" %>
+        <%= f.password_field :password_confirmation, class: "form-input", dir: "ltr", autocomplete: "new-password" %>
+        <%= field_error f, :password_confirmation %>
+        <br>
+
+        <%= f.submit t('users.edit.submit'), class: "btn btn-primary" %>
       <% end %>
     </div>
   </div>

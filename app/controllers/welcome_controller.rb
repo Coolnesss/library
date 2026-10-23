@@ -1,7 +1,8 @@
 class WelcomeController < ApplicationController
     
     def index        
-        @thought = Thought.daily_thought
+        @thought = Thought.daily_thought(rtl: rtl?)
+        @stats = Book.stats
     end
     
     def about

@@ -1,23 +1,21 @@
 <%= stylesheet_link_tag "welcome" %>
 
 
-<div class="container" style="">
-  <div id="cols" class="columns">    
-    <div class="column">
-        <h1>Library / AntiLibrary</h1>
-        <h5> Thought of the day </h5>
-        <blockquote class="container column col-10 <%= @thought.html_class %>">
-            <p> <%= markdown(@thought.content) %></p>
-        </blockquote>
+<div class="container" id="home">
+  <div id="cols" class="columns">
+    <div class="column home-text">
+        <h1><%= t('welcome.index.heading') %></h1>
+        <% if @thought %>
+          <h5><%= t('welcome.index.thought') %></h5>
+          <blockquote class="container column col-10 <%= @thought.html_class %>" dir="<%= @thought.direction_html %>">
+              <%= markdown(@thought.content) %>
+          </blockquote>
+        <% end %>
+        <h6 class="total-narrow"><%= t('welcome.index.total_books') %> <b><%= number_with_delimiter(@stats[:books]) %></b></h6>
     </div>
-    <div class="column">
-        <h6 style='margin-top: 5px'>Total books <b><%= Book.count %></b></h6>
-        <img src=<%= image_url("transparent.png") %>>
+    <div class="column home-picture">
+        <%= render 'application/stats', stats: @stats, class: 'home-stats total-wide' %>
+        <img src="<%= image_url("transparent.png") %>" alt="">
     </div>
   </div>
 </div>
-
-
-
-
-

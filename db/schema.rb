@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_09_28_181734) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_23_120000) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -72,6 +72,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_28_181734) do
     t.datetime "cover_updated_at", precision: nil
     t.string "translator"
     t.string "translator_sindhi"
+    t.integer "pages"
   end
 
   create_table "categories", force: :cascade do |t|
@@ -95,6 +96,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_28_181734) do
     t.boolean "admin"
     t.boolean "active"
     t.string "email"
+    t.string "locale"
     t.index ["email"], name: "index_users_on_email", unique: true
   end
 

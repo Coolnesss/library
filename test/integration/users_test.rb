@@ -20,7 +20,8 @@ class UsersTest < ActionDispatch::IntegrationTest
       post users_path, params: { user: { name: '', email: 'not-an-email', password: 'secret1', password_confirmation: 'secret1' } }
     end
     assert_response :unprocessable_entity
-    assert_includes response.body, 'Please provide a name'
+    assert_select 'p.text-error', I18n.t('activerecord.errors.models.user.attributes.name.blank', locale: :sd)
+    assert_select 'p.text-error', I18n.t('activerecord.errors.models.user.attributes.email.invalid', locale: :sd)
   end
 
   test "an admin approves a user, which emails them" do
@@ -78,7 +79,7 @@ class UsersTest < ActionDispatch::IntegrationTest
     patch user_path(users(:reader)), params: { user: { password: 'changed1', password_confirmation: 'changed1' } }
     assert_redirected_to root_path
 
-    get logout_path
+    delete logout_path
     sign_in users(:reader), password: 'changed1'
     assert_redirected_to root_path
   end

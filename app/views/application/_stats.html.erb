@@ -1,0 +1,9 @@
+<%# The library's numbers (Book.stats): each figure, then its label. %>
+<dl class="<%= local_assigns[:class] %>">
+  <% stats.each do |name, value| %>
+    <div>
+      <dt><%= t(name, scope: :stats, count: value) %></dt>
+      <dd dir="ltr"><%= name == :size ? number_to_human_size(value, locale: :en, precision: 2) : name == :oldest ? value : number_with_delimiter(value) %></dd>
+    </div>
+  <% end %>
+</dl>

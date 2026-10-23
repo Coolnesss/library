@@ -39,9 +39,10 @@ RUN SECRET_KEY_BASE_DUMMY=1 GMAIL_APP_USER=dummy GMAIL_APP_PASS=dummy \
 FROM base
 
 # poppler-utils: CreateCoversJob renders page 1 of the PDF with pdftoppm.
+# libvips42: the cover thumbnails in the book list.
 RUN apt-get update -qq && \
     apt-get install --no-install-recommends -y \
-      poppler-utils libsqlite3-0 && \
+      poppler-utils libvips42 libsqlite3-0 && \
     rm -rf /var/lib/apt/lists/*
 
 COPY --from=build "${BUNDLE_PATH}" "${BUNDLE_PATH}"

@@ -8,7 +8,7 @@ class SessionsTest < ActionDispatch::IntegrationTest
     get books_path
     assert_response :success
 
-    get logout_path
+    delete logout_path
     get books_path
     assert_redirected_to login_path
   end
@@ -21,7 +21,7 @@ class SessionsTest < ActionDispatch::IntegrationTest
   test "a user waiting for approval cannot log in" do
     sign_in users(:pending)
     assert_redirected_to login_path
-    assert_equal "Your account hasn't been activated by an admin yet", flash[:notice]
+    assert_equal I18n.t('sessions.not_approved', locale: :sd), flash[:notice]
 
     get books_path
     assert_redirected_to login_path
@@ -33,5 +33,14 @@ class SessionsTest < ActionDispatch::IntegrationTest
 
     get books_path
     assert_redirected_to login_path
+  end
+
+  test "signing out takes a DELETE, so a prefetched link cannot sign anyone out" do
+    sign_in users(:reader)
+    get '/logout'
+    assert_response :not_found
+    get books_path
+    assert_response :success
+    assert_select 'form[action=?] input[name=_method][value=delete]', logout_path
   end
 end

@@ -7,9 +7,11 @@ class Thought < ApplicationRecord
         if rtl then 'sindhi' else '' end
     end
 
-    def self.daily_thought
-        Rails.cache.fetch('daily_thought', expires_in: 1.day) do
-            Thought.all.sample
+    # One thought a day per language: right-to-left ones for Sindhi pages.
+    # Falls back to any thought while a language has none.
+    def self.daily_thought(rtl:)
+        Rails.cache.fetch(['daily_thought', rtl], expires_in: 1.day) do
+            where(rtl: rtl ? true : [false, nil]).sample || all.sample
         end
     end
 end

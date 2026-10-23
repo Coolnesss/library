@@ -1,5 +1,11 @@
+/* The home page fits the window without scrolling: the page is one window
+   tall, and the picture shrinks into whatever room the text leaves. */
 body {
     background-color: #f2debd;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    height: 100dvh; /* phones: the height without the browser's toolbars */
 }
 
 h1 {
@@ -10,24 +16,85 @@ blockquote p{
     font-size: 1rem;
 }
 
-#cols {
+/* The navbar keeps its height; only the home content gives way. */
+body > .section-header,
+body > .container:not(#home) {
+    flex-shrink: 0;
+}
 
+#home {
+    flex: 1 1 auto;
+    min-height: 0;
     display: flex;
-    align-items: center;
+    flex-direction: column;
+}
+
+#cols {
+    flex: 1 1 auto;
+    min-height: 0;
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: stretch;
     justify-content: center;
     flex-direction: row;
 }
 
-@media (max-width: 768px) {
-    #cols {
-      flex-direction: column;
-    }
-  }
-
 #cols .column {
-    height: 100%;
+    min-height: 0;
     text-align: center;
     margin: 0 auto;
+}
+
+.home-text {
+    align-self: center;
+    flex: 1 1 0;
+}
+
+.home-picture {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1 1 0;
+    padding-bottom: .5rem;
+}
+
+.home-picture img {
+    flex: 1 1 0;
+    min-height: 0;
+    width: 100%;
+    max-width: 543px;
+    object-fit: contain;
+}
+
+/* The numbers above the picture on wide screens: the figure, then its label. */
+.home-stats {
+    display: grid;
+    grid-template-columns: repeat(3, auto);
+    gap: .4rem 1.6rem;
+    margin: .4rem 0 .8rem;
+    flex-shrink: 0;
+}
+
+.home-stats div {
+    display: flex;
+    flex-direction: column-reverse;
+}
+
+.home-stats dd {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 700;
+    line-height: 1.2;
+}
+
+.home-stats dt {
+    color: #66758c;
+    font-weight: normal;
+}
+
+/* Above the picture on wide screens, under the thought on phones. */
+.total-narrow {
+    display: none;
 }
 
 blockquote {
@@ -36,8 +103,44 @@ blockquote {
     border-color: #3b4351;
 }
 
-img {
-    width: 100%;
-    height: auto;
-    max-width: 543px;
+/* Phones and narrow tablets: the text on top, the picture below. Last, so
+   it wins over the rules above. */
+@media (max-width: 768px) {
+    #cols {
+      flex-direction: column;
+    }
+    .home-text {
+      flex: 0 0 auto;
+    }
+    h1 {
+      font-size: 1.4rem;
+    }
+    /* Too little room beside the text: the picture fills the screen behind
+       it instead, faded, so it stays large without pushing anything off. */
+    #cols {
+      position: relative;
+    }
+    .home-picture {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      justify-content: flex-end;
+      pointer-events: none;
+    }
+    .home-picture img {
+      opacity: .25;
+    }
+    .total-wide {
+      display: none;
+    }
+    .total-narrow {
+      display: block;
+    }
+    .home-text {
+      position: relative;
+      z-index: 1;
+      flex: 1 1 auto;
+      /* A white halo keeps the letters clear of the lines behind them. */
+      text-shadow: 0 0 2px #fff, 0 0 4px #fff, 0 0 6px #fff;
+    }
 }

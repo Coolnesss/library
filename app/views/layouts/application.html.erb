@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html>
+<html lang="<%= I18n.locale %>" dir="<%= rtl? ? 'rtl' : 'ltr' %>">
 <head>
-  <title>Library</title>
+  <title><%= t('layout.title') %></title>
   <%= render 'application/favicon' %>
   <%= stylesheet_link_tag 'spectre.min', 'spectre-icons.min', 'spectre-exp.min', 'application', 'data-turbo-track': 'reload' %>
-  <link href="https://fonts.googleapis.com/css?family=Ubuntu:400,700&display=swap" rel="stylesheet"> 
+  <link href="https://fonts.googleapis.com/css?family=Ubuntu:400,700&display=swap" rel="stylesheet">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no" />
   <%= csrf_meta_tags %>
   <%# Page views count only in production; staging sets ANALYTICS=off. %>
@@ -18,68 +18,86 @@
   <section class="section section-header">
     <section class="grid-header container">
       <div class="off-canvas">
-        <!-- off-screen toggle button -->
-        <btn id="nav-toggle" class="off-canvas-toggle btn btn-link btn-action" href="#">
+        <button type="button" id="nav-toggle" class="off-canvas-toggle btn btn-link btn-action" aria-label="<%= t('layout.menu') %>">
           <i class="icon icon-menu"></i>
-        </btn>
+        </button>
 
         <div id="sidebar-id" class="off-canvas-sidebar">
           <section class="navbar-section">
             <ul>
-                <li><%= link_to fa_icon('home', text: 'Home'), root_path, class:"navbar-brand" %></li>
-                
-                <% if current_user %>
-                  <li><%= link_to fa_icon('book-open', text: 'Books'), books_path, class: "btn btn-link" %></li>
-                  <li><%= link_to fa_icon('info-circle', text: 'About'), about_path, class: "btn btn-link" %></li>
-                  <li><%= link_to fa_icon('lock', text: 'Change Password'), change_password_path, class: "btn btn-link" %></li>
-                  
-                  <% if current_user.admin? %>
-                    <div class='divider'> </div>
-                    <li><%= link_to fa_icon('tags', text: 'Categories'), categories_path, class: "btn btn-link" %></li>
-                    <li><%= link_to fa_icon('brain', text: 'Thoughts'), thoughts_path, class: "btn btn-link" %></li>
-                    <li><%= link_to fa_icon('user-shield', text: 'Unconfirmed users'), inactive_path, class: "btn btn-link" %></li>
-                    <li><%= link_to fa_icon('users', text: 'Users'), users_path, class: "btn btn-link" %></li>
-                  <% end %>
-                  
+              <li><%= link_to fa_icon('home', text: t('layout.home')), root_path, class: "navbar-brand" %></li>
+              <li><%= link_to fa_icon('info-circle', text: t('layout.about')), about_path, class: "btn btn-link" %></li>
+
+              <% if current_user %>
+                <li><%= link_to fa_icon('book-open', text: t('layout.books')), books_path, class: "btn btn-link" %></li>
+                <li><%= link_to fa_icon('lock', text: t('layout.change_password')), change_password_path, class: "btn btn-link" %></li>
+
+                <% if current_user.admin? %>
+                  <li class="divider"></li>
+                  <li><%= link_to fa_icon('tags', text: 'Categories'), categories_path, class: "btn btn-link" %></li>
+                  <li><%= link_to fa_icon('brain', text: 'Thoughts'), thoughts_path, class: "btn btn-link" %></li>
+                  <li><%= link_to fa_icon('user-shield', text: 'Unconfirmed users'), inactive_path, class: "btn btn-link" %></li>
+                  <li><%= link_to fa_icon('users', text: 'Users'), users_path, class: "btn btn-link" %></li>
                 <% end %>
-            <ul>
+              <% end %>
+            </ul>
           </section>
         </div>
 
-        <btn id="nav-toggle-remove" class="off-canvas-overlay" href="#"></btn>
+        <div id="nav-toggle-remove" class="off-canvas-overlay"></div>
 
         <div class="off-canvas-content">
-          <!-- off-screen content -->
           <nav class="navbar">
             <section class="navbar-section hide-lg">
-              
               <% if current_user %>
-                  <%= link_to fa_icon('book-open', text: 'Books'), books_path, class: "btn btn-link" %>
-                  <% if current_user.admin? %>
-                    <%= link_to fa_icon('tags', text: 'Categories'), categories_path, class: "btn btn-link" %>
-                    <%= link_to fa_icon('brain', text: 'Thoughts'), thoughts_path, class: "btn btn-link" %>
-                  <% end %>
+                <%= link_to fa_icon('book-open', text: t('layout.books')), books_path, class: "btn btn-link" %>
+                <% if current_user.admin? %>
+                  <%= link_to fa_icon('tags', text: 'Categories'), categories_path, class: "btn btn-link" %>
+                  <%= link_to fa_icon('brain', text: 'Thoughts'), thoughts_path, class: "btn btn-link" %>
                 <% end %>
+              <% end %>
             </section>
             <section class="navbar-section">
-              <%= link_to fa_icon('info-circle', text: 'About'), about_path, class: "btn btn-link" %>
+              <%# Each language is named in its own script; the current one is ticked.
+                  Choosing reloads the whole page: Turbo would keep the old <html lang dir>. %>
+              <details class="language-menu">
+                <summary class="btn btn-link" aria-label="<%= t('layout.language') %>">
+                  <%= fa_icon('language') %><span><%= t('layout.language_name') %></span> ▾
+                </summary>
+                <ul class="menu">
+                  <% I18n.available_locales.each do |locale| %>
+                    <li class="menu-item" lang="<%= locale %>">
+                      <% if locale == I18n.locale %>
+                        <span class="language-current" aria-current="true"><span class="language-tick">✓</span><%= t('layout.language_name', locale: locale) %></span>
+                      <% else %>
+                        <%= button_to t('layout.language_name', locale: locale), locale_path, method: :patch, params: { locale: locale },
+                                      class: "btn btn-link", form: { data: { turbo: false } } %>
+                      <% end %>
+                    </li>
+                  <% end %>
+                </ul>
+              </details>
+              <%# In the side menu on phones. %>
+              <%= link_to fa_icon('info-circle', text: t('layout.about')), about_path, class: "btn btn-link hide-sm" %>
               <% if current_user %>
-                <%= link_to fa_icon('sign-out-alt'), logout_path, class: "btn btn-link" %>
+                <%= button_to fa_icon('sign-out-alt'), logout_path, method: :delete, class: "btn btn-link", title: t('layout.sign_out'), 'aria-label': t('layout.sign_out') %>
               <% else %>
-                <%= link_to fa_icon('user-plus', text: 'Register'), register_path, class: "btn btn-link" %>
-                <%= link_to fa_icon('sign-in-alt', text: 'Sign in'), login_path, class: "btn btn-link" %>
+                <%= link_to fa_icon('user-plus', text: t('layout.register')), register_path, class: "btn btn-link" %>
+                <%= link_to fa_icon('sign-in-alt', text: t('layout.sign_in')), login_path, class: "btn btn-link" %>
               <% end %>
             </section>
           </nav>
         </div>
-  </div>
-      
+      </div>
     </section>
   </section>
   <div class="container grid-lg">
      <%= flash_messages %>
   </div>
-<%= yield %>
-
+  <% if english_only? %>
+    <div lang="en" dir="ltr"><%= yield %></div>
+  <% else %>
+    <%= yield %>
+  <% end %>
 </body>
 </html>

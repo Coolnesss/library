@@ -13,6 +13,7 @@ class CreateCoversJobTest < ActiveJob::TestCase
     assert cover.attached?
     assert_equal 'image/jpeg', cover.content_type
     assert_equal "\xFF\xD8\xFF".b, cover.download.byteslice(0, 3)
+    assert_equal 1, book.pages
   end
 
   test "leaves a Word file without a cover" do

@@ -1,7 +1,7 @@
 require 'open3'
 
-# Renders page 1 of a book's PDF as its cover, with poppler's pdftoppm. Word
-# files get no cover.
+# Renders page 1 of a book's PDF as its cover, with poppler's pdftoppm, and
+# counts its pages while the file is open. Word files get neither.
 class CreateCoversJob < ApplicationJob
   queue_as :default
 
@@ -25,6 +25,8 @@ class CreateCoversJob < ApplicationJob
         _out, err, status = Open3.capture3('pdftoppm', '-singlefile', '-f', '1', '-l', '1', '-scale-to', SIZE.to_s,
                                            '-jpeg', '-jpegopt', 'quality=80', pdf.path, output)
         raise "pdftoppm failed for book #{book.id}: #{err}" unless status.success?
+
+        book.update_column(:pages, Book.count_pages(pdf.path))
       end
 
       book.cover.attach(io: File.open("#{output}.jpg"), filename: 'cover.jpg', content_type: 'image/jpeg')

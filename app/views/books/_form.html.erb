@@ -5,60 +5,66 @@
       <%= form_for @book, html: { multipart: true } do |f| %>
         <div class="form-group">
             <% if action_name == 'new' %>
-              <p class='text-center'> Some empty fields will be autofilled after you upload a PDF, and click submit. <br> Then, fill in the rest of the fields and submit again to publish the book. </p>
+              <p class='text-center' lang='en' dir='ltr'> Some empty fields will be autofilled after you upload a PDF, and click submit. <br> Then, fill in the rest of the fields and submit again to publish the book. </p>
             <% end %>
-            <%= f.label :attachment, "PDF", class:"form-label" %>
+            <%= f.label :attachment, t('books.form.file'), class:"form-label" %>
             <%# A file chosen before a failed save is already uploaded. Send it back, so it need not be chosen again. %>
             <% if @book.attachment.attached? && @book.attachment_changes['attachment'] %>
               <%= f.hidden_field :attachment, value: @book.attachment.signed_id %>
-              <p class="form-input-hint">Keeping <%= @book.attachment.filename %>. Choose another file to replace it.</p>
+              <p class="form-input-hint" lang="en" dir="ltr">Keeping <%= @book.attachment.filename %>. Choose another file to replace it.</p>
             <% end %>
             <%= f.file_field :attachment, class:"form-input" %>
+            <%= field_error f, :attachment %>
             
             <div class="divider"></div>
 
             <%= f.label :name, "نالو", class:"form-label sindhi bold" %>
             <%= f.text_field :name, class:"form-input sindhi", dir: "rtl", placeholder: "نالو" %>
+            <%= field_error f, :name %>
 
             <%= f.label :name_eng, "Title", class:"form-label" %>
-            <%= f.text_field :name_eng, class:"form-input", placeholder: "Title" %>
+            <%= f.text_field :name_eng, class:"form-input", dir: "ltr", placeholder: "Title" %>
+            <%= field_error f, :name_eng %>
 
-            <%= f.label :isbn, "ISBN number", class:"form-label" %>
-            <%= f.text_field :isbn, class:"form-input", placeholder: "ISBN" %>
+            <%= f.label :isbn, t('books.form.isbn'), class:"form-label" %>
+            <%= f.text_field :isbn, class:"form-input", dir: "ltr", placeholder: "ISBN" %>
+            <%= field_error f, :isbn %>
             
             <%= f.label :author_sindhi, "ليکڪ / مرتب", class:"form-label sindhi" %>
             <%= f.text_field :author_sindhi, class:"form-input sindhi", dir: "rtl", placeholder: "ليکڪ / مرتب" %>
 
             <%= f.label :author, "Author / Editor", class:"form-label" %>
-            <%= f.text_field :author, class:"form-input", placeholder: "Author / Editor" %>
+            <%= f.text_field :author, class:"form-input", dir: "ltr", placeholder: "Author / Editor" %>
+            <%= field_error f, :author %>
 
             <%= f.label :translator, "Translator", class:"form-label" %>
-            <%= f.text_field :translator, class:"form-input", placeholder: "Translator" %>
+            <%= f.text_field :translator, class:"form-input", dir: "ltr", placeholder: "Translator" %>
 
             <%= f.label :translator_sindhi, "مترجم", class:"form-label sindhi" %>
             <%= f.text_field :translator_sindhi, class:"form-input sindhi", dir: "rtl", placeholder: "مترجم" %>
 
-            <%= f.label :language, "Language", class:"form-label" %>
-            <%= f.select :language, LanguageHelper.languages, {include_blank: "Select a language"}, class:"form-select" %>
+            <%= f.label :language, t('books.form.language'), class:"form-label" %>
+            <%= f.select :language, language_options, {include_blank: t('books.form.choose_language')}, class:"form-select" %>
 
-            <%= f.label :publisher, "Publisher", class:"form-label" %>
-            <%= f.text_field :publisher, class:"form-input", placeholder: "Publisher" %>
+            <%= f.label :publisher, t('books.form.publisher'), class:"form-label" %>
+            <%= f.text_field :publisher, class:"form-input", dir: "auto" %>
 
             <%= f.label :description_sindhi, "تعارف", class:"form-label sindhi bold" %>
             <%= f.text_area :description_sindhi, class:"form-input sindhi", placeholder: "Sindhi description", dir: "rtl" %>
 
             <%= f.label :description_eng, "Intro", class:"form-label" %>
-            <%= f.text_area :description_eng, class:"form-input", placeholder: "English description" %>
+            <%= f.text_area :description_eng, class:"form-input", dir: "ltr", placeholder: "English description" %>
 
-            <%= f.label :year, "Year", class:"form-label" %>
-            <%= f.number_field :year, class:"form-input", placeholder: "Year" %>
+            <%= f.label :year, t('books.form.year'), class:"form-label" %>
+            <%= f.number_field :year, class:"form-input", dir: "ltr" %>
+            <%= field_error f, :year %>
 
             
             <br>
 
             
             <div data-tags>
-              Tags:
+              <%= t('books.form.tags') %>
               <div class="tags" data-tag-chips>
                 <%# Keeps the list in the params when every chip is removed. %>
                 <%= hidden_field_tag 'book[tag_names][]', '', id: nil %>
@@ -69,7 +75,7 @@
               <template><%= render 'tag_chip', name: '' %></template>
 
               <br>
-              <label class="form-label" for="new-tag">Add a new tag (press enter to add)</label>
+              <label class="form-label" for="new-tag"><%= t('books.form.add_tag') %></label>
               <input class="form-input" id="new-tag" list="tag-suggestions" autocomplete="off" data-tag-input>
               <datalist id="tag-suggestions">
                 <% Category.order(:name).pluck(:name).each do |name| %>
@@ -80,7 +86,7 @@
 
             <div class="actions">
               <br>
-              <%= f.submit "Submit", class: "btn btn-primary" %>
+              <%= f.submit t('books.form.submit'), class: "btn btn-primary" %>
             </div>
             <br>
         </div>

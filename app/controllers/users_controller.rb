@@ -37,7 +37,7 @@ class UsersController < ApplicationController
 
     respond_to do |format|
       if @user.update(user_params)
-        format.html { redirect_to root_path, notice: 'Password changed successfully.' }
+        format.html { redirect_to root_path, notice: t('users.password_changed') }
         format.json { render :show, status: :ok }
       else
         format.html { render :edit, status: :unprocessable_entity }
@@ -52,9 +52,11 @@ class UsersController < ApplicationController
 
   def create
     @user = User.new user_params
+    # The approval email goes out in the language they registered in.
+    @user.locale = I18n.locale.to_s
 
     if @user.save
-      redirect_to login_path, notice: 'User created succesfully. Wait for an admin to activate your account.'
+      redirect_to login_path, notice: t('users.created')
     else
       render :register, status: :unprocessable_entity
     end
@@ -70,6 +72,10 @@ class UsersController < ApplicationController
   end
 
   private
+
+  def english_only?
+    %w[index inactive].include?(action_name)
+  end
 
     # Never trust parameters from the scary internet, only allow the white list through.
   def user_params

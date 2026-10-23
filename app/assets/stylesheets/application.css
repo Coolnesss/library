@@ -143,3 +143,172 @@ i {
 form.button_to {
   display: inline-block;
 }
+
+/* Sindhi pages (<html lang="sd" dir="rtl">). Ubuntu has no Arabic letters,
+   so Latin text and digits stay in Ubuntu and Sindhi falls through to the
+   Sindhi font, enlarged to match. */
+@font-face {
+  font-family: 'Sindhi UI';
+  src: url('MBLATEEFIv2.TTF') format('truetype');
+  size-adjust: 125%;
+}
+
+html[lang=sd] body,
+.language-menu [lang=sd] {
+  font-family: 'Ubuntu', 'Sindhi UI', sans-serif;
+}
+
+/* Spectre is written left to right; mirror the parts the layout uses. */
+.fa-icon {
+  margin-right: 0;
+  margin-inline-end: .3em;
+}
+
+i {
+  padding-right: 0;
+  padding-inline-end: 3px;
+}
+
+.grid-header .btn-link {
+  padding-left: .4rem;
+  padding-inline-start: .6rem;
+}
+
+[dir=rtl] .off-canvas .off-canvas-toggle {
+  left: auto;
+  right: .4rem;
+}
+
+/* Hidden while closed: off the right edge it would widen the page. */
+[dir=rtl] .off-canvas .off-canvas-sidebar {
+  left: auto;
+  right: 0;
+  transform: translateX(100%);
+  visibility: hidden;
+  transition: transform .25s, visibility .25s;
+}
+
+[dir=rtl] .off-canvas .off-canvas-sidebar.active {
+  transform: translateX(0);
+  visibility: visible;
+}
+
+[dir=rtl] .off-canvas .off-canvas-content {
+  padding: .4rem 4rem .4rem .4rem;
+}
+
+[dir=rtl] .float-right {
+  float: left !important;
+}
+
+[dir=rtl] .form-select:not([multiple]):not([size]) {
+  background-position: left .35rem center;
+  padding-left: 1.2rem;
+  padding-right: .4rem;
+}
+
+[dir=rtl] .input-group > :first-child:not(:last-child) {
+  border-radius: 0 .1rem .1rem 0;
+}
+
+[dir=rtl] .input-group > :last-child:not(:first-child) {
+  border-radius: .1rem 0 0 .1rem;
+  margin-left: 0;
+  margin-right: -.05rem;
+}
+
+[dir=rtl] .btn.btn-clear {
+  margin-left: -2px;
+  margin-right: .2rem;
+}
+
+[dir=rtl] .tile .tile-content:not(:first-child) {
+  padding-left: 0;
+  padding-right: .4rem;
+}
+
+[dir=rtl] .table {
+  text-align: right;
+}
+
+/* The language menu in the navbar (a <details>, so it works without JS). */
+.language-menu {
+  position: relative;
+  display: inline-block;
+}
+
+/* Chrome puts a <details>' content in a box that Spectre's border-box
+   sizing does not reach; without this the button is 12px taller than the
+   links beside it, and its text sits higher. */
+.language-menu summary,
+.language-menu .menu,
+.language-menu .menu * {
+  box-sizing: border-box;
+}
+
+.language-menu summary {
+  list-style: none;
+}
+
+.language-menu summary::-webkit-details-marker {
+  display: none;
+}
+
+.language-menu .menu {
+  position: absolute;
+  top: 100%;
+  inset-inline-end: 0;
+  min-width: 8rem;
+  z-index: 300;
+}
+
+.language-menu .menu-item .btn,
+.language-current {
+  display: block;
+  width: 100%;
+  text-align: start;
+  padding: .2rem .4rem;
+}
+
+.language-current {
+  font-weight: 700;
+  color: #5755d9;
+}
+
+.language-tick {
+  margin-inline-end: .3rem;
+}
+
+/* On phones the navbar's links and the language menu wrap rather than
+   pushing Register and Sign in off the screen. */
+@media (max-width: 600px) {
+  .navbar .navbar-section {
+    flex-wrap: wrap;
+  }
+}
+
+/* Admin tables: the buttons share one cell, and a table still too wide for
+   a phone scrolls inside its box instead of widening the page. */
+.table-scroll {
+  overflow-x: auto;
+}
+
+.table-actions .btn {
+  margin: .1rem 0;
+}
+
+/* The admin pages' English blocks on Sindhi pages: undo the mirroring above. */
+[dir=rtl] [dir=ltr] .table {
+  text-align: left;
+}
+
+[dir=rtl] [dir=ltr] .btn.btn-clear {
+  margin-left: .2rem;
+  margin-right: -2px;
+}
+
+[dir=rtl] [dir=ltr] .form-select:not([multiple]):not([size]) {
+  background-position: right .35rem center;
+  padding-left: .4rem;
+  padding-right: 1.2rem;
+}

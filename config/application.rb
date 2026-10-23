@@ -38,5 +38,10 @@ module Library
     #
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
+
+    # Sindhi first; any text not yet translated shows in English.
+    config.i18n.available_locales = [:sd, :en]
+    config.i18n.default_locale = :sd
+    config.i18n.fallbacks = [:en]
   end
 end

@@ -2,5 +2,5 @@
 <label class="chip">
   <span data-tag-name><%= name %></span>
   <%= hidden_field_tag field_name, name, id: nil %>
-  <button type="button" class="btn btn-clear" data-remove-tag aria-label="Remove tag"></button>
+  <button type="button" class="btn btn-clear" data-remove-tag aria-label="<%= t('books.form.remove_tag') %>"></button>
 </label>

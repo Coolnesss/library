@@ -12,10 +12,10 @@ class SessionsController < ApplicationController
       session[:user_id] = user.id
       redirect_to '/'
     elsif user && user.authenticate(params[:password])
-      redirect_to login_path, notice: "Your account hasn't been activated by an admin yet"
+      redirect_to login_path, notice: t('sessions.not_approved')
     else
-    # If user's login doesn't work, send them back to the login form.
-      redirect_to '/login'
+      # Used to say nothing, which looked like the page had just reloaded.
+      redirect_to login_path, alert: t('sessions.wrong_password')
     end
   end
 

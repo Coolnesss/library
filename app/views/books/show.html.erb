@@ -1,141 +1,86 @@
-<div class="container grid-xl hide-md">
-  <div class="columns">
-    <div class="column">
-      <div class="card">
-        <div class="card-image">
-          <img src=<%= cover_url(@book) %> class="img-responsive">
-        </div>
-      </div>
-    </div>
-    <div class="column">
-      <div class="card">
+<%= stylesheet_link_tag "books" %>
 
-        <div class="card-header">
-          <h4 class="card-title">
-             <%= @book.name_eng %>
-          </h4>
-          <h6 class="card-subtitle">by <%= link_to @book.author, books_path(author: @book.author) %> in <label class="label"><%= @book.year_str %></label>
-            <p>Published by <%= @book.publisher %></p>
-            <% if @book.translator.present? %>
-                <p style="margin: 0">Translated by <%= @book.translator %></p>
+<div class="container grid-lg book-page">
+  <div class="columns">
+    <div class="column col-4 col-md-12">
+      <img src="<%= cover_url(@book) %>" class="img-responsive book-cover" alt="">
+    </div>
+
+    <div class="column col-8 col-md-12">
+      <%# One card per language, the page's language first. %>
+      <% page_languages.each do |language| %>
+        <% title, author, translator, description = %i[title author translator description].map { |field| book_text(@book, field, language) } %>
+        <% next unless title || author || description %>
+
+        <div class="card book-card">
+          <div class="card-header">
+            <% if title %>
+              <h2 class="card-title"><%= tag.span title[0], **title[1] %></h2>
             <% end %>
+            <dl class="book-facts">
+              <% if author %>
+                <dt><%= t('books.show.author') %></dt>
+                <dd><%= link_to author[0], books_path(author: author[0]), **author[1] %></dd>
+              <% end %>
+              <% if translator %>
+                <dt><%= t('books.show.translator') %></dt>
+                <dd><%= tag.span translator[0], **translator[1] %></dd>
+              <% end %>
+            </dl>
+          </div>
+          <% if description %>
+            <%= tag.div markdown(description[0]), **description[1], class: ['card-body book-description', description[1][:class]] %>
+          <% end %>
+        </div>
+      <% end %>
+
+      <div class="card book-card">
+        <div class="card-body">
+          <% if @book.attachment.attached? %>
+            <div class="book-download">
+              <%= link_to @book.attachment.url, class: "btn btn-primary btn-lg", data: { umami_event: "download-button" } do %>
+                <i class="icon icon-download"></i> <%= t('books.show.download') %>
+              <% end %>
+              <bdi class="book-file" dir="ltr">
+                <%= @book.attachment.filename.extension.upcase %> · <%= number_to_human_size(@book.attachment.byte_size, locale: :en) %> · <%= @book.attachment.blob.created_at.to_date %>
+              </bdi>
+            </div>
+          <% end %>
+
+          <dl class="book-facts">
+            <% if @book.publisher.present? %>
+              <dt><%= t('books.show.publisher') %></dt>
+              <dd dir="auto"><%= @book.publisher %></dd>
+            <% end %>
+            <dt><%= t('books.show.year') %></dt>
+            <dd><%= @book.year_str %></dd>
             <% if @book.language.present? %>
-                <p style="margin: 0">Language: <%= @book.language %></p>
+              <dt><%= t('books.show.language') %></dt>
+              <dd><%= link_to language_name(@book.language), books_path(language: @book.language) %></dd>
             <% end %>
             <% if @book.isbn.present? %>
-              <br><small class="label label-primary">ISBN</small> <span class="number"><%= @book.isbn %></span>
+              <dt>ISBN</dt>
+              <dd dir="ltr"><%= @book.isbn %></dd>
             <% end %>
-          </h6>
+          </dl>
 
-          <%= markdown(@book.description_eng) %>
-
-          <% if @book.attachment.attached? %>
-            <div class="tile tile-centered">
-              <div class="tile-icon">
-                  <i class="icon icon-download centered"></i>
-                </div>
-              <div class="tile-content">
-                <div class="tile-title"><%= link_to "Download", @book.attachment.url, data: { umami_event: "download-button" } %></div>
-                <div class="tile-subtitle"> <%= number_to_human_size(@book.attachment.byte_size) %> · <%= @book.attachment.blob.created_at.to_date %></div>
-              </div>
+          <% if @book.categories.any? %>
+            <div class="book-tags">
+              <% @book.categories.each do |category| %>
+                <%= link_to category.name, books_path(tags: [category.name]), class: "chip", dir: "auto" %>
+              <% end %>
             </div>
           <% end %>
-          <br />
-          <% @book.categories.each do |category| %>
-            <%= link_to category.name, books_path(tags: [category.name]), class: "chip" %>
-          <% end %>
         </div>
-      </div>
-    <br/>
-      <div class="card">
-        <div class="card-header">
-          <h4 class="card-title <%= @book.font_html_class %>">
-             <%= @book.name %>
-          </h4>
-        
-          <div class="card-subtitle <%= @book.font_html_class %>">
-            <p><%= @book.author_sindhi %></p>
-            <% if @book.translator_sindhi.present? %>
-                <p><%= @book.translator_sindhi %></p>
-            <% end %> 
-          </div>
 
-        </div>
-        <div class="card-body sindhi">
-          <%= markdown(@book.description_sindhi) %>
-          
+        <div class="card-footer book-actions">
+          <%= link_to t('books.show.edit'), edit_book_path(@book), class: "btn btn-warning" %>
+          <% if current_user.admin? %>
+            <%= button_to t('books.show.delete'), @book, method: :delete, class: "btn btn-danger", form: { data: { turbo_confirm: t('books.show.confirm_delete') } } %>
+          <% end %>
+          <%= link_to t('books.show.back'), books_path, class: "btn btn-link" %>
         </div>
       </div>
-      <br>
-        <div class="card">
-          <div class="card-header">
-            <%= link_to 'Edit', edit_book_path(@book), class: "btn btn-warning" %>
-            <% if current_user.admin? %> 
-              <%= button_to 'Delete', @book, method: :delete, class: "btn btn-danger", form: { data: { turbo_confirm: 'Are you sure?' } } %>
-            <% end %>
-          </div>
-        </div>
     </div>
   </div>
-</div>
-
-<div class="container grid-sm show-md">
-    <img src=<%= cover_url(@book) %> class="img-responsive">
-
-    <br/>
-    <div class="card">
-      <div class="card-header">
-        <h4 class="card-title">
-          <%= @book.name_eng %>
-        </h4>
-        <h6 class="card-subtitle">by <%= link_to @book.author, books_path(author: @book.author) %> in <label class="label"><%= @book.year_str %></label>
-          <p>Published by <%= @book.publisher %></p>
-          <% if @book.translator.present? %>
-              <p style="margin: 0">Translated by <%= @book.translator %></p>
-          <% end %>
-          <% if @book.language.present? %>
-              <p style="margin: 0">Language: <%= @book.language %></p>
-          <% end %>
-          <% if @book.isbn.present? %>
-            <br><small class="label label-primary">ISBN</small> <span class="number"><%= @book.isbn %></span>
-          <% end %>
-        </h6>
-
-        <%= markdown(@book.description_eng) %>
-
-        <% if @book.attachment.attached? %>
-          <div class="tile tile-centered">
-            <div class="tile-icon">
-                <i class="icon icon-download centered"></i>
-              </div>
-            <div class="tile-content">
-              <div class="tile-title"><%= link_to "Download", @book.attachment.url, data: { umami_event: "download-button" } %></div>
-              <div class="tile-subtitle"> <%= number_to_human_size(@book.attachment.byte_size) %> · <%= @book.attachment.blob.created_at.to_date %></div>
-            </div>
-          </div>
-        <% end %>
-        <br />
-        <% @book.categories.each do |category| %>
-          <%= link_to category.name, books_path(tags: [category.name]), class: "chip" %>
-        <% end %>
-      </div>
-    </div>
-    <br/>
-    <div class="card">
-      <div class="card-header">
-        <h4 class="card-title <%= @book.font_html_class %>">
-            <%= @book.name %>
-        </h4>
-      </div>
-      <div class="card-body sindhi">
-        <%= markdown(@book.description_sindhi) %>
-      </div>
-      <div class="card-body">
-        <%= link_to 'Edit', edit_book_path(@book), class: "btn btn-warning" %>
-          <% if current_user.admin? %> 
-            <%= button_to 'Delete', @book, method: :delete, class: "btn btn-danger", form: { data: { turbo_confirm: 'Are you sure?' } } %>
-          <% end %>
-          <%= link_to 'Back', books_path, class: "btn btn-default" %>
-      </div>
-    </div>
 </div>

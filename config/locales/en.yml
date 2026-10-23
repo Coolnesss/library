@@ -1,5 +1,86 @@
 en:
+  layout:
+    title: "Antilibrary"
+    home: "Home"
+    books: "Books"
+    about: "About"
+    change_password: "Change password"
+    register: "Register"
+    sign_in: "Sign in"
+    sign_out: "Sign out"
+    menu: "Menu"
+    close: "Close"
+    # The language menu names each language in its own script.
+    language: "Language"
+    language_name: "English"
+
+  welcome:
+    index:
+      heading: "Library / AntiLibrary"
+      thought: "Thought of the day"
+      total_books: "Total books"
+    about:
+      heading: "What is AntiLibrary?"
+
+  # The library's numbers, on the home page and above the book list.
+  stats:
+    books:
+      one: "book"
+      other: "books"
+    pages:
+      one: "page"
+      other: "pages"
+    languages:
+      one: "language"
+      other: "languages"
+    authors:
+      one: "author"
+      other: "authors"
+    oldest: "oldest book"
+    size: "of PDFs"
+
+  languages:
+    Sindhi: "Sindhi"
+    Urdu: "Urdu"
+    English: "English"
+    Punjabi: "Punjabi"
+    Baluchi: "Balochi"
+    Siraiki: "Saraiki"
+    Pushto: "Pashto"
+    Other: "Other"
+
   books:
+    heading: "A river of read and unread books"
+    unknown_year: "Unknown"
+    new_book: "New book"
+    newest: "Newest"
+    created: "Book added."
+    updated: "Book updated."
+    destroyed: "Book deleted."
+    show:
+      author: "Author / Editor"
+      translator: "Translator"
+      publisher: "Publisher"
+      year: "Year"
+      language: "Language"
+      download: "Download"
+      edit: "Edit"
+      delete: "Delete"
+      back: "Back"
+      confirm_delete: "Are you sure?"
+    form:
+      new: "New book"
+      edit: "Edit book"
+      file: "PDF or Word file"
+      isbn: "ISBN"
+      publisher: "Publisher"
+      language: "Language"
+      choose_language: "Select a language"
+      year: "Year"
+      tags: "Tags"
+      add_tag: "Add a tag (press Enter)"
+      remove_tag: "Remove tag"
+      submit: "Save"
     search:
       placeholder: "Search titles, authors, translators, publishers, tags, ISBN"
       submit: "Search"
@@ -22,4 +103,67 @@ en:
       clear: "Clear all"
       count:
         one: "1 book"
-        other: "%{count} books"
+        other: "%{number} books"
+
+  sessions:
+    new:
+      heading: "Sign in"
+      email: "Email"
+      password: "Password"
+      submit: "Sign in"
+    wrong_password: "Wrong email or password."
+    not_approved: "Your account hasn't been approved yet."
+    sign_in_first: "Please sign in first."
+
+  users:
+    register:
+      heading: "Create an account"
+      intro: "This is a collection of Sindhi books, open only to people known personally or who have helped the effort."
+      name: "Name"
+      email: "Email"
+      password: "Password"
+      password_confirmation: "Password again"
+      approval: "Your account will be opened once you are identified."
+      submit: "Create an account"
+    edit:
+      heading: "Change password"
+      password: "New password"
+      password_confirmation: "New password again"
+      submit: "Save"
+    created: "Account created. Wait for an admin to approve it."
+    password_changed: "Password changed."
+
+  user_mailer:
+    user_approved_email:
+      subject: "Your Antilibrary account was approved"
+      hello: "Hello %{name}."
+      approved: "Your account was approved."
+      sign_in_here: "You can sign in here:"
+      automated: "This is an automated email."
+
+  # Shown under the field, so the messages leave out the field's name.
+  errors:
+    messages:
+      blank: "can't be empty"
+      not_a_number: "must be a number"
+      not_an_integer: "must be a whole number"
+      too_long: "is too long"
+      invalid_isbn: "isn't a valid ISBN"
+      not_a_document: "must be a PDF or Word file"
+  activerecord:
+    errors:
+      models:
+        user:
+          attributes:
+            name:
+              blank: "please give your name"
+            email:
+              invalid: "isn't a valid email"
+              taken: "already has an account"
+            password_confirmation:
+              confirmation: "passwords don't match"
+
+  will_paginate:
+    previous_label: "‹"
+    next_label: "›"
+    page_gap: "…"

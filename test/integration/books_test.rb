@@ -4,7 +4,7 @@ class BooksTest < ActionDispatch::IntegrationTest
   setup { sign_in users(:reader) }
 
   test "book pages need a login" do
-    get logout_path
+    delete logout_path
 
     get books_path
     assert_redirected_to login_path
@@ -23,7 +23,15 @@ class BooksTest < ActionDispatch::IntegrationTest
     assert_includes response.body, 'Two Nations'
     assert_not_includes response.body, 'Shah jo Risalo'
     assert_select "input[name='q'][value='Shani']"
-    assert_select '.search-summary', /1 book/
+    assert_select '.search-summary', /1 ڪتاب/
+  end
+
+  test "the index shows the found books' numbers beside the count" do
+    patch locale_path, params: { locale: 'en' }
+    get books_path, params: { q: 'Shani' }
+    # Singular for one: "1 author", "1 language".
+    assert_select '.list-stats dt', 'author'
+    assert_select '.list-stats dt', 'language'
   end
 
   test "the index filters by field, language and tags" do
@@ -54,7 +62,9 @@ class BooksTest < ActionDispatch::IntegrationTest
     assert_operator response.body.index('Shah jo Risalo'), :<, response.body.index('Two Nations')
 
     get books_path, params: { q: 'a', sort: 'year', dir: 'asc' }
-    assert_select 'th a[href=?]', '/books?dir=desc&q=a&sort=year', text: /▲/
+    assert_select '.book-sort a.active[href=?]', '/books?dir=desc&q=a&sort=year', text: /▲/
+    # Sindhi pages sort titles by the Sindhi title.
+    assert_select '.book-sort a[href=?]', '/books?dir=asc&q=a&sort=name'
     assert_select "input[type=hidden][name=sort][value=year]"
   end
 
@@ -78,9 +88,10 @@ class BooksTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_includes response.body, 'Shah jo Risalo'
     assert_includes response.body, 'شاهه جو رسالو'
-    # Both the wide and the narrow layout render the Markdown.
-    assert_equal 2, response.body.scan('<strong>poems</strong>').size
-    assert_equal 2, response.body.scan('<strong>مجموعو</strong>').size
+    assert_includes response.body, '<strong>poems</strong>'
+    assert_includes response.body, '<strong>مجموعو</strong>'
+    # The page's language comes first.
+    assert_operator response.body.index('شاهه جو رسالو'), :<, response.body.index('Shah jo Risalo')
   end
 
   test "the JSON index lists every book with its tags" do
@@ -94,7 +105,7 @@ class BooksTest < ActionDispatch::IntegrationTest
     get books_path(format: :csv)
     assert_redirected_to login_path
 
-    get logout_path
+    delete logout_path
     sign_in users(:admin)
     get books_path(format: :csv)
     assert_response :success
@@ -221,7 +232,7 @@ class BooksTest < ActionDispatch::IntegrationTest
     end
     assert_redirected_to login_path
 
-    get logout_path
+    delete logout_path
     sign_in users(:admin)
     assert_difference 'Book.count', -1 do
       delete book_path(books(:english))

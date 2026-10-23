@@ -1,20 +1,17 @@
-<h1>Login</h1>
+<h1><%= t('sessions.new.heading') %></h1>
 
 <div class="container grid-sm">
   <div class="columns">
     <div class="column centered">
-  <!-- form input control -->
-      <div class="form-group">
-        <%= form_tag '/login', class: "form-group" do %>
-          <label class="form-label" for="email">Email</label>
-          <input class="form-input" type="text" id="email" name="email" placeholder="Email" />
-          
-          <label class="form-label" for="password">Password</label>
-          <input class="form-input" type="password" id="password" name="password" placeholder="Password" />
-          <br>
-          <%= submit_tag "Submit", class:"btn btn-primary" %>
-        <% end %>
-        </div>
+      <%= form_tag login_path, class: "form-group" do %>
+        <label class="form-label" for="email"><%= t('sessions.new.email') %></label>
+        <input class="form-input" type="email" id="email" name="email" dir="ltr" autocomplete="username" />
+
+        <label class="form-label" for="password"><%= t('sessions.new.password') %></label>
+        <input class="form-input" type="password" id="password" name="password" dir="ltr" autocomplete="current-password" />
+        <br>
+        <%= submit_tag t('sessions.new.submit'), class: "btn btn-primary" %>
+      <% end %>
     </div>
   </div>
 </div>

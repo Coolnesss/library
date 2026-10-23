@@ -10,7 +10,10 @@ class BooksController < ApplicationController
     respond_to do |format| 
       format.html {
         @search = BookSearch.new(params.permit(*BookSearch::PARAMS))
-        @books = @search.results.includes(:categories).with_attached_cover.with_attached_attachment.page(params[:page])
+        results = @search.results
+        @books = results.includes(:categories).with_attached_cover.with_attached_attachment.page(params[:page])
+        # Run the search's filters once, then count over the ids.
+        @stats = Book.where(id: results.unscope(:order).select(:id).map(&:id)).stats
       }
       format.json { @books = Book.all }
       format.csv { send_data Book.as_csv, filename: "books-#{Date.today}.csv" }
@@ -41,7 +44,7 @@ class BooksController < ApplicationController
         # Create cover in background task if book was successfully created
         CreateCoversJob.perform_later @book
 
-        format.html { redirect_to @book, notice: 'Book was successfully created.' }
+        format.html { redirect_to @book, notice: t('books.created') }
         format.json { render :show, status: :created, location: @book }
       else
         keep_new_attachment
@@ -65,7 +68,7 @@ class BooksController < ApplicationController
         # A new file needs a new cover.
         CreateCoversJob.perform_later @book if new_file
 
-        format.html { redirect_to @book, notice: 'Book was successfully updated.' }
+        format.html { redirect_to @book, notice: t('books.updated') }
         format.json { render :show, status: :ok, location: @book }
       else
         keep_new_attachment
@@ -80,7 +83,7 @@ class BooksController < ApplicationController
   def destroy
     @book.destroy
     respond_to do |format|
-      format.html { redirect_to books_url, notice: 'Book was successfully destroyed.' }
+      format.html { redirect_to books_url, notice: t('books.destroyed') }
       format.json { head :no_content }
     end
   end

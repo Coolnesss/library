@@ -1,4 +1,5 @@
 require 'csv'
+require 'open3'
 
 class Book < ApplicationRecord
 
@@ -6,7 +7,11 @@ class Book < ApplicationRecord
   has_many :categories, through: :book_categories
 
   has_one_attached :attachment
-  has_one_attached :cover
+  # The thumbnail is made when a cover is attached; covers attached before
+  # then get theirs on first view.
+  has_one_attached :cover do |cover|
+    cover.variant :thumb, resize_to_limit: [160, 240], preprocessed: true
+  end
 
   DOCUMENT_TYPES = %w[
     application/pdf
@@ -22,7 +27,7 @@ class Book < ApplicationRecord
   validates :year, presence: true,
     numericality: { only_integer: true }
   
-  validates :isbn, isbn_format: true, allow_blank: true
+  validates :isbn, isbn_format: { message: :invalid_isbn }, allow_blank: true
 
   before_save :apply_tag_names, if: -> { @tag_names }
 
@@ -66,8 +71,34 @@ class Book < ApplicationRecord
     self.year = self.year.presence || pdf_year
   end
 
+  # The numbers for the home page (all books) and the book list (the books
+  # found: `Book.where(id: ...).stats`), leaving out what is not known. Pages are counted
+  # by the cover job and `bin/rails books:count_pages`; the total shows once
+  # nearly every PDF has a count, so a half-done count does not undersell it.
+  def self.stats
+    pdfs = joins(attachment_attachment: :blob).where(active_storage_blobs: { content_type: 'application/pdf' })
+    counted = pdfs.where.not(pages: nil).count
+    {
+      books: count,
+      pages: (sum(:pages) if counted.positive? && counted >= pdfs.count * 0.95),
+      languages: where.not(language: [nil, '', 'Other']).distinct.count(:language),
+      authors: where.not(author: [nil, '']).count(Arel.sql('DISTINCT lower(trim(author))')),
+      oldest: where('year > 0').minimum(:year),
+      size: ActiveStorage::Blob.joins(:attachments)
+                               .where(active_storage_attachments: { record_type: 'Book', name: 'attachment', record_id: select(:id) })
+                               .sum(:byte_size).nonzero?,
+    }.compact
+  end
+
+  # The page count from poppler's pdfinfo, or nil if it cannot tell.
+  def self.count_pages(path)
+    out, status = Open3.capture2('pdfinfo', path.to_s)
+    out[/^Pages:\s+(\d+)/, 1]&.to_i if status.success?
+  end
+
+  # 0 means the year is unknown.
   def year_str
-    return 'Unknown' if year == 0
+    return I18n.t('books.unknown_year') if year == 0
     year
   end
 
@@ -128,6 +159,6 @@ class Book < ApplicationRecord
   def attachment_is_a_document
     return unless attachment.attached?
 
-    errors.add(:attachment, "Should be a document") unless DOCUMENT_TYPES.include?(attachment.content_type)
+    errors.add(:attachment, :not_a_document) unless DOCUMENT_TYPES.include?(attachment.content_type)
   end
 end

@@ -6,7 +6,8 @@
   <% end %>
 
   <div class="input-group">
-    <%= search_field_tag :q, search.q, class: "form-input", dir: "auto", autocomplete: "off",
+    <%# No dir="auto": an empty box would lay the Sindhi hint out left to right. %>
+    <%= search_field_tag :q, search.q, class: "form-input", autocomplete: "off",
                          placeholder: t('books.search.placeholder'), 'aria-label': t('books.search.placeholder') %>
     <button class="btn btn-primary input-group-btn"><%= t('books.search.submit') %></button>
   </div>
@@ -35,7 +36,7 @@
 
       <div class="column col-6 col-sm-12">
         <label class="form-label" for="search-language"><%= t('books.search.language') %></label>
-        <%= select_tag :language, options_for_select(LanguageHelper.languages, search.language),
+        <%= select_tag :language, options_for_select(language_options, search.language),
                        include_blank: t('books.search.any_language'), id: "search-language", class: "form-select" %>
       </div>
 
@@ -65,7 +66,8 @@
 <% end %>
 
 <div class="search-summary">
-  <strong><%= t('books.search.count', count: count) %></strong>
+  <strong><%= t('books.search.count', count: count, number: number_with_delimiter(count)) %></strong>
+  <%= render 'application/stats', stats: stats.except(:books), class: 'list-stats hide-sm' if count.positive? %>
   <% chips = search_filter_chips(search) %>
   <% chips.each do |label, value, path| %>
     <span class="chip">

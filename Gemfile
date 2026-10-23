@@ -38,6 +38,8 @@ gem 'puma'
 # Active Job backend. Runs inside Puma through its plugin; see config/puma.rb.
 gem 'solid_queue'
 gem 'redcarpet'
+# Cover thumbnails for the book list (Active Storage variants), through libvips.
+gem 'image_processing', '~> 1.14'
 gem 'origami'
 
 group :development do

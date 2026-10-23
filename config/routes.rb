@@ -12,12 +12,15 @@ Rails.application.routes.draw do
 
   get '/login' => 'sessions#new'
   post '/login' => 'sessions#create'
-  get '/logout' => 'sessions#destroy', as: "logout"
+  # Not a GET: Turbo prefetches links on hover, and a GET link signed people
+  # out whenever the pointer passed over it.
+  delete '/logout' => 'sessions#destroy', as: "logout"
   get '/change_password' => 'users#edit', as: 'change_password'
   get '/register' => 'users#register', as: 'register'
   get '/inactive' => 'users#inactive', as: 'inactive'
   post '/confirm_user' => 'users#confirm', as: 'confirm'
   get '/about' => 'welcome#about', as: 'about'
+  patch '/locale' => 'locales#update', as: 'locale'
   resources :users
 
   # The priority is based upon order of creation: first created -> highest priority.

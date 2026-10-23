@@ -73,3 +73,206 @@ h1 {
 .search-summary .chip {
   margin: 0;
 }
+
+.page-heading {
+  padding: 1.5rem 1rem 1rem;
+}
+
+/* Sort options above the list (BooksHelper#sort_link). */
+.book-sort {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .2rem 1rem;
+  border-bottom: 1px solid #dadee4;
+  padding-bottom: .4rem;
+}
+
+.book-sort a {
+  color: #66758c;
+}
+
+.book-sort a.active {
+  color: #5755d9;
+  font-weight: 700;
+}
+
+/* The book list: a thumbnail, then the titles, authors, year and tags. */
+.book-list {
+  list-style: none;
+  margin: 0;
+}
+
+.book-row {
+  display: flex;
+  gap: .8rem;
+  align-items: flex-start;
+  padding: .6rem 0;
+  margin: 0;
+  border-bottom: 1px solid #f1f1fc;
+}
+
+.book-thumb {
+  flex: 0 0 4rem;
+}
+
+.book-thumb img {
+  display: block;
+  width: 4rem;
+  height: auto;
+  max-height: 6rem;
+  object-fit: contain;
+  border: 1px solid #e7e9ed;
+  background: #f7f8f9;
+}
+
+.book-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.book-title {
+  font-size: .9rem;
+  margin: 0 0 .1rem;
+  line-height: 1.4;
+}
+
+/* The page's .sindhi and Nastaliq classes set their own sizes. */
+.book-title .sindhi {
+  font-size: 1.1rem;
+}
+
+.book-alt-title {
+  color: #66758c;
+}
+
+.book-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .1rem .8rem;
+  margin: .2rem 0;
+}
+
+/* Spectre's .sindhi aligns right as a block; inline here. */
+.book-meta .sindhi,
+.book-meta .not-sindhi-arabic,
+.book-alt-title .sindhi,
+.book-alt-title .not-sindhi-arabic {
+  text-align: start;
+}
+
+.book-year {
+  color: #66758c;
+}
+
+.book-tags .chip {
+  margin: .1rem 0;
+  margin-inline-end: .2rem;
+}
+
+.book-pages {
+  justify-content: center;
+  margin: 1rem 0;
+}
+
+@media (max-width: 600px) {
+  .book-thumb {
+    flex-basis: 3rem;
+  }
+  .book-thumb img {
+    width: 3rem;
+  }
+}
+
+/* A book's page. */
+.book-cover {
+  margin: 0 auto 1rem;
+  border: 1px solid #e7e9ed;
+}
+
+.book-card {
+  margin-bottom: .8rem;
+}
+
+.book-card .card-title {
+  font-size: 1.1rem;
+}
+
+.book-card .card-title .sindhi {
+  font-size: 1.4rem;
+}
+
+.book-facts {
+  display: grid;
+  /* Not 1fr: an English value on a Sindhi page would sit at the far end. */
+  grid-template-columns: max-content auto;
+  justify-content: start;
+  gap: .2rem .8rem;
+  margin: .4rem 0;
+}
+
+.book-facts dt {
+  color: #66758c;
+  font-weight: normal;
+}
+
+.book-facts dd {
+  margin: 0;
+}
+
+.book-description {
+  font-size: .8rem;
+}
+
+.book-description.sindhi {
+  font-size: 1rem;
+}
+
+.book-download {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .4rem .8rem;
+  margin-bottom: .8rem;
+}
+
+.book-file {
+  color: #66758c;
+  font-size: .7rem;
+}
+
+.book-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .4rem;
+  align-items: center;
+}
+
+/* Sindhi names beside English ones: the Sindhi font runs small. */
+.book-meta .sindhi,
+.book-facts .sindhi {
+  font-size: 1rem;
+}
+
+/* The found books' numbers beside the count, figure before label: 4,148 pages. */
+.list-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 .8rem;
+  margin: 0;
+  color: #66758c;
+}
+
+.list-stats div {
+  display: flex;
+  flex-direction: row-reverse;
+  gap: .25rem;
+}
+
+.list-stats dd {
+  margin: 0;
+  color: #3b4351;
+}
+
+.list-stats dt {
+  font-weight: normal;
+}

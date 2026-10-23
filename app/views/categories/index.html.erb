@@ -4,13 +4,13 @@
 <div class="container grid-md">
   <div class="columns">
     <div class="column centered">
+      <div class="table-scroll">
       <table class="table table-hover">
         <thead>
           <tr>
             <th>Name</th>
-            <th>Amount of books</th>
+            <th>Books</th>
             <th>Actions</th>
-            <th></th>
           </tr>
         </thead>
 
@@ -19,12 +19,15 @@
             <tr>
               <td><%= category.name %></td>
               <td><%= category.books.count %></td>
-              <td><%= link_to "Edit", edit_category_path(category), class: "btn btn-sm btn-warning" %></td>
-              <td><%= button_to "Delete", category, method: :delete, class: "btn btn-sm btn-danger", form: { data: { turbo_confirm: 'Are you sure?' } } %></td>
+              <td class="table-actions">
+                <%= link_to "Edit", edit_category_path(category), class: "btn btn-sm btn-warning" %>
+                <%= button_to "Delete", category, method: :delete, class: "btn btn-sm btn-danger", form: { data: { turbo_confirm: 'Are you sure?' } } %>
+              </td>
             </tr>
           <% end %>
         </tbody>
       </table>
+      </div>
       <br>
     </div>
   </div>
