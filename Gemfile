@@ -1,5 +1,5 @@
 source 'https://rubygems.org'
-ruby '3.2.11'
+ruby '3.4.11'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 #gem 'rails', '~> 5.2'
@@ -13,6 +13,8 @@ gem 'sqlite3', '~> 2.1'
 gem 'bootsnap', require: false
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder'#, '~> 2.0'
+# json 3 is a new major version; stay on 2.x until it is checked on its own.
+gem 'json', '~> 2.10'
 # bundle exec rake doc:rails generates the API under doc/api.
 #gem 'sdoc', '~> 0.4.0', group: :doc
 
@@ -31,16 +33,24 @@ gem 'aws-sdk-s3'
 gem 'will_paginate'#, '3.1.7'
 gem 'isbn_validation'
 gem 'email_validator'
-gem 'puma'
+# Latest 6.x (security fixes since 6.0); a new major version is its own upgrade.
+gem 'puma', '~> 6.6'
 # Active Job backend. Runs inside Puma through its plugin; see config/puma.rb.
 gem 'solid_queue'
 gem 'redcarpet'
+# Book.as_csv. Not a default gem since Ruby 3.4.
+gem 'csv'
 # Cover thumbnails for the book list (Active Storage variants), through libvips.
 gem 'image_processing', '~> 1.14'
 
 group :development do
   gem 'web-console', '~> 4.2'
   gem 'pry-rails'
+end
+
+group :test do
+  # Rails 8.1's test runner does not take minitest 6.
+  gem 'minitest', '~> 5.25'
 end
 
 group :development, :test do

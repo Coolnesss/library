@@ -1,5 +1,8 @@
 class UsersController < ApplicationController
 
+  # /change_password has no :id, so authorize_self lets it through; without
+  # this, a signed-out visitor got a 500 instead of the login page.
+  before_action :authorize, only: [:edit, :update]
   before_action :authorize_self, except: [:inactive]
   before_action :authorize_admin, only: [:inactive, :confirm, :index, :destroy]
 

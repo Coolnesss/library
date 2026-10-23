@@ -1,6 +1,6 @@
 # Production image. Build it with Kamal, not by hand:
 #   kamal deploy
-ARG RUBY_VERSION=3.2.11
+ARG RUBY_VERSION=3.4.11
 FROM ruby:$RUBY_VERSION-slim-bookworm AS base
 
 WORKDIR /rails

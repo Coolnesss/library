@@ -99,4 +99,9 @@ class UsersTest < ActionDispatch::IntegrationTest
     assert_redirected_to login_path
     assert users(:admin).reload.authenticate(PASSWORD)
   end
+
+  test "changing the password needs a login" do
+    get change_password_path
+    assert_redirected_to login_path
+  end
 end

@@ -1,3 +1,7 @@
+# will_paginate loads its view helpers lazily; production eager-loads this
+# file before that, so load the base class here.
+require 'will_paginate/view_helpers/action_view'
+
 # will_paginate's page links in Spectre's pagination markup:
 # ul.pagination > li.page-item > a, with .active and .disabled items. The
 # first and last pages are marked .page-edge, so phones can leave them out.
